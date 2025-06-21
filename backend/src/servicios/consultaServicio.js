@@ -14,7 +14,7 @@ const createConsulta = async (consultaData) => {
   const { salon: salonId } = consultaData;
   
   // Verificar que el salón existe y está aprobado
-  const salon = await Venue.findOne({ _id: salonId, estado: 'aprobado' });
+  const salon = await Venue.findOne({ _id: salonId, estado: { $in: ['borrador', 'aprobado'] } }); //solo es temporal hay que cambiar a aprobado solamente despues de testear
   if (!salon) {
     throw createError('Salón no encontrado o no disponible', 404);
   }

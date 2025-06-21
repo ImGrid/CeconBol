@@ -1,5 +1,6 @@
 /**
- * Servidor Principal - Todo en uno
+ * Servidor Principal - CelebraBol API
+ * FASE 9: Integración y Rutas Principales
  */
 
 const express = require('express');
@@ -10,7 +11,7 @@ const rateLimit = require('express-rate-limit');
 
 // Configuración
 const { server } = require('./src/config/enviroment');
-const { initializeDatabase, checkConnection } = require('./src/config/database');
+const { initializeDatabase } = require('./src/config/database');
 const { logger } = require('./src/utilidades/logs');
 
 // Middlewares propios
@@ -18,10 +19,8 @@ const { requestLogger } = require('./src/utilidades/logs');
 const { responseMiddleware } = require('./src/utilidades/responses');
 const { errorHandler, notFoundHandler } = require('./src/middlewares/manejoErrores');
 
-// Rutas
-const authRoutes = require('./src/rutas/authRoutes');
-const salonRoutes = require('./src/rutas/solanesRoutes');
-const consultaRoutes = require('./src/rutas/consultaRoutes');
+// Centralizador de rutas
+const apiRoutes = require('./src/rutas/index');
 
 /**
  * Crear y configurar aplicación Express
@@ -50,53 +49,27 @@ const createExpressApp = () => {
   app.use(requestLogger);
   app.use(responseMiddleware);
   
-  // Servir archivos estáticos (uploads)
+  // Servir archivos estáticos
   app.use('/uploads', express.static('uploads'));
   
-  // Rutas de la API
-  app.use('/api/auth', authRoutes);
-  app.use('/api/salones', salonRoutes);
-  app.use('/api/consultas', consultaRoutes);
-  
-  // Ruta de salud básica
-  app.get('/api/health', (req, res) => {
-    res.success('API funcionando correctamente', {
-      timestamp: new Date().toISOString(),
-      env: server.env,
-      version: '1.0.0',
-      endpoints: {
-        auth: '/api/auth',
-        salones: '/api/salones',
-        consultas: '/api/consultas'
-      }
-    });
-  });
-  
-  // Ruta de salud detallada
-  app.get('/api/health/detailed', async (req, res) => {
-    const dbHealth = await checkConnection();
-    
-    res.json({
-      status: 'ok',
-      database: dbHealth,
-      server: {
-        port: server.port,
-        env: server.env,
-        uptime: process.uptime()
-      },
-      timestamp: new Date().toISOString()
-    });
-  });
+  // Rutas de la API centralizadas
+  app.use('/api', apiRoutes);
   
   // Ruta raíz
   app.get('/', (req, res) => {
     res.json({
-      message: 'CelebraBol API',
+      message: 'CelebraBol API - Marketplace de Salones de Eventos',
+      version: '1.0.0',
+      status: 'active',
       endpoints: {
+        api: '/api',
         health: '/api/health',
         auth: '/api/auth',
         salones: '/api/salones',
-        consultas: '/api/consultas'
+        consultas: '/api/consultas',
+        eventos: '/api/eventos',
+        resenas: '/api/resenas',
+        busqueda: '/api/busqueda'
       }
     });
   });
@@ -114,10 +87,10 @@ const createExpressApp = () => {
  * Inicializar aplicación completa
  */
 const startApp = async () => {
-  try {
-    
+  try {    
     // Conectar base de datos
     await initializeDatabase();
+    console.log('Base de datos conectada exitosamente');
     
     // Crear y configurar Express app
     const app = createExpressApp();
@@ -127,8 +100,14 @@ const startApp = async () => {
       console.log('\n=== SERVER STARTED ===');
       console.log(`URL: http://localhost:${server.port}`);
       console.log(`Environment: ${server.env}`);
-      console.log(`API: http://localhost:${server.port}/api`);
-      logger.info('HTTP server started', { port: server.port, env: server.env });
+      console.log(`API Endpoint: http://localhost:${server.port}/api`);
+      console.log('========================\n');
+      
+      logger.info('HTTP server started successfully', { 
+        port: server.port, 
+        env: server.env,
+        version: '1.0.0'
+      });
     });
     
     // Configurar cierre limpio
@@ -148,38 +127,58 @@ const startApp = async () => {
  */
 const setupGracefulShutdown = (httpServer) => {
   const shutdown = async (signal) => {
+    console.log(`\nShutdown initiated by signal: ${signal}`);
     logger.info(`Shutdown initiated by signal: ${signal}`);
     
     try {
       // Cerrar servidor HTTP
       await new Promise((resolve) => {
         httpServer.close(() => {
+          console.log('HTTP server closed');
           logger.info('HTTP server closed');
           resolve();
         });
       });
       
       // Cerrar base de datos
-      const { disconnectDatabase } = require('./src/configuracion/database');
+      const { disconnectDatabase } = require('./src/config/database');
       await disconnectDatabase();
+      console.log('Database disconnected');
       
+      console.log('Graceful shutdown completed');
       logger.info('Graceful shutdown completed');
       process.exit(0);
       
     } catch (error) {
+      console.error('Error during shutdown:', error.message);
       logger.error('Error during shutdown', { error: error.message });
       process.exit(1);
     }
   };
   
+  // Escuchar señales de sistema
   process.on('SIGTERM', () => shutdown('SIGTERM'));
   process.on('SIGINT', () => shutdown('SIGINT'));
+  
+  // Manejar errores no capturados
+  process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error.message);
+    logger.error('Uncaught Exception', { error: error.message, stack: error.stack });
+    process.exit(1);
+  });
+  
+  process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection:', reason);
+    logger.error('Unhandled Rejection', { reason, promise });
+    process.exit(1);
+  });
 };
 
 // Ejecutar si es llamado directamente
 if (require.main === module) {
   startApp().catch((error) => {
     console.error('FATAL ERROR:', error.message);
+    logger.error('Fatal startup error', { error: error.message, stack: error.stack });
     process.exit(1);
   });
 }
