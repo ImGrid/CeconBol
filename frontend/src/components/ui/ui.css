@@ -1,0 +1,318 @@
+/* Estilos específicos para componentes UI */
+/* === PAGINATION === */
+.pagination {
+  @apply flex flex-col items-center justify-between space-y-4 sm:flex-row sm:space-y-0;
+}
+
+.pagination-info {
+  @apply text-sm text-gray-700;
+}
+
+.pagination-controls {
+  @apply flex items-center space-x-2;
+}
+
+.pagination-btn {
+  @apply p-2 text-gray-500 transition-colors rounded-md hover:text-brand-primary disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-gray-500 hover:bg-gray-100;
+}
+
+.pagination-numbers {
+  @apply flex items-center space-x-1;
+}
+
+.pagination-number {
+  @apply px-3 py-2 text-sm font-medium transition-colors rounded-md;
+}
+
+.pagination-current {
+  @apply text-white bg-brand-primary;
+}
+
+.pagination-regular {
+  @apply text-gray-700 hover:text-brand-primary hover:bg-gray-100;
+}
+
+.pagination-ellipsis {
+  @apply px-2 py-1 text-gray-500;
+}
+
+/* === MODAL === */
+.modal-backdrop {
+  @apply fixed inset-0 z-50 overflow-y-auto;
+}
+
+.modal-backdrop-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50;
+}
+
+.modal-container {
+  @apply flex items-center justify-center min-h-full p-4;
+}
+
+.modal-content {
+  @apply relative w-full bg-white shadow-xl rounded-xl;
+}
+
+.modal-header {
+  @apply flex items-center justify-between p-6 border-b border-gray-200;
+}
+
+.modal-title {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.modal-close-btn {
+  @apply p-2 text-gray-400 transition-colors rounded-full hover:text-gray-600 hover:bg-gray-100;
+}
+
+.modal-body {
+  @apply p-6;
+}
+
+.modal-footer {
+  @apply px-6 py-4 border-t border-gray-200 bg-gray-50;
+}
+
+.modal-footer-actions {
+  @apply flex justify-end space-x-3;
+}
+
+/* Tamaños de modal */
+.modal-small {
+  @apply max-w-md;
+}
+
+.modal-medium {
+  @apply max-w-lg;
+}
+
+.modal-large {
+  @apply max-w-2xl;
+}
+
+.modal-xl {
+  @apply max-w-4xl;
+}
+
+/* === RATING === */
+.rating-container {
+  @apply flex items-center space-x-1;
+}
+
+.rating-stars {
+  @apply flex items-center;
+}
+
+.rating-star {
+  @apply text-lg transition-colors cursor-pointer;
+}
+
+.rating-star-small {
+  @apply text-sm;
+}
+
+.rating-star-medium {
+  @apply text-lg;
+}
+
+.rating-star-large {
+  @apply text-xl;
+}
+
+.rating-value {
+  @apply ml-2 text-sm text-gray-600;
+}
+
+.rating-count {
+  @apply ml-1 text-sm text-gray-500;
+}
+
+/* === BADGE === */
+.badge-base {
+  @apply inline-flex items-center font-medium;
+}
+
+.badge-small {
+  @apply px-2 py-1 text-xs;
+}
+
+.badge-medium {
+  @apply px-3 py-1 text-sm;
+}
+
+.badge-large {
+  @apply px-4 py-2 text-base;
+}
+
+.badge-rounded {
+  @apply rounded-full;
+}
+
+.badge-square {
+  @apply rounded;
+}
+
+/* === BUTTON === */
+.button-base {
+  @apply inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.button-small {
+  @apply px-4 py-2 text-sm rounded-md;
+}
+
+.button-medium {
+  @apply px-6 py-3 text-base rounded-lg;
+}
+
+.button-large {
+  @apply px-8 py-4 text-lg rounded-lg;
+}
+
+.button-disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.button-loading {
+  @apply opacity-75;
+}
+
+.button-full-width {
+  @apply w-full;
+}
+
+.button-icon {
+  @apply w-4 h-4 mr-2;
+}
+
+/* === CARD === */
+.card-base {
+  @apply transition-all duration-200 bg-white border rounded-xl;
+}
+
+.card-simple {
+  @apply border-gray-100 shadow-sm;
+}
+
+.card-bordered {
+  @apply border-2 border-gray-200;
+}
+
+.card-hover {
+  @apply hover:shadow-md;
+}
+
+.card-clickable {
+  @apply cursor-pointer;
+}
+
+.card-header {
+  @apply border-b border-gray-100;
+}
+
+.card-footer {
+  @apply border-t border-gray-100 bg-gray-50 rounded-b-xl;
+}
+
+.card-image {
+  @apply w-full h-auto;
+}
+
+.card-venue-image {
+  @apply object-cover w-full h-48;
+}
+
+.card-title {
+  @apply mb-2 text-xl font-semibold text-gray-900;
+}
+
+.card-venue-title {
+  @apply mb-1 text-lg font-semibold text-gray-900;
+}
+
+.card-subtitle {
+  @apply mb-2 text-sm text-gray-600;
+}
+
+.card-description {
+  @apply text-sm leading-relaxed text-gray-600;
+}
+
+/* Padding variants */
+.card-padding-none {
+  @apply p-0;
+}
+
+.card-padding-small {
+  @apply p-3;
+}
+
+.card-padding-medium {
+  @apply p-4;
+}
+
+.card-padding-large {
+  @apply p-6;
+}
+
+/* === INPUT === */
+.input-container {
+  @apply space-y-2;
+}
+
+.input-label {
+  @apply block text-sm font-medium text-gray-700;
+}
+
+.input-label-required::after {
+  content: '*';
+  @apply ml-1 text-red-500;
+}
+
+.input-label-error {
+  @apply text-red-600;
+}
+
+.input-field-container {
+  @apply relative;
+}
+
+.input-field-icon {
+  @apply absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none;
+}
+
+.input-field-icon svg {
+  @apply w-5 h-5 text-gray-400;
+}
+
+.input-field-loading {
+  @apply absolute inset-y-0 right-0 flex items-center pr-3;
+}
+
+.input-field-loading svg {
+  @apply w-4 h-4 text-gray-400 animate-spin;
+}
+
+.input-field-with-icon {
+  @apply pl-10;
+}
+
+.input-field-with-loading {
+  @apply pr-10;
+}
+
+.input-field-error {
+  @apply border-red-300 focus:ring-red-500 focus:border-red-500;
+}
+
+.input-field-disabled {
+  @apply opacity-50 cursor-not-allowed bg-gray-50;
+}
+
+.input-error-message {
+  @apply text-sm text-red-600;
+}
+
+.input-help-text {
+  @apply text-sm text-gray-500;
+}

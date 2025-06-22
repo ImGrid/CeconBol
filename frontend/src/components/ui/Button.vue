@@ -8,7 +8,7 @@
     <!-- Loading spinner -->
     <svg 
       v-if="loading" 
-      class="animate-spin h-4 w-4 mr-2" 
+      class="button-icon animate-spin" 
       fill="none" 
       viewBox="0 0 24 24"
     >
@@ -71,36 +71,46 @@ defineEmits(['click'])
 
 // Computed
 const buttonClass = computed(() => {
-  const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2'
+  const classes = ['button-base'] // Clase base de ui.css
   
   // Variantes (usando las clases del main.css)
   const variantClasses = {
-    'primary': 'btn-primary focus:ring-brand-primary',
-    'secondary': 'btn-secondary focus:ring-brand-secondary', 
-    'success': 'btn-success focus:ring-brand-tertiary',
-    'outline-primary': 'btn-outline-primary focus:ring-brand-primary',
-    'outline-secondary': 'btn-outline-secondary focus:ring-brand-secondary'
+    'primary': 'btn-primary',
+    'secondary': 'btn-secondary', 
+    'success': 'btn-success',
+    'outline-primary': 'btn-outline-primary',
+    'outline-secondary': 'btn-outline-secondary'
   }
   
-  // Tamaños
+  // Tamaños (usando las clases de ui.css)
   const sizeClasses = {
-    'small': 'px-4 py-2 text-sm rounded-md',
-    'medium': 'px-6 py-3 text-base rounded-lg', 
-    'large': 'px-8 py-4 text-lg rounded-lg'
+    'small': 'button-small',
+    'medium': 'button-medium', 
+    'large': 'button-large'
   }
+  
+  // Agregar clases
+  classes.push(variantClasses[props.variant])
+  classes.push(sizeClasses[props.size])
   
   // Estados
-  const stateClasses = (props.disabled || props.loading) ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md'
+  if (props.disabled || props.loading) {
+    classes.push('button-disabled')
+  }
+  
+  if (props.loading) {
+    classes.push('button-loading')
+  }
   
   // Ancho completo
-  const widthClass = props.fullWidth ? 'w-full' : ''
+  if (props.fullWidth) {
+    classes.push('button-full-width')
+  }
   
-  return [
-    baseClasses,
-    variantClasses[props.variant],
-    sizeClasses[props.size],
-    stateClasses,
-    widthClass
-  ].filter(Boolean).join(' ')
+  return classes.join(' ')
 })
 </script>
+
+<style>
+@import './ui.css';
+</style>

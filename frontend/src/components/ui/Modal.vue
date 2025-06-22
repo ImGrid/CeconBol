@@ -10,14 +10,14 @@
     >
       <div
         v-if="show"
-        class="fixed inset-0 z-50 overflow-y-auto"
+        class="modal-backdrop"
         @click="handleBackdropClick"
       >
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black bg-opacity-50" />
+        <div class="modal-backdrop-overlay" />
         
         <!-- Modal container -->
-        <div class="flex min-h-full items-center justify-center p-4">
+        <div class="modal-container">
           <Transition
             enter-active-class="transition-all duration-300"
             enter-from-class="opacity-0 scale-95"
@@ -32,15 +32,15 @@
               @click.stop
             >
               <!-- Header -->
-              <div v-if="!hideHeader" class="flex items-center justify-between p-6 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">
+              <div v-if="!hideHeader" class="modal-header">
+                <h3 class="modal-title">
                   {{ title }}
                 </h3>
                 
                 <button
                   v-if="!hideCloseButton"
                   type="button"
-                  class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+                  class="modal-close-btn"
                   @click="$emit('close')"
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,9 +55,9 @@
               </div>
 
               <!-- Footer -->
-              <div v-if="!hideFooter" class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+              <div v-if="!hideFooter" class="modal-footer">
                 <slot name="footer">
-                  <div class="flex justify-end space-x-3">
+                  <div class="modal-footer-actions">
                     <Button
                       v-if="!hideCancelButton"
                       variant="outline-primary"
@@ -146,20 +146,22 @@ const emit = defineEmits(['close', 'confirm'])
 
 // Computed
 const modalClass = computed(() => {
-  const baseClass = 'relative bg-white rounded-xl shadow-xl w-full'
+  const classes = ['modal-content'] // Clase base de ui.css
   
   const sizeClasses = {
-    'small': 'max-w-md',
-    'medium': 'max-w-lg',
-    'large': 'max-w-2xl',
-    'xl': 'max-w-4xl'
+    'small': 'modal-small',
+    'medium': 'modal-medium',
+    'large': 'modal-large',
+    'xl': 'modal-xl'
   }
   
-  return [baseClass, sizeClasses[props.size]].join(' ')
+  classes.push(sizeClasses[props.size])
+  
+  return classes.join(' ')
 })
 
 const bodyClass = computed(() => {
-  return props.hideHeader && props.hideFooter ? 'p-6' : 'p-6'
+  return 'modal-body'
 })
 
 // Métodos
@@ -194,3 +196,7 @@ onUnmounted(() => {
   document.body.style.overflow = ''
 })
 </script>
+
+<style>
+@import './ui.css';
+</style>

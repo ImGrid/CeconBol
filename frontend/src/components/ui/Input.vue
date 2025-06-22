@@ -1,24 +1,25 @@
 <template>
-  <div class="space-y-2">
+  <div class="input-container">
     <!-- Label -->
     <label 
       v-if="label" 
       :for="inputId" 
-      class="label-field"
-      :class="{ 'text-red-600': hasError }"
+      :class="[
+        'input-label',
+        { 'input-label-error': hasError, 'input-label-required': required }
+      ]"
     >
       {{ label }}
-      <span v-if="required" class="text-red-500 ml-1">*</span>
     </label>
 
     <!-- Input container -->
-    <div class="relative">
+    <div class="input-field-container">
       <!-- Icon (si se proporciona) -->
       <div 
         v-if="icon" 
-        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+        class="input-field-icon"
       >
-        <component :is="icon" class="h-5 w-5 text-gray-400" />
+        <component :is="icon" />
       </div>
 
       <!-- Input field -->
@@ -38,7 +39,7 @@
       <!-- Loading spinner -->
       <div 
         v-if="loading" 
-        class="absolute inset-y-0 right-0 pr-3 flex items-center"
+        class="input-field-loading"
       >
         <svg class="animate-spin h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
@@ -50,7 +51,7 @@
     <!-- Error message -->
     <p 
       v-if="hasError" 
-      class="text-sm text-red-600"
+      class="input-error-message"
     >
       {{ error }}
     </p>
@@ -58,7 +59,7 @@
     <!-- Help text -->
     <p 
       v-if="helpText && !hasError" 
-      class="text-sm text-gray-500"
+      class="input-help-text"
     >
       {{ helpText }}
     </p>
@@ -122,29 +123,31 @@ const inputId = computed(() => `input-${Math.random().toString(36).substr(2, 9)}
 const hasError = computed(() => !!props.error)
 
 const inputClass = computed(() => {
-  const baseClass = 'input-field' // Clase definida en main.css
+  const classes = ['form-input'] // Usar la clase unificada de main.css
   
   // Estados
-  const stateClasses = []
-  
   if (hasError.value) {
-    stateClasses.push('border-red-300 focus:ring-red-500 focus:border-red-500')
+    classes.push('input-field-error')
   }
   
   if (props.disabled) {
-    stateClasses.push('opacity-50 cursor-not-allowed bg-gray-50')
+    classes.push('input-field-disabled')
   }
   
   // Si hay icono, añadir padding izquierdo
   if (props.icon) {
-    stateClasses.push('pl-10')
+    classes.push('input-field-with-icon')
   }
   
   // Si hay loading, añadir padding derecho
   if (props.loading) {
-    stateClasses.push('pr-10')
+    classes.push('input-field-with-loading')
   }
   
-  return [baseClass, ...stateClasses].join(' ')
+  return classes.join(' ')
 })
 </script>
+
+<style>
+@import './ui.css';
+</style>

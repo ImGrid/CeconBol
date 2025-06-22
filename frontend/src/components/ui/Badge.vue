@@ -42,7 +42,7 @@ const props = defineProps({
 
 // Computed
 const badgeClass = computed(() => {
-  const baseClass = 'inline-flex items-center font-medium'
+  const classes = ['badge-base'] // Clase base de ui.css
   
   // Variantes con colores de la paleta "Elegancia Festiva"
   const variantClasses = {
@@ -53,28 +53,31 @@ const badgeClass = computed(() => {
     'warning': 'bg-brand-accent text-white',
     'error': 'bg-red-100 text-red-800',
     
-    // Badges especiales para salones
-    'premium': 'badge-premium', // Definido en main.css
-    'popular': 'badge-popular',  // Definido en main.css
-    'new': 'badge-new',         // Definido en main.css
+    // Badges especiales para salones (definidos en main.css)
+    'premium': 'badge-premium',
+    'popular': 'badge-popular',
+    'new': 'badge-new',
     'destacado': 'bg-gradient-to-r from-brand-accent to-brand-secondary text-white'
   }
   
-  // Tamaños
+  // Tamaños (definidos en ui.css)
   const sizeClasses = {
-    'small': 'px-2 py-1 text-xs',
-    'medium': 'px-3 py-1 text-sm',
-    'large': 'px-4 py-2 text-base'
+    'small': 'badge-small',
+    'medium': 'badge-medium',
+    'large': 'badge-large'
   }
   
   // Bordes redondeados
-  const roundedClass = props.rounded ? 'rounded-full' : 'rounded'
+  const roundedClass = props.rounded ? 'badge-rounded' : 'badge-square'
   
-  return [
-    baseClass,
-    variantClasses[props.variant],
-    sizeClasses[props.size],
-    roundedClass
-  ].filter(Boolean).join(' ')
+  classes.push(variantClasses[props.variant])
+  classes.push(sizeClasses[props.size])
+  classes.push(roundedClass)
+  
+  return classes.join(' ')
 })
 </script>
+
+<style>
+@import './ui.css';
+</style>

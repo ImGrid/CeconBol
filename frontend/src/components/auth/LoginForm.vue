@@ -1,24 +1,28 @@
 <template>
   <form @submit.prevent="handleSubmit" class="space-y-6">
     <!-- Email -->
-    <Input
-      v-model="form.email"
-      type="email"
-      label="Correo electrónico"
-      placeholder="ejemplo@correo.com"
-      :error="errors.email"
-      required
-    />
+    <div class="form-group">
+      <Input
+        v-model="form.email"
+        type="email"
+        label="Correo electrónico"
+        placeholder="ejemplo@correo.com"
+        :error="errors.email"
+        required
+      />
+    </div>
 
     <!-- Contraseña -->
-    <Input
-      v-model="form.contrasena"
-      type="password"
-      label="Contraseña"
-      placeholder="Ingresa tu contraseña"
-      :error="errors.contrasena"
-      required
-    />
+    <div class="form-group">
+      <Input
+        v-model="form.contrasena"
+        type="password"
+        label="Contraseña"
+        placeholder="Ingresa tu contraseña"
+        :error="errors.contrasena"
+        required
+      />
+    </div>
 
     <!-- Error general -->
     <div v-if="error" class="alert-error">

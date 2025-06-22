@@ -1,53 +1,61 @@
 <template>
   <form @submit.prevent="handleSubmit" class="space-y-6">
     <!-- Nombre -->
-    <Input
-      v-model="form.nombre"
-      type="text"
-      label="Nombre"
-      placeholder="Tu nombre"
-      :error="errors.nombre"
-      required
-    />
+    <div class="form-group">
+      <Input
+        v-model="form.nombre"
+        type="text"
+        label="Nombre"
+        placeholder="Tu nombre"
+        :error="errors.nombre"
+        required
+      />
+    </div>
 
     <!-- Apellido -->
-    <Input
-      v-model="form.apellido"
-      type="text"
-      label="Apellido"
-      placeholder="Tu apellido"
-      :error="errors.apellido"
-      required
-    />
+    <div class="form-group">
+      <Input
+        v-model="form.apellido"
+        type="text"
+        label="Apellido"
+        placeholder="Tu apellido"
+        :error="errors.apellido"
+        required
+      />
+    </div>
 
     <!-- Email -->
-    <Input
-      v-model="form.email"
-      type="email"
-      label="Correo electrónico"
-      placeholder="ejemplo@correo.com"
-      :error="errors.email"
-      required
-    />
+    <div class="form-group">
+      <Input
+        v-model="form.email"
+        type="email"
+        label="Correo electrónico"
+        placeholder="ejemplo@correo.com"
+        :error="errors.email"
+        required
+      />
+    </div>
 
     <!-- Teléfono -->
-    <Input
-      v-model="form.telefono"
-      type="tel"
-      label="Teléfono (opcional)"
-      placeholder="70123456"
-      :error="errors.telefono"
-      help-text="Formato: 7 u 8 dígitos"
-    />
+    <div class="form-group">
+      <Input
+        v-model="form.telefono"
+        type="tel"
+        label="Teléfono (opcional)"
+        placeholder="70123456"
+        :error="errors.telefono"
+        help-text="Formato: 7 u 8 dígitos"
+      />
+    </div>
 
     <!-- Ciudad -->
-    <div class="space-y-2">
-      <label class="label-field">
+    <div class="form-group">
+      <label class="form-label">
         Ciudad <span class="text-red-500 ml-1">*</span>
       </label>
       <select
         v-model="form.ciudad"
-        class="input-field"
+        class="form-select"
         :class="{ 'border-red-300': errors.ciudad }"
         required
       >
@@ -62,8 +70,8 @@
     </div>
 
     <!-- Rol -->
-    <div class="space-y-2">
-      <label class="label-field">
+    <div class="form-group">
+      <label class="form-label">
         Tipo de cuenta <span class="text-red-500 ml-1">*</span>
       </label>
       <div class="space-y-3">
@@ -72,7 +80,7 @@
             v-model="form.rol"
             type="radio"
             value="cliente"
-            class="text-brand-primary focus:ring-brand-primary"
+            class="radio-brand"
           />
           <span class="ml-3">
             <span class="font-medium">Cliente</span>
@@ -84,7 +92,7 @@
             v-model="form.rol"
             type="radio"
             value="proveedor"
-            class="text-brand-primary focus:ring-brand-primary"
+            class="radio-brand"
           />
           <span class="ml-3">
             <span class="font-medium">Proveedor</span>
@@ -98,25 +106,29 @@
     </div>
 
     <!-- Contraseña -->
-    <Input
-      v-model="form.contrasena"
-      type="password"
-      label="Contraseña"
-      placeholder="Mínimo 6 caracteres"
-      :error="errors.contrasena"
-      help-text="Debe contener al menos una mayúscula, una minúscula y un número"
-      required
-    />
+    <div class="form-group">
+      <Input
+        v-model="form.contrasena"
+        type="password"
+        label="Contraseña"
+        placeholder="Mínimo 6 caracteres"
+        :error="errors.contrasena"
+        help-text="Debe contener al menos una mayúscula, una minúscula y un número"
+        required
+      />
+    </div>
 
     <!-- Confirmar contraseña -->
-    <Input
-      v-model="form.confirmarContrasena"
-      type="password"
-      label="Confirmar contraseña"
-      placeholder="Repite tu contraseña"
-      :error="errors.confirmarContrasena"
-      required
-    />
+    <div class="form-group">
+      <Input
+        v-model="form.confirmarContrasena"
+        type="password"
+        label="Confirmar contraseña"
+        placeholder="Repite tu contraseña"
+        :error="errors.confirmarContrasena"
+        required
+      />
+    </div>
 
     <!-- Error general -->
     <div v-if="error" class="alert-error">

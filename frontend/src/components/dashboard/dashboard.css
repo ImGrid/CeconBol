@@ -1,0 +1,322 @@
+/* Estilos específicos para componentes de dashboard */
+
+/* === DASHBOARD LAYOUT === */
+.dashboard-layout {
+  @apply min-h-screen bg-gray-50;
+}
+
+.dashboard-sidebar {
+  @apply fixed inset-y-0 left-0 z-50 w-64 transition-transform duration-300 ease-in-out transform bg-white shadow-lg lg:translate-x-0 lg:static lg:inset-0;
+}
+
+.dashboard-sidebar-hidden {
+  @apply -translate-x-full;
+}
+
+.dashboard-main {
+  @apply flex-1 lg:ml-0;
+}
+
+.dashboard-content {
+  @apply px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8;
+}
+
+.dashboard-header {
+  @apply mb-8;
+}
+
+.dashboard-title {
+  @apply mb-2 text-2xl font-bold text-gray-900 md:text-3xl;
+}
+
+.dashboard-subtitle {
+  @apply text-gray-600;
+}
+
+/* === SIDEBAR === */
+.sidebar-header {
+  @apply p-6 border-b border-gray-200;
+}
+
+.sidebar-logo {
+  @apply text-xl font-bold text-brand-primary;
+}
+
+.sidebar-nav {
+  @apply p-6 space-y-2;
+}
+
+.sidebar-nav-item {
+  @apply flex items-center px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-lg;
+}
+
+.sidebar-nav-item-active {
+  @apply text-white bg-brand-primary;
+}
+
+.sidebar-nav-item-inactive {
+  @apply text-gray-700 hover:bg-gray-100 hover:text-brand-primary;
+}
+
+.sidebar-nav-icon {
+  @apply flex-shrink-0 w-5 h-5 mr-3;
+}
+
+.sidebar-footer {
+  @apply absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200 bg-gray-50;
+}
+
+/* === DASHBOARD STATS === */
+.dashboard-stats {
+  @apply grid grid-cols-1 gap-6 mb-8 md:grid-cols-2 lg:grid-cols-4;
+}
+
+.stat-card {
+  @apply p-6 transition-shadow duration-200 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-md;
+}
+
+.stat-card-icon {
+  @apply flex items-center justify-center w-12 h-12 mb-4 rounded-lg;
+}
+
+.stat-card-icon-primary {
+  @apply bg-brand-primary bg-opacity-10 text-brand-primary;
+}
+
+.stat-card-icon-secondary {
+  @apply bg-brand-secondary bg-opacity-10 text-brand-secondary;
+}
+
+.stat-card-icon-tertiary {
+  @apply bg-brand-tertiary bg-opacity-10 text-brand-tertiary;
+}
+
+.stat-card-icon-accent {
+  @apply bg-brand-accent bg-opacity-10 text-brand-accent;
+}
+
+.stat-card-value {
+  @apply mb-1 text-3xl font-bold text-gray-900;
+}
+
+.stat-card-label {
+  @apply mb-2 text-sm text-gray-600;
+}
+
+.stat-card-change {
+  @apply text-sm font-medium;
+}
+
+.stat-card-change-positive {
+  @apply text-green-600;
+}
+
+.stat-card-change-negative {
+  @apply text-red-600;
+}
+
+.stat-card-change-neutral {
+  @apply text-gray-500;
+}
+
+/* === QUICK ACTIONS === */
+.quick-actions {
+  @apply p-6 mb-8 bg-white border border-gray-100 shadow-sm rounded-xl;
+}
+
+.quick-actions-header {
+  @apply flex items-center justify-between mb-6;
+}
+
+.quick-actions-title {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.quick-actions-grid {
+  @apply grid grid-cols-2 gap-4 md:grid-cols-4;
+}
+
+.quick-action-btn {
+  @apply flex flex-col items-center p-4 text-center transition-all duration-200 border-2 border-gray-200 border-dashed rounded-lg cursor-pointer hover:border-brand-primary hover:bg-brand-primary hover:bg-opacity-5;
+}
+
+.quick-action-icon {
+  @apply w-8 h-8 mb-2 text-gray-400;
+}
+
+.quick-action-btn:hover .quick-action-icon {
+  @apply text-brand-primary;
+}
+
+.quick-action-label {
+  @apply text-sm font-medium text-gray-700;
+}
+
+.quick-action-btn:hover .quick-action-label {
+  @apply text-brand-primary;
+}
+
+/* === RECENT ACTIVITY === */
+.recent-activity {
+  @apply p-6 bg-white border border-gray-100 shadow-sm rounded-xl;
+}
+
+.recent-activity-header {
+  @apply flex items-center justify-between mb-6;
+}
+
+.recent-activity-title {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.recent-activity-view-all {
+  @apply text-sm font-medium text-brand-primary hover:text-primary-700;
+}
+
+.activity-list {
+  @apply space-y-4;
+}
+
+.activity-item {
+  @apply flex items-start p-3 space-x-3 transition-colors duration-200 rounded-lg hover:bg-gray-50;
+}
+
+.activity-icon {
+  @apply flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-full;
+}
+
+.activity-icon-consulta {
+  @apply text-blue-600 bg-blue-100;
+}
+
+.activity-icon-evento {
+  @apply text-green-600 bg-green-100;
+}
+
+.activity-icon-resena {
+  @apply text-yellow-600 bg-yellow-100;
+}
+
+.activity-icon-salon {
+  @apply text-purple-600 bg-purple-100;
+}
+
+.activity-content {
+  @apply flex-1 min-w-0;
+}
+
+.activity-title {
+  @apply text-sm font-medium text-gray-900;
+}
+
+.activity-description {
+  @apply mt-1 text-sm text-gray-600;
+}
+
+.activity-time {
+  @apply mt-1 text-xs text-gray-500;
+}
+
+/* === TABS === */
+.tabs-container {
+  @apply bg-white border border-gray-100 shadow-sm rounded-xl;
+}
+
+.tabs-nav {
+  @apply flex border-b border-gray-200;
+}
+
+.tab-button {
+  @apply px-6 py-3 text-sm font-medium transition-colors duration-200 border-b-2 border-transparent;
+}
+
+.tab-button-active {
+  @apply text-brand-primary border-brand-primary bg-brand-primary bg-opacity-5;
+}
+
+.tab-button-inactive {
+  @apply text-gray-500 hover:text-gray-700 hover:border-gray-300;
+}
+
+.tab-content {
+  @apply p-6;
+}
+
+/* === BACK TO TOP === */
+.back-to-top {
+  @apply fixed z-40 flex items-center justify-center w-12 h-12 text-white transition-all duration-200 rounded-full shadow-lg bottom-6 right-6 bg-brand-primary hover:bg-primary-700 hover:shadow-xl;
+}
+
+.back-to-top-hidden {
+  @apply transform translate-y-2 opacity-0 pointer-events-none;
+}
+
+.back-to-top-visible {
+  @apply transform translate-y-0 opacity-100 pointer-events-auto;
+}
+
+/* === DASHBOARD GRID === */
+.dashboard-grid {
+  @apply grid grid-cols-1 gap-8 lg:grid-cols-3;
+}
+
+.dashboard-main-content {
+  @apply space-y-8 lg:col-span-2;
+}
+
+.dashboard-sidebar-content {
+  @apply space-y-8 lg:col-span-1;
+}
+
+/* === RESPONSIVE DASHBOARD === */
+@media (max-width: 1023px) {
+  .dashboard-sidebar {
+    @apply -translate-x-full;
+  }
+  
+  .dashboard-sidebar.is-open {
+    @apply translate-x-0;
+  }
+  
+  .dashboard-main {
+    @apply ml-0;
+  }
+}
+
+/* Mobile sidebar overlay */
+.sidebar-overlay {
+  @apply fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden;
+}
+
+/* === DASHBOARD CARDS === */
+.dashboard-card {
+  @apply p-6 bg-white border border-gray-100 shadow-sm rounded-xl;
+}
+
+.dashboard-card-header {
+  @apply flex items-center justify-between mb-4;
+}
+
+.dashboard-card-title {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.dashboard-card-action {
+  @apply text-sm font-medium text-brand-primary hover:text-primary-700;
+}
+
+.dashboard-empty-state {
+  @apply py-12 text-center;
+}
+
+.dashboard-empty-icon {
+  @apply w-16 h-16 mx-auto mb-4 text-gray-400;
+}
+
+.dashboard-empty-title {
+  @apply mb-2 text-lg font-medium text-gray-900;
+}
+
+.dashboard-empty-description {
+  @apply max-w-sm mx-auto mb-6 text-gray-500;
+}

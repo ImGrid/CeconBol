@@ -1,0 +1,261 @@
+/* Estilos específicos para componentes de salones */
+
+/* === SALON CARD === */
+.salon-card {
+  @apply flex flex-col h-full;
+}
+
+.salon-card .card-body {
+  @apply flex flex-col flex-1;
+}
+
+.salon-card .card-footer {
+  @apply mt-auto;
+}
+
+/* === SALON LIST === */
+.salon-list {
+  @apply min-h-96;
+}
+
+.salon-list-grid {
+  @apply grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.salon-list-loading {
+  @apply grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.salon-card-skeleton {
+  @apply bg-gray-200 animate-pulse rounded-xl h-80;
+}
+
+/* === SALON GALLERY === */
+.salon-gallery {
+  @apply mb-8;
+}
+
+.gallery-grid {
+  @apply grid grid-cols-4 gap-2 h-96;
+}
+
+.gallery-main {
+  @apply col-span-4 row-span-2 md:col-span-2;
+}
+
+.gallery-secondary {
+  @apply grid grid-cols-2 col-span-4 gap-2 md:col-span-2;
+}
+
+.gallery-secondary-item {
+  @apply relative h-full;
+}
+
+.gallery-nav {
+  @apply absolute p-2 text-white transition-opacity transform -translate-y-1/2 bg-black bg-opacity-50 rounded-full top-1/2 hover:bg-opacity-70;
+}
+
+.gallery-nav-prev {
+  @apply left-4;
+}
+
+.gallery-nav-next {
+  @apply right-4;
+}
+
+.gallery-modal img {
+  @apply object-contain w-full max-h-96;
+}
+
+.gallery-overlay {
+  @apply absolute inset-0 flex items-center justify-center bg-black cursor-pointer bg-opacity-60 rounded-br-xl;
+}
+
+.gallery-overlay-content {
+  @apply text-center text-white;
+}
+
+.gallery-overlay-icon {
+  @apply w-8 h-8 mx-auto mb-2;
+}
+
+.gallery-overlay-text {
+  @apply text-sm font-medium;
+}
+
+/* === SALON DETAILS === */
+.salon-details {
+  @apply px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8;
+}
+
+.salon-header {
+  @apply mb-6;
+}
+
+.salon-title {
+  @apply mb-2 text-2xl font-bold text-gray-900 md:text-3xl;
+}
+
+.salon-location {
+  @apply flex items-center mb-3 text-gray-600;
+}
+
+.salon-rating {
+  @apply flex items-center space-x-4;
+}
+
+.salon-badges {
+  @apply flex flex-wrap gap-2 mt-4 sm:mt-0;
+}
+
+.salon-main-grid {
+  @apply grid gap-8 lg:grid-cols-3;
+}
+
+.salon-content {
+  @apply space-y-8 lg:col-span-2;
+}
+
+.salon-sidebar {
+  @apply lg:col-span-1;
+}
+
+.salon-sidebar-sticky {
+  @apply sticky space-y-6 top-6;
+}
+
+/* === SALON INFO === */
+.salon-info-grid {
+  @apply grid gap-6 md:grid-cols-2;
+}
+
+.salon-info-item {
+  @apply flex items-center space-x-3;
+}
+
+.salon-info-icon {
+  @apply flex items-center justify-center flex-shrink-0 w-10 h-10 rounded-lg;
+}
+
+.salon-info-icon-primary {
+  @apply bg-brand-primary bg-opacity-10 text-brand-primary;
+}
+
+.salon-info-icon-secondary {
+  @apply bg-brand-secondary bg-opacity-10 text-brand-secondary;
+}
+
+.salon-info-content h3 {
+  @apply font-medium text-gray-900;
+}
+
+.salon-info-content p {
+  @apply text-gray-600;
+}
+
+/* === SALON SERVICIOS === */
+.salon-services-grid {
+  @apply grid gap-3 md:grid-cols-2;
+}
+
+.salon-service-item {
+  @apply flex items-center space-x-2;
+}
+
+.salon-service-icon {
+  @apply flex-shrink-0 w-5 h-5 text-brand-tertiary;
+}
+
+.salon-service-text {
+  @apply text-gray-700;
+}
+
+.salon-services-additional {
+  @apply space-y-3;
+}
+
+.salon-service-additional-item {
+  @apply flex items-center justify-between p-3 rounded-lg bg-gray-50;
+}
+
+.salon-service-additional-info h4 {
+  @apply font-medium text-gray-900;
+}
+
+.salon-service-additional-info p {
+  @apply text-sm text-gray-600;
+}
+
+.salon-service-additional-price {
+  @apply text-right;
+}
+
+.salon-service-additional-price span {
+  @apply font-semibold text-brand-primary;
+}
+
+.salon-service-additional-price .unit {
+  @apply block text-xs text-gray-500;
+}
+
+/* === SALON CONTACT === */
+.salon-contact-card {
+  @apply space-y-4;
+}
+
+.salon-contact-price {
+  @apply p-4 text-center rounded-lg bg-gray-50;
+}
+
+.salon-contact-price-label {
+  @apply mb-1 text-sm text-gray-600;
+}
+
+.salon-contact-price-amount {
+  @apply text-2xl font-bold text-brand-primary;
+}
+
+.salon-contact-price-unit {
+  @apply text-sm text-gray-600;
+}
+
+.salon-contact-info {
+  @apply space-y-3;
+}
+
+.salon-contact-item {
+  @apply flex items-center space-x-2;
+}
+
+.salon-contact-icon {
+  @apply w-5 h-5 text-gray-400;
+}
+
+.salon-contact-text {
+  @apply text-gray-700;
+}
+
+.salon-contact-email {
+  @apply text-sm text-gray-700;
+}
+
+/* === TRUNCATE TEXT === */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* === CITY CARDS === */
+.city-card {
+  @apply p-6 text-left transition-all duration-200 bg-white border border-gray-200 rounded-lg hover:border-brand-primary hover:shadow-md hover:transform hover:-translate-y-1;
+}
+
+.city-card-title {
+  @apply mb-1 text-lg font-semibold text-gray-900;
+}
+
+.city-card-count {
+  @apply text-sm text-gray-600;
+}

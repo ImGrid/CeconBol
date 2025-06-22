@@ -1,5 +1,10 @@
 import './assets/css/main.css'
 
+// Importar CSS de módulos
+import './components/ui/ui.css'
+import './components/busqueda/busqueda.css'
+import './components/salones/salones.css'
+
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'

@@ -1,11 +1,27 @@
 <template>
-  <span :class="badgeClass">
-    <!-- Icono opcional -->
-    <span v-if="icon" class="mr-1">{{ icon }}</span>
-    
-    <!-- Contenido -->
-    <slot>{{ text }}</slot>
-  </span>
+  <div class="rating-container">
+    <!-- Estrellas -->
+    <div class="rating-stars">
+      <span 
+        v-for="star in 5" 
+        :key="star"
+        :class="starClass(star)"
+        @click="handleStarClick(star)"
+      >
+        ★
+      </span>
+    </div>
+
+    <!-- Valor numérico (opcional) -->
+    <span v-if="showValue" class="rating-value">
+      {{ displayValue }}
+    </span>
+
+    <!-- Cantidad de reseñas (opcional) -->
+    <span v-if="showCount && count" class="rating-count">
+      ({{ count }})
+    </span>
+  </div>
 </template>
 
 <script setup>
@@ -13,68 +29,94 @@ import { computed } from 'vue'
 
 // Props
 const props = defineProps({
-  text: {
-    type: String,
-    default: ''
+  value: {
+    type: Number,
+    default: 0,
+    validator: (value) => value >= 0 && value <= 5
   },
-  variant: {
-    type: String,
-    default: 'default',
-    validator: (value) => [
-      'default', 'primary', 'secondary', 'success', 'warning', 'error',
-      'premium', 'popular', 'new', 'destacado'
-    ].includes(value)
+  maxStars: {
+    type: Number,
+    default: 5,
+    validator: (value) => value > 0
   },
   size: {
     type: String,
     default: 'medium',
     validator: (value) => ['small', 'medium', 'large'].includes(value)
   },
-  icon: {
-    type: String,
-    default: ''
+  interactive: {
+    type: Boolean,
+    default: false
   },
-  rounded: {
+  showValue: {
     type: Boolean,
     default: true
+  },
+  showCount: {
+    type: Boolean,
+    default: false
+  },
+  count: {
+    type: Number,
+    default: 0
+  },
+  precision: {
+    type: Number,
+    default: 1,
+    validator: (value) => [0, 1, 2].includes(value)
   }
 })
 
+// Events
+const emit = defineEmits(['update:value', 'change'])
+
 // Computed
-const badgeClass = computed(() => {
-  const baseClass = 'inline-flex items-center font-medium'
-  
-  // Variantes con colores de la paleta "Elegancia Festiva"
-  const variantClasses = {
-    'default': 'bg-gray-100 text-gray-800',
-    'primary': 'bg-brand-primary text-white',
-    'secondary': 'bg-brand-secondary text-white', 
-    'success': 'bg-brand-tertiary text-white',
-    'warning': 'bg-brand-accent text-white',
-    'error': 'bg-red-100 text-red-800',
-    
-    // Badges especiales para salones
-    'premium': 'badge-premium', // Definido en main.css
-    'popular': 'badge-popular',  // Definido en main.css
-    'new': 'badge-new',         // Definido en main.css
-    'destacado': 'bg-gradient-to-r from-brand-accent to-brand-secondary text-white'
+const displayValue = computed(() => {
+  if (props.precision === 0) {
+    return Math.round(props.value)
   }
-  
-  // Tamaños
-  const sizeClasses = {
-    'small': 'px-2 py-1 text-xs',
-    'medium': 'px-3 py-1 text-sm',
-    'large': 'px-4 py-2 text-base'
-  }
-  
-  // Bordes redondeados
-  const roundedClass = props.rounded ? 'rounded-full' : 'rounded'
-  
-  return [
-    baseClass,
-    variantClasses[props.variant],
-    sizeClasses[props.size],
-    roundedClass
-  ].filter(Boolean).join(' ')
+  return props.value.toFixed(props.precision)
 })
+
+const sizeClasses = computed(() => {
+  const sizes = {
+    'small': 'rating-star-small',
+    'medium': 'rating-star-medium', 
+    'large': 'rating-star-large'
+  }
+  return sizes[props.size]
+})
+
+// Métodos
+const starClass = (starNumber) => {
+  const classes = ['rating-star', sizeClasses.value]
+  
+  if (starNumber <= props.value) {
+    // Estrella llena - usar color de marca para estrellas
+    classes.push('rating-stars') // Clase definida en main.css
+  } else if (starNumber - 0.5 <= props.value) {
+    // Media estrella (futuro feature)
+    classes.push('text-brand-accent opacity-50')
+  } else {
+    // Estrella vacía
+    classes.push('text-gray-300')
+  }
+  
+  if (props.interactive) {
+    classes.push('hover:text-brand-accent cursor-pointer')
+  }
+  
+  return classes.join(' ')
+}
+
+const handleStarClick = (starNumber) => {
+  if (!props.interactive) return
+  
+  emit('update:value', starNumber)
+  emit('change', starNumber)
+}
 </script>
+
+<style>
+@import './ui.css';
+</style>

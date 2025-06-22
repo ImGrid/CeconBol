@@ -28,7 +28,7 @@
       </h3>
       
       <!-- Subtítulo -->
-      <p v-if="subtitle" :class="subtitleClass">
+      <p v-if="subtitle" class="card-subtitle">
         {{ subtitle }}
       </p>
 
@@ -38,7 +38,7 @@
       </div>
       
       <!-- Descripción -->
-      <p v-if="description" :class="descriptionClass">
+      <p v-if="description" class="card-description">
         {{ description }}
       </p>
     </div>
@@ -107,46 +107,47 @@ const emit = defineEmits(['click', 'image-error'])
 
 // Computed classes
 const cardClass = computed(() => {
-  const baseClass = 'bg-white rounded-xl border transition-all duration-200'
+  const classes = ['card-base'] // Clase base de ui.css
   
+  // Variantes usando clases de main.css y ui.css
   const variantClasses = {
     'default': 'card',
     'venue': 'card-venue', 
-    'simple': 'shadow-sm border-gray-100',
-    'bordered': 'border-2 border-gray-200'
+    'simple': 'card-simple',
+    'bordered': 'card-bordered'
   }
   
-  const hoverClass = props.hover ? 'hover-glow hover-lift' : ''
-  const clickableClass = props.clickable ? 'cursor-pointer' : ''
+  classes.push(variantClasses[props.variant])
   
-  return [
-    baseClass,
-    variantClasses[props.variant],
-    hoverClass,
-    clickableClass
-  ].filter(Boolean).join(' ')
+  // Estados
+  if (props.hover) {
+    classes.push('card-hover hover-glow hover-lift')
+  }
+  
+  if (props.clickable) {
+    classes.push('card-clickable')
+  }
+  
+  return classes.join(' ')
 })
 
 const headerClass = computed(() => {
   const paddingClasses = {
-    'none': 'p-0',
-    'small': 'p-3',
-    'medium': 'p-4',
-    'large': 'p-6'
+    'none': 'card-padding-none',
+    'small': 'card-padding-small',
+    'medium': 'card-padding-medium',
+    'large': 'card-padding-large'
   }
   
-  return [
-    'border-b border-gray-100',
-    paddingClasses[props.padding]
-  ].join(' ')
+  return ['card-header', paddingClasses[props.padding]].join(' ')
 })
 
 const bodyClass = computed(() => {
   const paddingClasses = {
-    'none': 'p-0',
-    'small': 'p-3',
-    'medium': 'p-4',
-    'large': 'p-6'
+    'none': 'card-padding-none',
+    'small': 'card-padding-small',
+    'medium': 'card-padding-medium',
+    'large': 'card-padding-large'
   }
   
   return paddingClasses[props.padding]
@@ -154,34 +155,21 @@ const bodyClass = computed(() => {
 
 const footerClass = computed(() => {
   const paddingClasses = {
-    'none': 'p-0',
-    'small': 'p-3',
-    'medium': 'p-4', 
-    'large': 'p-6'
+    'none': 'card-padding-none',
+    'small': 'card-padding-small',
+    'medium': 'card-padding-medium', 
+    'large': 'card-padding-large'
   }
   
-  return [
-    'border-t border-gray-100 bg-gray-50 rounded-b-xl',
-    paddingClasses[props.padding]
-  ].join(' ')
+  return ['card-footer', paddingClasses[props.padding]].join(' ')
 })
 
 const imageClass = computed(() => {
-  return props.variant === 'venue' ? 'w-full h-48 object-cover' : 'w-full h-auto'
+  return props.variant === 'venue' ? 'card-venue-image' : 'card-image'
 })
 
 const titleClass = computed(() => {
-  return props.variant === 'venue' 
-    ? 'text-lg font-semibold text-gray-900 mb-1'
-    : 'text-xl font-semibold text-gray-900 mb-2'
-})
-
-const subtitleClass = computed(() => {
-  return 'text-sm text-gray-600 mb-2'
-})
-
-const descriptionClass = computed(() => {
-  return 'text-gray-600 text-sm leading-relaxed'
+  return props.variant === 'venue' ? 'card-venue-title' : 'card-title'
 })
 
 // Métodos
@@ -197,3 +185,7 @@ const handleImageError = (event) => {
   event.target.src = '/images/placeholder-salon.jpg'
 }
 </script>
+
+<style>
+@import './ui.css';
+</style>
