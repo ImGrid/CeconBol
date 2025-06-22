@@ -1,0 +1,6 @@
+2025-06-21 21:24:49 [ERROR]: Error caught by middleware Credenciales inválidas
+Error: Credenciales inválidas
+    at createError (C:\Users\lenovo\Documents\CeconBol\backend\src\middlewares\manejoErrores.js:166:17)
+    at Object.loginUser (C:\Users\lenovo\Documents\CeconBol\backend\src\servicios\authService.js:58:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async C:\Users\lenovo\Documents\CeconBol\backend\src\controladores\authController.js:25:18
