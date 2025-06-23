@@ -7,92 +7,11 @@ import './components/salones/salones.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { createRouter, createWebHistory } from 'vue-router'
 
 import App from './App.vue'
 
-// Importar páginas
-import Home from '@/pages/Home.vue'
-import Login from '@/pages/auth/Login.vue'
-import Register from '@/pages/auth/Register.vue'
-
-// Importar guards
-import { requireAuth, requireGuest, initializeAuth } from '@/router/guards.js'
-
-// === CONFIGURACIÓN DE RUTAS ===
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home,
-    beforeEnter: initializeAuth
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login,
-    beforeEnter: requireGuest
-  },
-  {
-    path: '/register',
-    name: 'Register', 
-    component: Register,
-    beforeEnter: requireGuest
-  },
-  
-  // Rutas temporales hasta implementar Fase 2-3
-  {
-    path: '/salones',
-    name: 'Salones',
-    component: () => import('@/pages/Home.vue'), // Temporal - mostrar Home
-    beforeEnter: initializeAuth
-  },
-  {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: () => import('@/pages/Home.vue'), // Temporal - reemplazar en Fase 3
-    beforeEnter: requireAuth
-  },
-  {
-    path: '/profile',
-    name: 'Profile',
-    component: () => import('@/pages/Home.vue'), // Temporal - reemplazar después
-    beforeEnter: requireAuth
-  },
-  {
-    path: '/admin/dashboard',
-    name: 'AdminDashboard', 
-    component: () => import('@/pages/Home.vue'), // Temporal - reemplazar en Fase 9
-    beforeEnter: requireAuth
-  },
-  {
-    path: '/mis-salones',
-    name: 'MisSalones',
-    component: () => import('@/pages/Home.vue'), // Temporal - reemplazar en Fase 4
-    beforeEnter: requireAuth
-  },
-  
-  // 404 - Catch all
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: () => import('@/pages/Home.vue') // Temporal - crear página 404 después
-  }
-]
-
-// === CONFIGURACIÓN DEL ROUTER ===
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
-  scrollBehavior(to, from, savedPosition) {
-    // Scroll al top en cada navegación, o restablecer posición si existe
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { top: 0 }
-    }
-  }
-})
+//  Importar router desde archivo externo
+import router from '@/router/index.js'
 
 // === CONFIGURACIÓN DE PINIA ===
 const pinia = createPinia()
@@ -102,7 +21,7 @@ const app = createApp(App)
 
 // Plugins
 app.use(pinia)
-app.use(router)
+app.use(router) // Usar el router externo corregido
 
 // Error handler global
 app.config.errorHandler = (err, vm, info) => {

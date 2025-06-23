@@ -1,7 +1,7 @@
-import { upload, post, del } from '@/services/api.js'
+import { upload, post, del, put } from '@/services/api.js'
 import { API_ENDPOINTS, FILE_CONFIG } from '@/utils/constants.js'
 
-// === UPLOAD DE IMÁGENES ===
+// === 📸 UPLOAD DE IMÁGENES GENERALES ===
 
 export const uploadImage = async (file, onProgress = null) => {
   try {
@@ -15,7 +15,7 @@ export const uploadImage = async (file, onProgress = null) => {
     formData.append('image', file)
     formData.append('type', 'salon')
     
-    const response = await upload('/api/upload/image', formData, onProgress)
+    const response = await upload(API_ENDPOINTS.UPLOAD.IMAGE, formData, onProgress)
     return response.data.data
   } catch (error) {
     console.error('Error uploading image:', error)
@@ -41,7 +41,7 @@ export const uploadMultipleImages = async (files, onProgress = null) => {
     formData.append('type', 'salon')
     formData.append('count', files.length)
     
-    const response = await upload('/api/upload/images', formData, onProgress)
+    const response = await upload(API_ENDPOINTS.UPLOAD.IMAGES, formData, onProgress)
     return response.data.data
   } catch (error) {
     console.error('Error uploading multiple images:', error)
@@ -49,7 +49,7 @@ export const uploadMultipleImages = async (files, onProgress = null) => {
   }
 }
 
-// === UPLOAD DE FOTOS DE SALONES ===
+// === 🏢 UPLOAD DE FOTOS DE SALONES - FASE 4 ===
 
 export const uploadSalonPhotos = async (salonId, files, onProgress = null) => {
   try {
@@ -72,7 +72,7 @@ export const uploadSalonPhotos = async (salonId, files, onProgress = null) => {
       if (file.caption) {
         formData.append(`caption_${index}`, file.caption)
       }
-      if (file.isMain) {
+      if (file.isMain && index === 0) {
         formData.append(`main_${index}`, 'true')
       }
     })
@@ -80,7 +80,13 @@ export const uploadSalonPhotos = async (salonId, files, onProgress = null) => {
     // Endpoint específico para salones
     const endpoint = API_ENDPOINTS.SALONES.UPLOAD_PHOTOS.replace('{id}', salonId)
     
-    const response = await upload(endpoint, formData, onProgress)
+    const response = await upload(endpoint, formData, (progressEvent) => {
+      if (onProgress && progressEvent.lengthComputable) {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        onProgress(progressEvent, percentCompleted)
+      }
+    })
+    
     return response.data.data
   } catch (error) {
     console.error('Error uploading salon photos:', error)
@@ -90,7 +96,10 @@ export const uploadSalonPhotos = async (salonId, files, onProgress = null) => {
 
 export const updateSalonPhoto = async (salonId, photoId, updates) => {
   try {
-    const response = await post(`/api/salones/${salonId}/fotos/${photoId}`, updates)
+    const endpoint = API_ENDPOINTS.SALONES.UPDATE_PHOTO
+      .replace('{id}', salonId)
+      .replace('{photoId}', photoId)
+    const response = await put(endpoint, updates)
     return response.data.data
   } catch (error) {
     console.error('Error updating salon photo:', error)
@@ -100,7 +109,10 @@ export const updateSalonPhoto = async (salonId, photoId, updates) => {
 
 export const deleteSalonPhoto = async (salonId, photoId) => {
   try {
-    const response = await del(`/api/salones/${salonId}/fotos/${photoId}`)
+    const endpoint = API_ENDPOINTS.SALONES.DELETE_PHOTO
+      .replace('{id}', salonId)
+      .replace('{photoId}', photoId)
+    const response = await del(endpoint)
     return response.data.data
   } catch (error) {
     console.error('Error deleting salon photo:', error)
@@ -110,9 +122,8 @@ export const deleteSalonPhoto = async (salonId, photoId) => {
 
 export const reorderSalonPhotos = async (salonId, photoIds) => {
   try {
-    const response = await post(`/api/salones/${salonId}/fotos/reorder`, {
-      order: photoIds
-    })
+    const endpoint = API_ENDPOINTS.SALONES.REORDER_PHOTOS.replace('{id}', salonId)
+    const response = await put(endpoint, { order: photoIds })
     return response.data.data
   } catch (error) {
     console.error('Error reordering salon photos:', error)
@@ -120,7 +131,16 @@ export const reorderSalonPhotos = async (salonId, photoIds) => {
   }
 }
 
-// === VALIDACIONES DE ARCHIVOS ===
+export const setMainSalonPhoto = async (salonId, photoId) => {
+  try {
+    return await updateSalonPhoto(salonId, photoId, { esPrincipal: true })
+  } catch (error) {
+    console.error('Error setting main salon photo:', error)
+    throw error
+  }
+}
+
+// === ✅ VALIDACIONES DE ARCHIVOS ===
 
 export const validateImageFile = (file) => {
   if (!file) {
@@ -199,7 +219,7 @@ export const validateImageFiles = (files) => {
   return { isValid: true }
 }
 
-// === UTILIDADES DE ARCHIVOS ===
+// === 🛠️ UTILIDADES DE ARCHIVOS ===
 
 export const getFilePreview = (file) => {
   return new Promise((resolve, reject) => {
@@ -216,7 +236,8 @@ export const getFilePreview = (file) => {
         preview: e.target.result,
         name: file.name,
         size: file.size,
-        type: file.type
+        type: file.type,
+        id: Date.now() + Math.random() // ID temporal para UI
       })
     }
     
@@ -299,7 +320,7 @@ export const compressImage = (file, maxWidth = 1920, maxHeight = 1080, quality =
   })
 }
 
-// === HELPERS DE FORMATO ===
+// === 📊 HELPERS DE FORMATO ===
 
 export const formatFileSize = (bytes) => {
   if (bytes === 0) return '0 Bytes'
@@ -319,7 +340,7 @@ export const isImageFile = (file) => {
   return file && file.type && file.type.startsWith('image/')
 }
 
-// === CLEANUP ===
+// === 🧹 CLEANUP ===
 
 export const revokeObjectURL = (url) => {
   if (url && url.startsWith('blob:')) {
@@ -337,7 +358,7 @@ export const cleanupPreviews = (previews) => {
   }
 }
 
-// === PROGRESS TRACKING ===
+// === 📈 PROGRESS TRACKING ===
 
 export const createProgressTracker = () => {
   let progress = 0
@@ -380,4 +401,37 @@ export const createProgressTracker = () => {
       return isComplete
     }
   }
+}
+
+// === 🔄 BATCH UPLOADS ===
+
+export const uploadFilesBatch = async (files, salonId, batchSize = 3, onBatchProgress = null) => {
+  const results = []
+  const batches = []
+  
+  // Dividir archivos en lotes
+  for (let i = 0; i < files.length; i += batchSize) {
+    batches.push(files.slice(i, i + batchSize))
+  }
+  
+  // Subir cada lote
+  for (let i = 0; i < batches.length; i++) {
+    const batch = batches[i]
+    
+    try {
+      const batchResults = await uploadSalonPhotos(salonId, batch, (progressEvent, percent) => {
+        if (onBatchProgress) {
+          const totalProgress = ((i * batchSize) + (percent * batch.length / 100)) / files.length * 100
+          onBatchProgress(Math.round(totalProgress), i + 1, batches.length)
+        }
+      })
+      
+      results.push(...batchResults)
+    } catch (error) {
+      console.error(`Error uploading batch ${i + 1}:`, error)
+      throw error
+    }
+  }
+  
+  return results
 }

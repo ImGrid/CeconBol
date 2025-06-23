@@ -32,7 +32,7 @@
         <div class="lg:col-span-1">
           <FilterSidebar
             v-model="filtros"
-            :result-count="pagination.total"
+            :result-count="pagination?.total || 0"
             @apply-filters="handleApplyFilters"
             @clear-filters="handleClearFilters"
           />
@@ -48,7 +48,7 @@
                 {{ getResultsTitle() }}
               </h2>
               <p v-if="!loading && hasResultados" class="mt-1 text-sm text-gray-600">
-                {{ pagination.total }} {{ pagination.total === 1 ? 'resultado' : 'resultados' }} encontrados
+                {{ pagination?.total || 0 }} {{ (pagination?.total || 0) === 1 ? 'resultado' : 'resultados' }} encontrados
               </p>
             </div>
 
@@ -71,10 +71,10 @@
 
           <!-- Lista de salones -->
           <SalonList
-            :salones="resultados"
-            :loading="loading"
-            :loading-more="loadingMore"
-            :error="error"
+            :salones="resultados || []"
+            :loading="loading || false"
+            :loading-more="loadingMore || false"
+            :error="error || ''"
             :has-filters="hasActiveFilters"
             :can-load-more="canLoadMore"
             :search-term="searchQuery"
@@ -85,7 +85,7 @@
           />
 
           <!-- Paginación -->
-          <div v-if="!loading && hasResultados && pagination.totalPages > 1" class="mt-8">
+          <div v-if="!loading && hasResultados && (pagination?.totalPages || 0) > 1" class="mt-8">
             <Pagination
               :pagination="pagination"
               @page-change="handlePageChange"
@@ -154,138 +154,228 @@ const searchQuery = ref('')
 const loadingMore = ref(false)
 const salonesDestacados = ref([])
 
-// Computed
+// ✅ DECLARAR FUNCIONES ANTES DE USARLAS EN WATCHERS
+
+const updateFromQueryParams = (query) => {
+  try {
+    // Actualizar filtros desde URL
+    if (query.q) searchQuery.value = query.q
+    if (query.ciudad) filtros.ciudad = query.ciudad
+    if (query.capacidad) {
+      filtros.capacidadMinima = parseInt(query.capacidad)
+    }
+    // ... más parámetros según sea necesario
+  } catch (error) {
+    console.error('Error updating from query params:', error)
+  }
+}
+
+const updateQueryParams = () => {
+  try {
+    // Actualizar URL con filtros actuales
+    const query = {}
+    
+    if (searchQuery.value) query.q = searchQuery.value
+    if (filtros?.ciudad) query.ciudad = filtros.ciudad
+    if (filtros?.capacidadMinima) query.capacidad = filtros.capacidadMinima
+    
+    router.replace({ query })
+  } catch (error) {
+    console.error('Error updating query params:', error)
+  }
+}
+
+// Computed con verificaciones null
 const hasActiveFilters = computed(() => {
-  return filtrosActivos.value || searchQuery.value.length > 0
+  try {
+    return (filtrosActivos?.value || false) || searchQuery.value.length > 0
+  } catch (error) {
+    console.error('Error in hasActiveFilters:', error)
+    return false
+  }
 })
 
 const hasSearchOrFilters = computed(() => {
-  return hasActiveFilters.value
+  try {
+    return hasActiveFilters.value
+  } catch (error) {
+    console.error('Error in hasSearchOrFilters:', error)
+    return false
+  }
 })
 
 const canLoadMore = computed(() => {
-  return pagination.value.page < pagination.value.totalPages
+  try {
+    return (pagination?.value?.page || 0) < (pagination?.value?.totalPages || 0)
+  } catch (error) {
+    console.error('Error in canLoadMore:', error)
+    return false
+  }
 })
+
+// ✅ WATCHERS CON VERIFICACIONES
 
 // Watchers
 watch(() => route.query, (newQuery) => {
   // Sincronizar con query parameters de la URL
-  updateFromQueryParams(newQuery)
+  if (newQuery) {
+    updateFromQueryParams(newQuery)
+  }
 }, { immediate: true })
 
-// Métodos
-const updateFromQueryParams = (query) => {
-  // Actualizar filtros desde URL
-  if (query.q) searchQuery.value = query.q
-  if (query.ciudad) filtros.ciudad = query.ciudad
-  if (query.capacidad) {
-    filtros.capacidadMinima = parseInt(query.capacidad)
-  }
-  // ... más parámetros según sea necesario
-}
-
-const updateQueryParams = () => {
-  // Actualizar URL con filtros actuales
-  const query = {}
-  
-  if (searchQuery.value) query.q = searchQuery.value
-  if (filtros.ciudad) query.ciudad = filtros.ciudad
-  if (filtros.capacidadMinima) query.capacidad = filtros.capacidadMinima
-  
-  router.replace({ query })
-}
-
+// Métodos con verificaciones null
 const handleSearch = async (texto) => {
-  searchQuery.value = texto
-  filtros.texto = texto
-  await performSearch()
+  try {
+    searchQuery.value = texto || ''
+    if (filtros) {
+      filtros.texto = texto || ''
+    }
+    await performSearch()
+  } catch (error) {
+    console.error('Error in handleSearch:', error)
+  }
 }
 
 const handleClearSearch = () => {
-  searchQuery.value = ''
-  filtros.texto = ''
-  performSearch()
+  try {
+    searchQuery.value = ''
+    if (filtros) {
+      filtros.texto = ''
+    }
+    performSearch()
+  } catch (error) {
+    console.error('Error in handleClearSearch:', error)
+  }
 }
 
 const handleApplyFilters = async (newFilters) => {
-  Object.assign(filtros, newFilters)
-  await performSearch()
+  try {
+    if (filtros && newFilters) {
+      Object.assign(filtros, newFilters)
+    }
+    await performSearch()
+  } catch (error) {
+    console.error('Error in handleApplyFilters:', error)
+  }
 }
 
 const handleClearFilters = () => {
-  searchQuery.value = ''
-  limpiarFiltros()
-  performSearch()
+  try {
+    searchQuery.value = ''
+    if (limpiarFiltros) {
+      limpiarFiltros()
+    }
+    performSearch()
+  } catch (error) {
+    console.error('Error in handleClearFilters:', error)
+  }
 }
 
 const handleSortChange = () => {
-  performSearch()
+  try {
+    performSearch()
+  } catch (error) {
+    console.error('Error in handleSortChange:', error)
+  }
 }
 
 const handlePageChange = (page) => {
-  pagination.value.page = page
-  performSearch()
-  
-  // Scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  try {
+    if (pagination?.value) {
+      pagination.value.page = page
+    }
+    performSearch()
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  } catch (error) {
+    console.error('Error in handlePageChange:', error)
+  }
 }
 
 const handleLoadMore = async () => {
-  loadingMore.value = true
   try {
-    await cargarMasResultados()
+    loadingMore.value = true
+    if (cargarMasResultados) {
+      await cargarMasResultados()
+    }
+  } catch (error) {
+    console.error('Error in handleLoadMore:', error)
   } finally {
     loadingMore.value = false
   }
 }
 
 const handleSearchAll = () => {
-  handleClearFilters()
+  try {
+    handleClearFilters()
+  } catch (error) {
+    console.error('Error in handleSearchAll:', error)
+  }
 }
 
 const handleRetry = () => {
-  clearError()
-  performSearch()
+  try {
+    if (clearError) {
+      clearError()
+    }
+    performSearch()
+  } catch (error) {
+    console.error('Error in handleRetry:', error)
+  }
 }
 
 const performSearch = async () => {
   try {
-    await buscarSalones()
-    updateQueryParams()
+    if (buscarSalones) {
+      await buscarSalones()
+      updateQueryParams()
+    }
   } catch (error) {
-    console.error('Error in search:', error)
+    console.error('Error in performSearch:', error)
   }
 }
 
+// ✅ FUNCIÓN getResultsTitle CON VERIFICACIONES NULL
 const getResultsTitle = () => {
-  if (loading.value) return 'Buscando salones...'
-  if (error.value) return 'Error en la búsqueda'
-  if (!hasResultados.value && hasActiveFilters.value) return 'No se encontraron salones'
-  if (!hasResultados.value) return 'No hay salones disponibles'
-  if (searchQuery.value) return `Resultados para "${searchQuery.value}"`
-  if (filtrosActivos.value) return 'Salones filtrados'
-  return 'Todos los salones'
+  try {
+    if (loading?.value) return 'Buscando salones...'
+    if (error?.value) return 'Error en la búsqueda'
+    if (!hasResultados?.value && hasActiveFilters.value) return 'No se encontraron salones'
+    if (!hasResultados?.value) return 'No hay salones disponibles'
+    if (searchQuery.value) return `Resultados para "${searchQuery.value}"`
+    if (filtrosActivos?.value) return 'Salones filtrados'
+    return 'Todos los salones'
+  } catch (err) {
+    console.error('Error in getResultsTitle:', err)
+    return 'Buscando salones...'
+  }
 }
 
 const loadSalonesDestacados = async () => {
   try {
     const destacados = await busquedaService.getSalonesDestacados(6)
-    salonesDestacados.value = destacados
+    salonesDestacados.value = destacados || []
   } catch (error) {
     console.error('Error loading featured salones:', error)
+    salonesDestacados.value = []
   }
 }
 
 // Lifecycle
 onMounted(async () => {
-  // Actualizar título de la página
-  document.title = 'Buscar Salones - CECONBOL'
-  
-  // Cargar datos iniciales
-  await Promise.all([
-    performSearch(),
-    loadSalonesDestacados()
-  ])
+  try {
+    // Actualizar título de la página
+    document.title = 'Buscar Salones - CECONBOL'
+    
+    // Cargar datos iniciales
+    await Promise.all([
+      performSearch(),
+      loadSalonesDestacados()
+    ])
+  } catch (error) {
+    console.error('Error in onMounted:', error)
+  }
 })
 </script>
 

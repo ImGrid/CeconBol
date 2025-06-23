@@ -48,12 +48,14 @@ export const getSalonBySlug = async (slug) => {
   }
 }
 
-// === MIS SALONES (PROVEEDOR) ===
+// === 🏢 MIS SALONES (PROVEEDOR) - FASE 4 ===
 
 export const getMisSalones = async (filtros = {}) => {
   try {
     const params = new URLSearchParams()
     if (filtros.estado) params.append('estado', filtros.estado)
+    if (filtros.ciudad) params.append('ciudad', filtros.ciudad)
+    if (filtros.search) params.append('search', filtros.search)
     if (filtros.page) params.append('page', filtros.page)
     if (filtros.limit) params.append('limit', filtros.limit)
     
@@ -68,11 +70,28 @@ export const getMisSalones = async (filtros = {}) => {
   }
 }
 
-// === CREAR SALÓN ===
+export const getMisSalonesStats = async () => {
+  try {
+    const response = await get(API_ENDPOINTS.SALONES.STATS)
+    return response.data.data
+  } catch (error) {
+    console.error('Error getting salones stats:', error)
+    // Devolver datos por defecto si falla
+    return {
+      total: 0,
+      aprobados: 0,
+      pendientes: 0,
+      consultasRecibidas: 0
+    }
+  }
+}
+
+// === ✨ CREAR SALÓN - FASE 4 ===
 
 export const createSalon = async (salonData) => {
   try {
-    const response = await post(API_ENDPOINTS.SALONES.CREATE, salonData)
+    const preparedData = prepareSalonDataForSubmit(salonData)
+    const response = await post(API_ENDPOINTS.SALONES.CREATE, preparedData)
     return response.data.data
   } catch (error) {
     console.error('Error creating salon:', error)
@@ -80,11 +99,24 @@ export const createSalon = async (salonData) => {
   }
 }
 
-// === ACTUALIZAR SALÓN ===
+export const saveSalonDraft = async (salonData) => {
+  try {
+    const draftData = { ...salonData, estado: 'borrador' }
+    const preparedData = prepareSalonDataForSubmit(draftData)
+    const response = await post(API_ENDPOINTS.SALONES.CREATE, preparedData)
+    return response.data.data
+  } catch (error) {
+    console.error('Error saving salon draft:', error)
+    throw error
+  }
+}
+
+// === ✏️ ACTUALIZAR SALÓN - FASE 4 ===
 
 export const updateSalon = async (salonId, salonData) => {
   try {
-    const response = await put(`${API_ENDPOINTS.SALONES.BY_ID}/${salonId}`, salonData)
+    const preparedData = prepareSalonDataForSubmit(salonData)
+    const response = await put(`${API_ENDPOINTS.SALONES.BY_ID}/${salonId}`, preparedData)
     return response.data.data
   } catch (error) {
     console.error('Error updating salon:', error)
@@ -92,7 +124,7 @@ export const updateSalon = async (salonId, salonData) => {
   }
 }
 
-// === ELIMINAR SALÓN ===
+// === 🗑️ ELIMINAR SALÓN - FASE 4 ===
 
 export const deleteSalon = async (salonId) => {
   try {
@@ -104,7 +136,59 @@ export const deleteSalon = async (salonId) => {
   }
 }
 
-// === CAMBIAR ESTADO DEL SALÓN ===
+// === 👁️ GESTIÓN DE VISIBILIDAD - FASE 4 ===
+
+export const toggleSalonVisibility = async (salonId, visible) => {
+  try {
+    const endpoint = API_ENDPOINTS.SALONES.VISIBILITY.replace('{id}', salonId)
+    const response = await put(endpoint, { activo: visible })
+    return response.data.data
+  } catch (error) {
+    console.error('Error toggling salon visibility:', error)
+    throw error
+  }
+}
+
+// === 📸 GESTIÓN DE FOTOS - FASE 4 ===
+
+export const updateSalonPhoto = async (salonId, photoId, updates) => {
+  try {
+    const endpoint = API_ENDPOINTS.SALONES.UPDATE_PHOTO
+      .replace('{id}', salonId)
+      .replace('{photoId}', photoId)
+    const response = await put(endpoint, updates)
+    return response.data.data
+  } catch (error) {
+    console.error('Error updating salon photo:', error)
+    throw error
+  }
+}
+
+export const deleteSalonPhoto = async (salonId, photoId) => {
+  try {
+    const endpoint = API_ENDPOINTS.SALONES.DELETE_PHOTO
+      .replace('{id}', salonId)
+      .replace('{photoId}', photoId)
+    const response = await del(endpoint)
+    return response.data.data
+  } catch (error) {
+    console.error('Error deleting salon photo:', error)
+    throw error
+  }
+}
+
+export const reorderSalonPhotos = async (salonId, photoIds) => {
+  try {
+    const endpoint = API_ENDPOINTS.SALONES.REORDER_PHOTOS.replace('{id}', salonId)
+    const response = await put(endpoint, { order: photoIds })
+    return response.data.data
+  } catch (error) {
+    console.error('Error reordering salon photos:', error)
+    throw error
+  }
+}
+
+// === 📊 CAMBIAR ESTADO DEL SALÓN ===
 
 export const changeSalonStatus = async (salonId, nuevoEstado) => {
   try {
@@ -113,19 +197,6 @@ export const changeSalonStatus = async (salonId, nuevoEstado) => {
     return response.data.data
   } catch (error) {
     console.error('Error changing salon status:', error)
-    throw error
-  }
-}
-
-// === SALÓN DRAFT ===
-
-export const saveSalonDraft = async (salonData) => {
-  try {
-    const draftData = { ...salonData, estado: 'borrador' }
-    const response = await post(API_ENDPOINTS.SALONES.CREATE, draftData)
-    return response.data.data
-  } catch (error) {
-    console.error('Error saving salon draft:', error)
     throw error
   }
 }
@@ -139,19 +210,20 @@ export const publishSalon = async (salonId) => {
   }
 }
 
-// === ESTADÍSTICAS DEL PROVEEDOR ===
+// === 📅 DISPONIBILIDAD ===
 
-export const getMisSalonesStats = async () => {
+export const checkSalonAvailability = async (salonId, fecha) => {
   try {
-    const response = await get('/api/salones/mis-salones/stats')
+    const endpoint = API_ENDPOINTS.SALONES.DISPONIBILIDAD.replace('{id}', salonId)
+    const response = await get(`${endpoint}?fecha=${fecha}`)
     return response.data.data
   } catch (error) {
-    console.error('Error getting salones stats:', error)
+    console.error('Error checking salon availability:', error)
     throw error
   }
 }
 
-// === VALIDACIONES ANTES DE ENVÍO ===
+// === 🛠️ VALIDACIONES ANTES DE ENVÍO ===
 
 export const validateSalonData = (salonData) => {
   const errors = []
@@ -203,15 +275,15 @@ export const validateSalonData = (salonData) => {
   }
 }
 
-// === HELPERS PARA FORMULARIOS ===
+// === 🔧 HELPERS PARA FORMULARIOS ===
 
 export const prepareSalonDataForSubmit = (formData) => {
   // Preparar datos para envío al backend
   const salonData = {
     // Información básica
-    nombre: formData.nombre.trim(),
-    descripcion: formData.descripcion.trim(),
-    direccion: formData.direccion.trim(),
+    nombre: formData.nombre?.trim(),
+    descripcion: formData.descripcion?.trim(),
+    direccion: formData.direccion?.trim(),
     ciudad: formData.ciudad,
     
     // Capacidad y precios
@@ -230,8 +302,9 @@ export const prepareSalonDataForSubmit = (formData) => {
     
     // Metadatos
     slug: generateSlug(formData.nombre),
-    destacado: false,
-    activo: true
+    destacado: formData.destacado || false,
+    activo: formData.activo !== undefined ? formData.activo : true,
+    estado: formData.estado || 'borrador'
   }
   
   // Limpiar campos vacíos
@@ -244,9 +317,11 @@ export const prepareSalonDataForSubmit = (formData) => {
   return salonData
 }
 
-// === HELPERS INTERNOS ===
+// === 🔤 HELPERS INTERNOS ===
 
 const generateSlug = (nombre) => {
+  if (!nombre) return ''
+  
   return nombre
     .toLowerCase()
     .normalize('NFD')
@@ -257,26 +332,19 @@ const generateSlug = (nombre) => {
     .replace(/^-|-$/g, '') // Quitar guiones al inicio/final
 }
 
-// === BUSCAR SALONES DISPONIBLES ===
+// === 📊 FUNCIONES ADICIONALES PARA DASHBOARD ===
 
-export const checkSalonAvailability = async (salonId, fecha) => {
+export const getSalonMetrics = async (salonId) => {
   try {
-    const response = await get(`/api/salones/${salonId}/disponibilidad?fecha=${fecha}`)
+    const response = await get(`${API_ENDPOINTS.SALONES.BY_ID}/${salonId}/metrics`)
     return response.data.data
   } catch (error) {
-    console.error('Error checking salon availability:', error)
-    throw error
-  }
-}
-
-// === GESTIÓN DE VISIBILIDAD ===
-
-export const toggleSalonVisibility = async (salonId, visible) => {
-  try {
-    const response = await put(`/api/salones/${salonId}/visibilidad`, { activo: visible })
-    return response.data.data
-  } catch (error) {
-    console.error('Error toggling salon visibility:', error)
-    throw error
+    console.error('Error getting salon metrics:', error)
+    return {
+      totalConsultas: 0,
+      eventosConfirmados: 0,
+      calificacionPromedio: 0,
+      totalResenas: 0
+    }
   }
 }

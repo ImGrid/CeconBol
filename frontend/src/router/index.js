@@ -52,7 +52,7 @@ const routes = [
     }
   },
   
-  // === RUTAS DE DASHBOARD (COMPLETADAS) ===
+  // === RUTAS DE DASHBOARD ===
   {
     path: '/dashboard',
     name: 'Dashboard',
@@ -90,7 +90,7 @@ const routes = [
     path: '/dashboard/cliente', 
     name: 'ClienteDashboard',
     component: ClienteDashboard,
-    beforeEnter: requireAuth, // Cliente puede acceder
+    beforeEnter: requireAuth,
     meta: {
       title: 'Mi Dashboard - CECONBOL',
       requiresAuth: true
@@ -108,7 +108,7 @@ const routes = [
     }
   },
   
-  // === RUTAS DE SALONES (Fase 2) ===
+  // === RUTAS DE SALONES PÚBLICOS ===
   {
     path: '/salones',
     name: 'Salones',
@@ -137,11 +137,11 @@ const routes = [
     }
   },
   
-  // === RUTAS DE GESTIÓN (TEMPORALES HASTA OTRAS FASES) ===
+  // === 🏢 FASE 4: GESTIÓN DE SALONES (PROVEEDOR) - CONECTADO ===
   {
     path: '/mis-salones',
     name: 'MisSalones',
-    component: () => import('@/pages/Home.vue'), // Temporal - reemplazar en Fase 4
+    component: () => import('@/pages/salones/MisSalones.vue'),
     beforeEnter: requireProvider,
     meta: {
       title: 'Mis Salones - CECONBOL',
@@ -152,7 +152,7 @@ const routes = [
   {
     path: '/mis-salones/crear',
     name: 'CrearSalon',
-    component: () => import('@/pages/Home.vue'), // Temporal - reemplazar en Fase 4
+    component: () => import('@/pages/salones/SalonCreate.vue'),
     beforeEnter: requireProvider,
     meta: {
       title: 'Crear Salón - CECONBOL',
@@ -160,6 +160,19 @@ const routes = [
       requiresProvider: true
     }
   },
+  {
+    path: '/mis-salones/:id/editar',
+    name: 'EditarSalon',
+    component: () => import('@/pages/salones/SalonEdit.vue'),
+    beforeEnter: requireProvider,
+    meta: {
+      title: 'Editar Salón - CECONBOL',
+      requiresAuth: true,
+      requiresProvider: true
+    }
+  },
+  
+  // === RUTAS DE CONSULTAS (TEMPORALES HASTA FASE 5) ===
   {
     path: '/consultas',
     name: 'Consultas',

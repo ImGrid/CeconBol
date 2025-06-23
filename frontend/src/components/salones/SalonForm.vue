@@ -28,46 +28,58 @@
           <!-- Nombre del salón -->
           <div class="col-span-2 form-group">
             <Input
-              v-bind="createFieldProps('nombre')"
+              v-model="formData.nombre"
               label="Nombre del Salón"
               placeholder="Ej: Salón Fiesta Imperial"
               required
               help-text="Nombre que aparecerá en las búsquedas"
+              :error="errors.nombre"
+              @blur="handleFieldBlur('nombre')"
+              @focus="handleFieldFocus('nombre')"
             />
           </div>
 
           <!-- Ciudad -->
           <div class="form-group">
             <Select
-              v-bind="createSelectProps('ciudad')"
+              v-model="formData.ciudad"
               label="Ciudad"
               placeholder="Selecciona la ciudad"
               :options="CIUDADES_BOLIVIA"
               required
+              :error="errors.ciudad"
+              @blur="handleFieldBlur('ciudad')"
+              @focus="handleFieldFocus('ciudad')"
             />
           </div>
 
           <!-- Dirección -->
           <div class="form-group">
             <Input
-              v-bind="createFieldProps('direccion')"
+              v-model="formData.direccion"
               label="Dirección"
               placeholder="Calle, número y zona"
               required
               help-text="Dirección completa del salón"
+              :error="errors.direccion"
+              @blur="handleFieldBlur('direccion')"
+              @focus="handleFieldFocus('direccion')"
             />
           </div>
 
           <!-- Descripción -->
           <div class="col-span-2 form-group">
             <TextArea
-              v-bind="createFieldProps('descripcion')"
+              v-model="formData.descripcion"
               label="Descripción"
               placeholder="Describe tu salón, sus características principales, ambiente, estilo decorativo..."
               :rows="4"
               :max-length="1000"
               required
               help-text="Una buena descripción ayuda a atraer más clientes (mínimo 50 caracteres)"
+              :error="errors.descripcion"
+              @blur="handleFieldBlur('descripcion')"
+              @focus="handleFieldFocus('descripcion')"
             />
           </div>
         </div>
@@ -91,13 +103,16 @@
               Capacidad Mínima <span class="text-red-500">*</span>
             </label>
             <Input
-              v-bind="createFieldProps('capacidadMinima')"
+              v-model="formData.capacidadMinima"
               type="number"
               placeholder="50"
               min="1"
               max="10000"
               required
               help-text="Número mínimo de invitados"
+              :error="errors.capacidadMinima"
+              @blur="handleFieldBlur('capacidadMinima')"
+              @focus="handleFieldFocus('capacidadMinima')"
             />
           </div>
 
@@ -106,13 +121,16 @@
               Capacidad Máxima <span class="text-red-500">*</span>
             </label>
             <Input
-              v-bind="createFieldProps('capacidadMaxima')"
+              v-model="formData.capacidadMaxima"
               type="number"
               placeholder="200"
               min="1"
               max="10000"
               required
               help-text="Número máximo de invitados"
+              :error="errors.capacidadMaxima"
+              @blur="handleFieldBlur('capacidadMaxima')"
+              @focus="handleFieldFocus('capacidadMaxima')"
             />
           </div>
 
@@ -159,13 +177,16 @@
                     Bs.
                   </span>
                   <Input
-                    v-bind="createFieldProps('precioBase')"
+                    v-model="formData.precioBase"
                     type="number"
                     placeholder="2500"
                     min="100"
                     max="1000000"
                     class="pl-8"
                     required
+                    :error="errors.precioBase"
+                    @blur="handleFieldBlur('precioBase')"
+                    @focus="handleFieldFocus('precioBase')"
                   />
                 </div>
                 <p class="mt-1 text-sm text-gray-500">
@@ -205,34 +226,43 @@
           <!-- Teléfono principal -->
           <div class="form-group">
             <Input
-              v-bind="createFieldProps('telefonoContacto')"
+              v-model="formData.telefonoContacto"
               type="tel"
               label="Teléfono Principal"
               placeholder="70123456"
               required
               help-text="7 u 8 dígitos sin espacios"
+              :error="errors.telefonoContacto"
+              @blur="handleFieldBlur('telefonoContacto')"
+              @focus="handleFieldFocus('telefonoContacto')"
             />
           </div>
 
           <!-- WhatsApp -->
           <div class="form-group">
             <Input
-              v-bind="createFieldProps('whatsapp')"
+              v-model="formData.whatsapp"
               type="tel"
               label="WhatsApp (opcional)"
               placeholder="70123456"
               help-text="Para contacto directo por WhatsApp"
+              :error="errors.whatsapp"
+              @blur="handleFieldBlur('whatsapp')"
+              @focus="handleFieldFocus('whatsapp')"
             />
           </div>
 
           <!-- Email -->
           <div class="col-span-2 form-group">
             <Input
-              v-bind="createFieldProps('emailContacto')"
+              v-model="formData.emailContacto"
               type="email"
               label="Email de Contacto (opcional)"
               placeholder="contacto@misalon.com"
               help-text="Email alternativo para consultas"
+              :error="errors.emailContacto"
+              @blur="handleFieldBlur('emailContacto')"
+              @focus="handleFieldFocus('emailContacto')"
             />
           </div>
         </div>
@@ -455,7 +485,6 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useSalonFormValidation, createFieldProps, createSelectProps } from '@/composables/useFormValidation.js'
 import { formatPrice } from '@/utils/helpers.js'
 import { CIUDADES_BOLIVIA } from '@/utils/constants.js'
 import Card from '@/components/ui/Card.vue'
@@ -489,26 +518,50 @@ const props = defineProps({
 // Events
 const emit = defineEmits(['submit', 'update:modelValue', 'step-change'])
 
-// Form validation composable
-const {
-  formData,
-  errors,
-  touched,
-  isValid,
-  isSubmitting,
-  handleFieldChange,
-  handleFieldBlur,
-  handleFieldFocus,
-  handleSubmit,
-  setFormData
-} = useSalonFormValidation(props.modelValue)
+// ✅ ESTADO DEL FORMULARIO SIN COMPOSABLE PROBLEMÁTICO
+const formData = ref({
+  // Información básica
+  nombre: '',
+  descripcion: '',
+  direccion: '',
+  ciudad: '',
+  
+  // Capacidad y precios
+  capacidadMinima: null,
+  capacidadMaxima: null,
+  modeloPrecio: 'fijo',
+  precioBase: null,
+  
+  // Contacto
+  telefonoContacto: '',
+  emailContacto: '',
+  whatsapp: '',
+  
+  // Servicios
+  servicios: [],
+  
+  // Metadatos
+  estado: 'borrador',
+  activo: true,
+  destacado: false
+})
 
-// Estado local
+const errors = ref({})
+const touched = ref({})
+const isSubmitting = ref(false)
 const currentStep = ref(0)
 const uploadedPhotos = ref([])
 
 // Configuración
 const isDev = computed(() => import.meta.env.DEV)
+
+// Validación básica
+const isValid = computed(() => {
+  return Object.keys(errors.value).length === 0 && 
+         formData.value.nombre && 
+         formData.value.descripcion && 
+         formData.value.ciudad
+})
 
 // Pasos del formulario
 const formSteps = [
@@ -560,6 +613,98 @@ const tiposCosto = [
   { value: 'por_hora', label: 'Por hora' }
 ]
 
+// ✅ MÉTODOS DE VALIDACIÓN SIMPLES
+const handleFieldChange = (fieldName, value) => {
+  formData.value[fieldName] = value
+  touched.value[fieldName] = true
+  
+  // Validación básica
+  validateField(fieldName, value)
+  
+  emit('update:modelValue', formData.value)
+}
+
+const handleFieldBlur = (fieldName) => {
+  touched.value[fieldName] = true
+  validateField(fieldName, formData.value[fieldName])
+}
+
+const handleFieldFocus = (fieldName) => {
+  // Limpiar error al enfocar
+  if (errors.value[fieldName]) {
+    errors.value = { ...errors.value, [fieldName]: '' }
+  }
+}
+
+const validateField = (fieldName, value) => {
+  let error = ''
+  
+  switch (fieldName) {
+    case 'nombre':
+      if (!value || value.length < 3) {
+        error = 'El nombre debe tener al menos 3 caracteres'
+      }
+      break
+    case 'descripcion':
+      if (!value || value.length < 50) {
+        error = 'La descripción debe tener al menos 50 caracteres'
+      }
+      break
+    case 'ciudad':
+      if (!value) {
+        error = 'La ciudad es requerida'
+      }
+      break
+    case 'direccion':
+      if (!value || value.length < 10) {
+        error = 'La dirección debe ser más específica'
+      }
+      break
+    case 'capacidadMinima':
+      if (!value || value <= 0) {
+        error = 'La capacidad mínima es requerida'
+      }
+      break
+    case 'capacidadMaxima':
+      if (!value || value <= 0) {
+        error = 'La capacidad máxima es requerida'
+      } else if (formData.value.capacidadMinima && value < formData.value.capacidadMinima) {
+        error = 'La capacidad máxima debe ser mayor a la mínima'
+      }
+      break
+    case 'precioBase':
+      if (formData.value.modeloPrecio !== 'personalizado' && (!value || value <= 0)) {
+        error = 'El precio base es requerido'
+      }
+      break
+    case 'telefonoContacto':
+      if (!value) {
+        error = 'El teléfono de contacto es requerido'
+      } else if (!/^\d{7,8}$/.test(value)) {
+        error = 'Teléfono debe tener 7 u 8 dígitos'
+      }
+      break
+    case 'emailContacto':
+      if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        error = 'Email inválido'
+      }
+      break
+    case 'whatsapp':
+      if (value && !/^\d{7,8}$/.test(value)) {
+        error = 'WhatsApp debe tener 7 u 8 dígitos'
+      }
+      break
+  }
+  
+  if (error) {
+    errors.value = { ...errors.value, [fieldName]: error }
+  } else {
+    const newErrors = { ...errors.value }
+    delete newErrors[fieldName]
+    errors.value = newErrors
+  }
+}
+
 // Computed
 const getStepClass = (index) => {
   const baseClass = 'progress-step'
@@ -572,12 +717,12 @@ const canProceedToNext = () => {
   // Validaciones por paso
   switch (currentStep.value) {
     case 0: // Información básica
-      return formData.nombre && formData.ciudad && formData.direccion && formData.descripcion
+      return formData.value.nombre && formData.value.ciudad && formData.value.direccion && formData.value.descripcion
     case 1: // Capacidad y precios
-      return formData.capacidadMinima && formData.capacidadMaxima && formData.modeloPrecio &&
-             (formData.modeloPrecio === 'personalizado' || formData.precioBase)
+      return formData.value.capacidadMinima && formData.value.capacidadMaxima && formData.value.modeloPrecio &&
+             (formData.value.modeloPrecio === 'personalizado' || formData.value.precioBase)
     case 2: // Contacto
-      return formData.telefonoContacto
+      return formData.value.telefonoContacto
     case 3: // Servicios
       return true // Los servicios son opcionales
     case 4: // Fotos
@@ -588,9 +733,9 @@ const canProceedToNext = () => {
 }
 
 const getPriceHelpText = () => {
-  if (formData.modeloPrecio === 'fijo') {
+  if (formData.value.modeloPrecio === 'fijo') {
     return 'Precio total del salón independiente del número de invitados'
-  } else if (formData.modeloPrecio === 'por_persona') {
+  } else if (formData.value.modeloPrecio === 'por_persona') {
     return 'Precio por cada invitado (se multiplicará por la cantidad)'
   }
   return ''
@@ -598,27 +743,27 @@ const getPriceHelpText = () => {
 
 // Métodos de servicios
 const isServicioIncluido = (nombreServicio) => {
-  return formData.servicios?.some(s => s.nombre === nombreServicio && s.incluido) || false
+  return formData.value.servicios?.some(s => s.nombre === nombreServicio && s.incluido) || false
 }
 
 const toggleServicioIncluido = (nombreServicio) => {
-  if (!formData.servicios) {
-    formData.servicios = []
+  if (!formData.value.servicios) {
+    formData.value.servicios = []
   }
   
-  const index = formData.servicios.findIndex(s => s.nombre === nombreServicio)
+  const index = formData.value.servicios.findIndex(s => s.nombre === nombreServicio)
   
   if (index >= 0) {
-    if (formData.servicios[index].incluido) {
+    if (formData.value.servicios[index].incluido) {
       // Si está incluido, removerlo
-      formData.servicios.splice(index, 1)
+      formData.value.servicios.splice(index, 1)
     } else {
       // Si no está incluido, marcarlo como incluido
-      formData.servicios[index].incluido = true
+      formData.value.servicios[index].incluido = true
     }
   } else {
     // Agregar como servicio incluido
-    formData.servicios.push({
+    formData.value.servicios.push({
       nombre: nombreServicio,
       incluido: true,
       costoAdicional: 0
@@ -657,7 +802,7 @@ const previousStep = () => {
 // Manejo de fotos
 const handlePhotosUploaded = (photos) => {
   uploadedPhotos.value = photos
-  formData.fotos = photos
+  formData.value.fotos = photos
 }
 
 const handlePhotoError = (error) => {
@@ -665,40 +810,39 @@ const handlePhotoError = (error) => {
 }
 
 // Submit del formulario
-const onSubmit = async (formData) => {
-  // Agregar servicios adicionales al formData
-  if (serviciosAdicionales.value.length > 0) {
-    const serviciosValidos = serviciosAdicionales.value.filter(s => 
-      s.nombre && s.costoAdicional
-    )
-    
-    serviciosValidos.forEach(servicio => {
-      if (!formData.servicios) formData.servicios = []
-      formData.servicios.push({
-        ...servicio,
-        incluido: false
-      })
-    })
-  }
+const handleSubmit = async () => {
+  isSubmitting.value = true
   
-  // Emitir evento de submit
-  emit('submit', formData)
-  emit('update:modelValue', formData)
-}
-
-// Helpers para crear props de campos
-const createFieldProps = (fieldName) => {
-  return createFieldProps({ formData, errors, handleFieldChange, handleFieldBlur, handleFieldFocus }, fieldName)
-}
-
-const createSelectProps = (fieldName) => {
-  return createSelectProps({ formData, errors, handleFieldChange, handleFieldBlur, handleFieldFocus }, fieldName)
+  try {
+    // Agregar servicios adicionales al formData
+    if (serviciosAdicionales.value.length > 0) {
+      const serviciosValidos = serviciosAdicionales.value.filter(s => 
+        s.nombre && s.costoAdicional
+      )
+      
+      serviciosValidos.forEach(servicio => {
+        if (!formData.value.servicios) formData.value.servicios = []
+        formData.value.servicios.push({
+          ...servicio,
+          incluido: false
+        })
+      })
+    }
+    
+    // Emitir evento de submit
+    emit('submit', formData.value)
+    emit('update:modelValue', formData.value)
+  } catch (error) {
+    console.error('Error submitting form:', error)
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 // Lifecycle
 onMounted(() => {
   if (props.modelValue && Object.keys(props.modelValue).length > 0) {
-    setFormData(props.modelValue)
+    Object.assign(formData.value, props.modelValue)
     
     // Cargar servicios adicionales si existen
     const serviciosAd = props.modelValue.servicios?.filter(s => !s.incluido) || []
