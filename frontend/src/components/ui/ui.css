@@ -316,3 +316,325 @@
 .input-help-text {
   @apply text-sm text-gray-500;
 }
+/* === CHECKBOX === */
+.checkbox-container {
+  @apply space-y-2;
+}
+
+.checkbox-container-disabled {
+  @apply opacity-60;
+}
+
+.checkbox-wrapper {
+  @apply flex items-start space-x-3;
+}
+
+.checkbox-hidden {
+  @apply sr-only;
+}
+
+.checkbox-custom {
+  @apply relative flex items-center justify-center flex-shrink-0 transition-all duration-200 border-2 rounded cursor-pointer;
+}
+
+.checkbox-custom-small {
+  @apply w-4 h-4;
+}
+
+.checkbox-custom-medium {
+  @apply w-5 h-5;
+}
+
+.checkbox-custom-large {
+  @apply w-6 h-6;
+}
+
+.checkbox-custom-default {
+  @apply bg-white border-gray-300;
+}
+
+.checkbox-custom-brand {
+  @apply bg-white border-gray-300;
+}
+
+.checkbox-custom-success {
+  @apply bg-white border-gray-300;
+}
+
+.checkbox-custom-warning {
+  @apply bg-white border-gray-300;
+}
+
+.checkbox-custom-error {
+  @apply bg-white border-red-300;
+}
+
+.checkbox-custom-checked.checkbox-custom-default {
+  @apply bg-gray-600 border-gray-600;
+}
+
+.checkbox-custom-checked.checkbox-custom-brand {
+  @apply border-brand-primary bg-brand-primary;
+}
+
+.checkbox-custom-checked.checkbox-custom-success {
+  @apply border-brand-tertiary bg-brand-tertiary;
+}
+
+.checkbox-custom-checked.checkbox-custom-warning {
+  @apply border-brand-accent bg-brand-accent;
+}
+
+.checkbox-custom-checked.checkbox-custom-error {
+  @apply bg-red-600 border-red-600;
+}
+
+.checkbox-custom-indeterminate {
+  @apply border-brand-primary bg-brand-primary;
+}
+
+.checkbox-custom-disabled {
+  @apply bg-gray-100 opacity-50 cursor-not-allowed;
+}
+
+.checkbox-check-icon {
+  @apply w-3 h-3 text-white;
+}
+
+.checkbox-indeterminate-icon {
+  @apply w-3 h-3 text-white;
+}
+
+.checkbox-label {
+  @apply font-medium text-gray-700 cursor-pointer select-none;
+}
+
+.checkbox-label-small {
+  @apply text-sm;
+}
+
+.checkbox-label-medium {
+  @apply text-base;
+}
+
+.checkbox-label-large {
+  @apply text-lg;
+}
+
+.checkbox-label-disabled {
+  @apply text-gray-500 cursor-not-allowed;
+}
+
+.checkbox-label-error {
+  @apply text-red-700;
+}
+
+.checkbox-description {
+  @apply ml-8 text-sm text-gray-600;
+}
+
+.checkbox-error {
+  @apply ml-8 text-sm text-red-600;
+}
+
+.checkbox-help {
+  @apply ml-8 text-sm text-gray-500;
+}
+
+.checkbox-custom:hover:not(.checkbox-custom-disabled) {
+  @apply border-gray-400;
+}
+
+.checkbox-custom-brand:hover:not(.checkbox-custom-disabled):not(.checkbox-custom-checked) {
+  @apply border-opacity-50 border-brand-primary;
+}
+
+.checkbox-hidden:focus + .checkbox-custom {
+  @apply ring-2 ring-brand-primary ring-offset-2;
+}
+/* === SELECT === */
+.select-container {
+  @apply space-y-2;
+}
+
+.select-wrapper {
+  @apply relative;
+}
+
+.select-icon {
+  @apply absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 pointer-events-none;
+}
+
+.select-loading {
+  @apply absolute inset-y-0 flex items-center pr-3 right-8;
+}
+
+.select-small {
+  @apply px-3 py-2 text-sm;
+}
+
+.select-medium {
+  @apply px-3 py-2 text-base;
+}
+
+.select-large {
+  @apply px-4 py-3 text-lg;
+}
+
+.select-error {
+  @apply border-red-300 focus:ring-red-500 focus:border-red-500;
+}
+
+.select-disabled {
+  @apply opacity-50 cursor-not-allowed bg-gray-50;
+}
+
+.select-loading-state {
+  @apply pr-16;
+}
+
+.form-select {
+  @apply appearance-none;
+  background-image: none;
+}
+
+.form-select::-ms-expand {
+  display: none;
+}
+
+.form-select:focus {
+  @apply outline-none ring-2 ring-brand-primary ring-offset-2 border-brand-primary;
+}
+/* === TABS === */
+.tab-fade-enter-active,
+.tab-fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.tab-fade-enter-from,
+.tab-fade-leave-to {
+  opacity: 0;
+}
+
+.tab-slide-enter-active,
+.tab-slide-leave-active {
+  transition: all 0.3s ease;
+}
+
+.tab-slide-enter-from {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+.tab-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.tab-pill-active {
+  @apply text-white rounded-full bg-brand-primary;
+}
+
+.tab-pill-inactive {
+  @apply text-gray-500 rounded-full hover:text-brand-primary hover:bg-gray-100;
+}
+
+.tab-minimal-active {
+  @apply bg-transparent border-b-2 text-brand-primary border-brand-primary;
+}
+
+.tab-minimal-inactive {
+  @apply text-gray-500 bg-transparent border-b-2 border-transparent hover:text-gray-700;
+}
+
+.tab-disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.tab-panel {
+  @apply min-h-0;
+}
+/* === TEXTAREA === */
+.textarea-container {
+  @apply space-y-2;
+}
+
+.textarea-wrapper {
+  @apply relative;
+}
+
+.textarea-base {
+  @apply resize-y;
+}
+
+.textarea-footer {
+  @apply flex items-end justify-between;
+}
+
+.textarea-help {
+  @apply flex-1 text-sm text-gray-500;
+}
+
+.textarea-error {
+  @apply flex-1 text-sm text-red-600;
+}
+
+.textarea-counter {
+  @apply flex-shrink-0 ml-2;
+}
+
+.textarea-resize-handle {
+  @apply absolute opacity-50 pointer-events-none bottom-2 right-2;
+}
+
+.textarea-small {
+  @apply px-3 py-2 text-sm;
+}
+
+.textarea-medium {
+  @apply px-3 py-2 text-base;
+}
+
+.textarea-large {
+  @apply px-4 py-3 text-lg;
+}
+
+.textarea-error {
+  @apply border-red-300 focus:ring-red-500 focus:border-red-500;
+}
+
+.textarea-disabled {
+  @apply opacity-50 cursor-not-allowed resize-none bg-gray-50;
+}
+
+.textarea-auto-resize {
+  @apply overflow-hidden resize-none;
+}
+
+textarea.form-input:focus {
+  @apply outline-none ring-2 ring-brand-primary ring-offset-2 border-brand-primary;
+}
+
+.textarea-base::-webkit-scrollbar {
+  @apply w-2;
+}
+
+.textarea-base::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded;
+}
+
+.textarea-base::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded hover:bg-gray-400;
+}
+
+.textarea-base {
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.textarea-base:hover:not(:disabled) {
+  @apply border-gray-400;
+}
+
+.textarea-base::placeholder {
+  @apply text-gray-400;
+}

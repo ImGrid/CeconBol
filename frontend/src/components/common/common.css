@@ -1,0 +1,177 @@
+/* Estilos específicos para componentes comunes/compartidos */
+
+/* === IMAGE UPLOAD === */
+.image-upload-container {
+  @apply space-y-4;
+}
+
+.upload-area {
+  @apply relative transition-all duration-200 border-2 border-dashed rounded-lg cursor-pointer;
+}
+
+.upload-area-empty {
+  @apply border-gray-300 hover:border-brand-primary hover:bg-brand-primary hover:bg-opacity-5;
+}
+
+.upload-area-dragging {
+  @apply border-brand-primary bg-brand-primary bg-opacity-10;
+}
+
+.upload-area-with-files {
+  @apply border-gray-200 bg-gray-50;
+}
+
+.upload-content {
+  @apply flex flex-col items-center justify-center p-8 text-center;
+}
+
+.upload-icon {
+  @apply mb-4 text-gray-400;
+}
+
+.upload-area-dragging .upload-icon {
+  @apply text-brand-primary;
+}
+
+.upload-text {
+  @apply space-y-1;
+}
+
+.upload-primary-text {
+  @apply text-lg font-medium text-gray-700;
+}
+
+.upload-secondary-text {
+  @apply text-sm text-gray-500;
+}
+
+.upload-limit-text {
+  @apply text-xs text-gray-400;
+}
+
+/* Files Preview */
+.files-preview {
+  @apply p-4;
+}
+
+.files-grid {
+  @apply grid grid-cols-2 gap-4 mb-4 md:grid-cols-3 lg:grid-cols-4;
+}
+
+.file-preview-item {
+  @apply space-y-2;
+}
+
+.file-preview-image {
+  @apply relative overflow-hidden bg-gray-100 rounded-lg aspect-square group;
+}
+
+.preview-img {
+  @apply object-cover w-full h-full;
+}
+
+.file-remove-btn {
+  @apply absolute p-1 text-white transition-opacity duration-200 bg-red-500 rounded-full opacity-0 top-2 right-2 group-hover:opacity-100 hover:bg-red-600;
+}
+
+/* Upload Progress Overlay */
+.upload-progress-overlay {
+  @apply absolute inset-0 flex items-center justify-center bg-black bg-opacity-50;
+}
+
+.upload-progress-circle {
+  @apply relative w-16 h-16;
+}
+
+.progress-ring {
+  @apply w-full h-full transform -rotate-90;
+}
+
+.progress-text {
+  @apply absolute inset-0 flex items-center justify-center text-sm font-medium text-white;
+}
+
+/* Success/Error Overlays */
+.upload-success-overlay {
+  @apply absolute inset-0 flex items-center justify-center bg-brand-tertiary bg-opacity-80;
+}
+
+.upload-error-overlay {
+  @apply absolute inset-0 flex items-center justify-center bg-red-500 bg-opacity-80;
+}
+
+/* File Info */
+.file-info {
+  @apply text-center;
+}
+
+.file-name {
+  @apply text-sm font-medium text-gray-700 truncate;
+}
+
+.file-size {
+  @apply text-xs text-gray-500;
+}
+
+.file-error {
+  @apply text-xs text-red-600;
+}
+
+/* Add More Area */
+.add-more-area {
+  @apply flex items-center justify-center transition-all duration-200 bg-gray-100 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer aspect-square hover:border-brand-primary hover:bg-brand-primary hover:bg-opacity-5;
+}
+
+.add-more-content {
+  @apply text-center;
+}
+
+/* Upload Actions */
+.upload-actions {
+  @apply p-4 space-y-3 rounded-lg bg-gray-50;
+}
+
+.upload-summary {
+  @apply text-sm font-medium text-gray-700;
+}
+
+/* Progress Bar */
+.upload-progress-bar {
+  @apply flex items-center space-x-3;
+}
+
+.progress-bar-track {
+  @apply flex-1 h-2 overflow-hidden bg-gray-200 rounded-full;
+}
+
+.progress-bar-fill {
+  @apply h-full transition-all duration-300 ease-out bg-brand-primary;
+}
+
+.progress-text {
+  @apply min-w-0 text-sm font-medium text-gray-700;
+}
+
+/* Error Messages */
+.upload-errors {
+  @apply space-y-2;
+}
+
+.upload-error-item {
+  @apply flex items-center space-x-2 text-sm text-red-600;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .files-grid {
+    @apply grid-cols-2 gap-2;
+  }
+  
+  .upload-content {
+    @apply p-6;
+  }
+  
+  .upload-primary-text {
+    @apply text-base;
+  }
+}
