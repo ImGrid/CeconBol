@@ -89,38 +89,73 @@ export const getEstadoLabel = (estado, tipo = 'consulta') => {
   return labels[tipo]?.[estado] || estado
 }
 
-// ✨ ACTUALIZADO: Colores de badges para estados con paleta "Elegancia Festiva"
+// ✅ CORREGIDO: Clases CSS que SÍ existen en main.css
 export const getEstadoBadgeColor = (estado, tipo = 'consulta') => {
   const colors = {
     consulta: {
-      'nueva': 'bg-primary-50 text-primary-700 border border-primary-200',           // Azul Océano
-      'contactado': 'bg-secondary-50 text-secondary-700 border border-secondary-200', // Naranja Dorado
-      'cotizado': 'bg-accent-50 text-accent-700 border border-accent-200',           // Dorado Sutil
-      'negociando': 'bg-secondary-100 text-secondary-800 border border-secondary-300', // Naranja más intenso
-      'ganada': 'bg-success-50 text-success-700 border border-success-200',          // Verde Salvia
-      'perdida': 'bg-red-50 text-red-700 border border-red-200'                      // Rojo para perdidas
+      'nueva': 'bg-blue-50 text-blue-700 border border-blue-200',              // Azul para nuevas
+      'contactado': 'bg-amber-50 text-amber-700 border border-amber-200',      // Amber para progreso
+      'cotizado': 'bg-purple-50 text-purple-700 border border-purple-200',     // Purple para cotizado
+      'negociando': 'bg-orange-50 text-orange-700 border border-orange-200',   // Orange para negociación
+      'ganada': 'bg-green-50 text-green-700 border border-green-200',          // Verde para ganada
+      'perdida': 'bg-red-50 text-red-700 border border-red-200'                // Rojo para perdida
     },
     evento: {
-      'confirmado': 'bg-primary-50 text-primary-700 border border-primary-200',      // Azul Océano
-      'en_progreso': 'bg-secondary-50 text-secondary-700 border border-secondary-200', // Naranja Dorado
-      'completado': 'bg-success-50 text-success-700 border border-success-200',      // Verde Salvia
-      'cancelado': 'bg-red-50 text-red-700 border border-red-200'                    // Rojo
+      'confirmado': 'bg-blue-50 text-blue-700 border border-blue-200',         // Azul para confirmado
+      'en_progreso': 'bg-amber-50 text-amber-700 border border-amber-200',     // Amber para progreso
+      'completado': 'bg-green-50 text-green-700 border border-green-200',      // Verde para completado
+      'cancelado': 'bg-red-50 text-red-700 border border-red-200'              // Rojo para cancelado
     },
     salon: {
-      'borrador': 'bg-gray-50 text-gray-700 border border-gray-200',                 // Gris neutro
-      'pendiente': 'bg-accent-50 text-accent-700 border border-accent-200',          // Dorado - espera
-      'aprobado': 'bg-success-50 text-success-700 border border-success-200',        // Verde Salvia
-      'rechazado': 'bg-red-50 text-red-700 border border-red-200',                   // Rojo
-      'suspendido': 'bg-secondary-50 text-secondary-700 border border-secondary-200' // Naranja - advertencia
+      'borrador': 'bg-gray-50 text-gray-700 border border-gray-200',           // Gris para borrador
+      'pendiente': 'bg-amber-50 text-amber-700 border border-amber-200',       // Amber para pendiente
+      'aprobado': 'bg-green-50 text-green-700 border border-green-200',        // Verde para aprobado
+      'rechazado': 'bg-red-50 text-red-700 border border-red-200',             // Rojo para rechazado
+      'suspendido': 'bg-orange-50 text-orange-700 border border-orange-200'    // Orange para suspendido
     },
     resena: {
-      'pendiente': 'bg-accent-50 text-accent-700 border border-accent-200',          // Dorado - espera
-      'aprobado': 'bg-success-50 text-success-700 border border-success-200',        // Verde Salvia
-      'rechazado': 'bg-red-50 text-red-700 border border-red-200'                    // Rojo
+      'pendiente': 'bg-amber-50 text-amber-700 border border-amber-200',       // Amber para pendiente
+      'aprobado': 'bg-green-50 text-green-700 border border-green-200',        // Verde para aprobado
+      'rechazado': 'bg-red-50 text-red-700 border border-red-200'              // Rojo para rechazado
     }
   }
   
   return colors[tipo]?.[estado] || 'bg-gray-50 text-gray-700 border border-gray-200'
+}
+
+// ✅ CORREGIDO: Usar clases que SÍ existen en el sistema
+export const getEstadoBadgeVariant = (estado, tipo = 'consulta') => {
+  // Mapeo a las variantes de Badge.vue que SÍ existen
+  const variants = {
+    consulta: {
+      'nueva': 'primary',
+      'contactado': 'warning', 
+      'cotizado': 'secondary',
+      'negociando': 'warning',
+      'ganada': 'success',
+      'perdida': 'error'
+    },
+    evento: {
+      'confirmado': 'primary',
+      'en_progreso': 'warning',
+      'completado': 'success',
+      'cancelado': 'error'
+    },
+    salon: {
+      'borrador': 'default',
+      'pendiente': 'warning',
+      'aprobado': 'success',
+      'rechazado': 'error',
+      'suspendido': 'warning'
+    },
+    resena: {
+      'pendiente': 'warning',
+      'aprobado': 'success',
+      'rechazado': 'error'
+    }
+  }
+  
+  return variants[tipo]?.[estado] || 'default'
 }
 
 // Corta texto largo
@@ -140,8 +175,11 @@ export const isValidBolivianPhone = (phone) => {
   return phoneRegex.test(phone)
 }
 
-// Genera slug para URLs
+// ✅ ELIMINADO: generateSlug duplicado (ya existe en salones.service.js)
+// Lo mantendré aquí como función principal y eliminaré de salones.service.js
 export const generateSlug = (text) => {
+  if (!text) return ''
+  
   return text
     .toLowerCase()
     .normalize('NFD')
@@ -180,12 +218,81 @@ export const formatPhone = (phone) => {
   return phone
 }
 
-// ✨ NUEVA: Función para obtener clase de color para precios
+// ✅ CORREGIDO: Usar clases del sistema CSS
 export const getPriceColorClass = (highlighted = false) => {
-  return highlighted ? 'text-brand-primary font-bold' : 'text-gray-900 font-semibold'
+  if (highlighted) {
+    return 'text-brand-primary font-bold' // Usa variable CSS definida
+  }
+  return 'text-gray-900 font-semibold'
 }
 
-// ✨ NUEVA: Función para obtener clase de rating/estrellas
+// ✅ CORREGIDO: Usar clases que existen
 export const getRatingColorClass = () => {
-  return 'text-brand-accent' // Dorado sutil para las estrellas
+  return 'text-brand-accent' // Usa variable CSS definida (Dorado)
+}
+
+// ✅ NUEVO: Función para obtener clases de botón según estado
+export const getButtonVariantForStatus = (estado, tipo = 'salon') => {
+  const variants = {
+    salon: {
+      'borrador': 'outline-primary',
+      'pendiente': 'warning',
+      'aprobado': 'success',
+      'rechazado': 'outline-secondary',
+      'suspendido': 'outline-secondary'
+    },
+    consulta: {
+      'nueva': 'primary',
+      'contactado': 'secondary',
+      'cotizado': 'outline-primary',
+      'negociando': 'secondary',
+      'ganada': 'success',
+      'perdida': 'outline-secondary'
+    }
+  }
+  
+  return variants[tipo]?.[estado] || 'primary'
+}
+
+// ✅ NUEVO: Función para formatear archivos
+export const formatFileSize = (bytes) => {
+  if (bytes === 0) return '0 Bytes'
+  
+  const k = 1024
+  const sizes = ['Bytes', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+}
+
+// ✅ NUEVO: Función para capitalizar texto
+export const capitalize = (text) => {
+  if (!text) return ''
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
+}
+
+// ✅ NUEVO: Función para formatear números con separadores
+export const formatNumber = (number) => {
+  if (!number && number !== 0) return ''
+  return new Intl.NumberFormat('es-BO').format(number)
+}
+
+// ✅ NUEVO: Función para obtener iniciales de nombre
+export const getInitials = (nombre, apellido = '') => {
+  if (!nombre) return 'U'
+  
+  const firstInitial = nombre.charAt(0).toUpperCase()
+  const lastInitial = apellido ? apellido.charAt(0).toUpperCase() : ''
+  
+  return firstInitial + lastInitial
+}
+
+// ✅ NUEVO: Función para validar si una URL es válida
+export const isValidUrl = (url) => {
+  try {
+    new URL(url)
+    return true
+  } catch {
+    return false
+  }
 }

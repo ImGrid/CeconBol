@@ -1,14 +1,16 @@
 import { upload, post, del, put } from '@/services/api.js'
 import { API_ENDPOINTS, FILE_CONFIG } from '@/utils/constants.js'
+// ✅ CORREGIDO: Usar validators.js como fuente única para validaciones
+import { imageFile, imageFiles } from '@/utils/validators.js'
 
 // === 📸 UPLOAD DE IMÁGENES GENERALES ===
 
 export const uploadImage = async (file, onProgress = null) => {
   try {
-    // Validar archivo antes de subir
-    const validation = validateImageFile(file)
-    if (!validation.isValid) {
-      throw new Error(validation.error)
+    // ✅ CORREGIDO: Usar validator centralizado
+    const validation = imageFile(file)
+    if (validation !== true) {
+      throw new Error(validation)
     }
     
     const formData = new FormData()
@@ -25,10 +27,10 @@ export const uploadImage = async (file, onProgress = null) => {
 
 export const uploadMultipleImages = async (files, onProgress = null) => {
   try {
-    // Validar archivos
-    const validation = validateImageFiles(files)
-    if (!validation.isValid) {
-      throw new Error(validation.error)
+    // ✅ CORREGIDO: Usar validator centralizado
+    const validation = imageFiles(files)
+    if (validation !== true) {
+      throw new Error(validation)
     }
     
     const formData = new FormData()
@@ -57,9 +59,10 @@ export const uploadSalonPhotos = async (salonId, files, onProgress = null) => {
       throw new Error('ID del salón requerido')
     }
     
-    const validation = validateImageFiles(files)
-    if (!validation.isValid) {
-      throw new Error(validation.error)
+    // ✅ CORREGIDO: Usar validator centralizado
+    const validation = imageFiles(files)
+    if (validation !== true) {
+      throw new Error(validation)
     }
     
     const formData = new FormData()
@@ -77,8 +80,8 @@ export const uploadSalonPhotos = async (salonId, files, onProgress = null) => {
       }
     })
     
-    // Endpoint específico para salones
-    const endpoint = API_ENDPOINTS.SALONES.UPLOAD_PHOTOS.replace('{id}', salonId)
+    // ✅ CORREGIDO: Construir URL sin placeholders
+    const endpoint = `/api/salones/${salonId}/fotos`
     
     const response = await upload(endpoint, formData, (progressEvent) => {
       if (onProgress && progressEvent.lengthComputable) {
@@ -96,9 +99,7 @@ export const uploadSalonPhotos = async (salonId, files, onProgress = null) => {
 
 export const updateSalonPhoto = async (salonId, photoId, updates) => {
   try {
-    const endpoint = API_ENDPOINTS.SALONES.UPDATE_PHOTO
-      .replace('{id}', salonId)
-      .replace('{photoId}', photoId)
+    const endpoint = `/api/salones/${salonId}/fotos/${photoId}`
     const response = await put(endpoint, updates)
     return response.data.data
   } catch (error) {
@@ -109,9 +110,7 @@ export const updateSalonPhoto = async (salonId, photoId, updates) => {
 
 export const deleteSalonPhoto = async (salonId, photoId) => {
   try {
-    const endpoint = API_ENDPOINTS.SALONES.DELETE_PHOTO
-      .replace('{id}', salonId)
-      .replace('{photoId}', photoId)
+    const endpoint = `/api/salones/${salonId}/fotos/${photoId}`
     const response = await del(endpoint)
     return response.data.data
   } catch (error) {
@@ -122,7 +121,7 @@ export const deleteSalonPhoto = async (salonId, photoId) => {
 
 export const reorderSalonPhotos = async (salonId, photoIds) => {
   try {
-    const endpoint = API_ENDPOINTS.SALONES.REORDER_PHOTOS.replace('{id}', salonId)
+    const endpoint = `/api/salones/${salonId}/fotos/reorder`
     const response = await put(endpoint, { order: photoIds })
     return response.data.data
   } catch (error) {
@@ -140,86 +139,16 @@ export const setMainSalonPhoto = async (salonId, photoId) => {
   }
 }
 
-// === ✅ VALIDACIONES DE ARCHIVOS ===
+// === ✅ VALIDACIONES - AHORA USA validators.js ===
 
-export const validateImageFile = (file) => {
-  if (!file) {
-    return { isValid: false, error: 'Archivo requerido' }
-  }
-  
-  // Verificar que es un archivo
-  if (!(file instanceof File)) {
-    return { isValid: false, error: 'Debe ser un archivo válido' }
-  }
-  
-  // Verificar tipo MIME
-  if (!FILE_CONFIG.ALLOWED_TYPES.includes(file.type)) {
-    return { 
-      isValid: false, 
-      error: 'Solo se permiten imágenes JPG, PNG o WebP' 
-    }
-  }
-  
-  // Verificar tamaño
-  if (file.size > FILE_CONFIG.MAX_SIZE) {
-    const maxSizeMB = FILE_CONFIG.MAX_SIZE / (1024 * 1024)
-    return { 
-      isValid: false, 
-      error: `La imagen no puede exceder ${maxSizeMB}MB` 
-    }
-  }
-  
-  // Verificar tamaño mínimo (opcional)
-  const minSize = 10 * 1024 // 10KB mínimo
-  if (file.size < minSize) {
-    return { 
-      isValid: false, 
-      error: 'La imagen es demasiado pequeña' 
-    }
-  }
-  
-  return { isValid: true }
-}
+// ✅ ELIMINADAS: validateImageFile y validateImageFiles duplicadas
+// Ahora se importan de validators.js
 
-export const validateImageFiles = (files) => {
-  if (!files || files.length === 0) {
-    return { isValid: false, error: 'Debe seleccionar al menos una imagen' }
-  }
-  
-  if (files.length > FILE_CONFIG.MAX_FILES) {
-    return { 
-      isValid: false, 
-      error: `Máximo ${FILE_CONFIG.MAX_FILES} imágenes permitidas` 
-    }
-  }
-  
-  // Validar cada archivo
-  for (let i = 0; i < files.length; i++) {
-    const validation = validateImageFile(files[i])
-    if (!validation.isValid) {
-      return { 
-        isValid: false, 
-        error: `Imagen ${i + 1}: ${validation.error}` 
-      }
-    }
-  }
-  
-  // Verificar tamaño total
-  const totalSize = Array.from(files).reduce((sum, file) => sum + file.size, 0)
-  const maxTotalSize = FILE_CONFIG.MAX_SIZE * files.length // Tamaño máximo total
-  
-  if (totalSize > maxTotalSize) {
-    const maxTotalMB = maxTotalSize / (1024 * 1024)
-    return { 
-      isValid: false, 
-      error: `El tamaño total no puede exceder ${maxTotalMB}MB` 
-    }
-  }
-  
-  return { isValid: true }
-}
+// Re-export para compatibilidad con código existente
+export const validateImageFile = imageFile
+export const validateImageFiles = imageFiles
 
-// === 🛠️ UTILIDADES DE ARCHIVOS ===
+// === 🛠️ UTILIDADES DE ARCHIVOS SIMPLIFICADAS ===
 
 export const getFilePreview = (file) => {
   return new Promise((resolve, reject) => {
@@ -265,51 +194,63 @@ export const getMultipleFilePreviews = async (files) => {
   }
 }
 
+// === ✅ COMPRESIÓN SIMPLIFICADA (Opcional, solo si se necesita) ===
+
 export const compressImage = (file, maxWidth = 1920, maxHeight = 1080, quality = 0.8) => {
   return new Promise((resolve, reject) => {
+    // Validar que es una imagen
+    if (!file.type.startsWith('image/')) {
+      reject(new Error('El archivo debe ser una imagen'))
+      return
+    }
+
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
     const img = new Image()
     
     img.onload = () => {
-      // Calcular nuevas dimensiones manteniendo aspect ratio
-      let { width, height } = img
-      
-      if (width > height) {
-        if (width > maxWidth) {
-          height = (height * maxWidth) / width
-          width = maxWidth
-        }
-      } else {
-        if (height > maxHeight) {
-          width = (width * maxHeight) / height
-          height = maxHeight
-        }
-      }
-      
-      canvas.width = width
-      canvas.height = height
-      
-      // Dibujar imagen redimensionada
-      ctx.drawImage(img, 0, 0, width, height)
-      
-      // Convertir a blob
-      canvas.toBlob(
-        (blob) => {
-          if (blob) {
-            // Crear nuevo archivo con el mismo nombre
-            const compressedFile = new File([blob], file.name, {
-              type: file.type,
-              lastModified: Date.now()
-            })
-            resolve(compressedFile)
-          } else {
-            reject(new Error('Error comprimiendo imagen'))
+      try {
+        // Calcular nuevas dimensiones manteniendo aspect ratio
+        let { width, height } = img
+        
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width
+            width = maxWidth
           }
-        },
-        file.type,
-        quality
-      )
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height
+            height = maxHeight
+          }
+        }
+        
+        canvas.width = width
+        canvas.height = height
+        
+        // Dibujar imagen redimensionada
+        ctx.drawImage(img, 0, 0, width, height)
+        
+        // Convertir a blob
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              // Crear nuevo archivo con el mismo nombre
+              const compressedFile = new File([blob], file.name, {
+                type: file.type,
+                lastModified: Date.now()
+              })
+              resolve(compressedFile)
+            } else {
+              reject(new Error('Error comprimiendo imagen'))
+            }
+          },
+          file.type,
+          quality
+        )
+      } catch (error) {
+        reject(new Error('Error procesando imagen'))
+      }
     }
     
     img.onerror = () => {
@@ -320,7 +261,7 @@ export const compressImage = (file, maxWidth = 1920, maxHeight = 1080, quality =
   })
 }
 
-// === 📊 HELPERS DE FORMATO ===
+// === 📊 HELPERS DE FORMATO - SIMPLIFICADOS ===
 
 export const formatFileSize = (bytes) => {
   if (bytes === 0) return '0 Bytes'
@@ -333,6 +274,7 @@ export const formatFileSize = (bytes) => {
 }
 
 export const getFileExtension = (filename) => {
+  if (!filename) return ''
   return filename.slice((filename.lastIndexOf('.') - 1 >>> 0) + 2)
 }
 
@@ -340,7 +282,7 @@ export const isImageFile = (file) => {
   return file && file.type && file.type.startsWith('image/')
 }
 
-// === 🧹 CLEANUP ===
+// === 🧹 CLEANUP HELPERS ===
 
 export const revokeObjectURL = (url) => {
   if (url && url.startsWith('blob:')) {
@@ -358,7 +300,7 @@ export const cleanupPreviews = (previews) => {
   }
 }
 
-// === 📈 PROGRESS TRACKING ===
+// === 📈 PROGRESS TRACKING SIMPLIFICADO ===
 
 export const createProgressTracker = () => {
   let progress = 0
@@ -375,7 +317,11 @@ export const createProgressTracker = () => {
       isComplete = progress >= 100
       
       callbacks.forEach(callback => {
-        callback({ progress, isComplete })
+        try {
+          callback({ progress, isComplete })
+        } catch (error) {
+          console.error('Error en callback de progreso:', error)
+        }
       })
     },
     
@@ -384,7 +330,11 @@ export const createProgressTracker = () => {
       isComplete = true
       
       callbacks.forEach(callback => {
-        callback({ progress, isComplete })
+        try {
+          callback({ progress, isComplete })
+        } catch (error) {
+          console.error('Error en callback de completado:', error)
+        }
       })
     },
     
@@ -403,7 +353,7 @@ export const createProgressTracker = () => {
   }
 }
 
-// === 🔄 BATCH UPLOADS ===
+// === 🔄 BATCH UPLOADS SIMPLIFICADO ===
 
 export const uploadFilesBatch = async (files, salonId, batchSize = 3, onBatchProgress = null) => {
   const results = []
@@ -434,4 +384,54 @@ export const uploadFilesBatch = async (files, salonId, batchSize = 3, onBatchPro
   }
   
   return results
+}
+
+// === 📱 UTILIDADES PARA DIFERENTES TIPOS DE ARCHIVO ===
+
+export const getSupportedMimeTypes = () => {
+  return FILE_CONFIG.ALLOWED_TYPES
+}
+
+export const getMaxFileSize = () => {
+  return FILE_CONFIG.MAX_SIZE
+}
+
+export const getMaxFiles = () => {
+  return FILE_CONFIG.MAX_FILES
+}
+
+// === 🎨 HELPERS PARA UI ===
+
+export const createImageThumbnail = async (file, size = 150) => {
+  try {
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    const img = new Image()
+    
+    return new Promise((resolve, reject) => {
+      img.onload = () => {
+        canvas.width = size
+        canvas.height = size
+        
+        // Calcular crop para mantener aspect ratio cuadrado
+        const minDimension = Math.min(img.width, img.height)
+        const startX = (img.width - minDimension) / 2
+        const startY = (img.height - minDimension) / 2
+        
+        ctx.drawImage(
+          img, 
+          startX, startY, minDimension, minDimension,
+          0, 0, size, size
+        )
+        
+        canvas.toBlob(resolve, 'image/jpeg', 0.8)
+      }
+      
+      img.onerror = reject
+      img.src = URL.createObjectURL(file)
+    })
+  } catch (error) {
+    console.error('Error creating thumbnail:', error)
+    throw error
+  }
 }

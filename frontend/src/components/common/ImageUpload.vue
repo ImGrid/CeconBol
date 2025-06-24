@@ -58,7 +58,8 @@
             :key="`file-${index}`"
             class="file-preview-item"
           >
-            <div class="file-preview-image">
+            <!-- ✅ CORREGIDO: Agregar 'group' directamente en el HTML -->
+            <div class="file-preview-image group">
               <img 
                 :src="file.preview" 
                 :alt="file.name"
@@ -68,7 +69,7 @@
               <!-- Remove Button -->
               <button
                 @click.stop="removeFile(index)"
-                class="file-remove-btn"
+                class="file-remove-btn group-hover:opacity-100"
                 :title="`Eliminar ${file.name}`"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

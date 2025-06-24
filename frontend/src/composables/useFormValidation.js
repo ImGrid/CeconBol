@@ -1,10 +1,11 @@
 import { ref, reactive, computed } from 'vue'
 import { debounce } from '@/utils/helpers.js'
+// ✅ CORREGIDO: Usar validators.js como fuente única de verdad
+import * as validators from '@/utils/validators.js'
 
 /**
  * Composable simplificado para validación de formularios
- * @param {Object} initialData - Datos iniciales del formulario
- * @param {Object} validationRules - Reglas de validación por campo
+ * CORREGIDO: Elimina duplicaciones, usa validators.js
  */
 export const useFormValidation = (initialData = {}, validationRules = {}) => {
   // === ESTADO ===
@@ -21,6 +22,10 @@ export const useFormValidation = (initialData = {}, validationRules = {}) => {
 
   const hasErrors = computed(() => {
     return Object.values(errors).some(error => error)
+  })
+
+  const isDirty = computed(() => {
+    return Object.values(touched).some(isTouched => isTouched)
   })
 
   // === VALIDACIÓN DE CAMPO ===
@@ -151,6 +156,7 @@ export const useFormValidation = (initialData = {}, validationRules = {}) => {
     // Computed
     isValid,
     hasErrors,
+    isDirty,
 
     // Métodos
     validateField,
@@ -165,84 +171,82 @@ export const useFormValidation = (initialData = {}, validationRules = {}) => {
   }
 }
 
-// === COMPOSABLE ESPECÍFICO PARA SALONES ===
+// === ✅ COMPOSABLE ESPECÍFICO PARA SALONES - SIMPLIFICADO ===
 export const useSalonFormValidation = (initialData = {}) => {
+  // ✅ CORREGIDO: Usar validators.js como fuente única
   const validationRules = {
-    nombre: (value) => {
-      if (!value) return 'El nombre es requerido'
-      if (value.length < 3) return 'El nombre debe tener al menos 3 caracteres'
-      if (value.length > 100) return 'El nombre no puede exceder 100 caracteres'
-      return true
+    nombre: validators.salonName,
+    descripcion: validators.salonDescription,
+    direccion: validators.salonAddress,
+    ciudad: validators.salonCity,
+    capacidadMinima: validators.salonCapacityMin,
+    capacidadMaxima: (value) => validators.salonCapacityMax(value, initialData.capacidadMinima),
+    modeloPrecio: validators.salonPriceModel,
+    precioBase: (value) => {
+      // Solo validar precio si no es personalizado
+      if (initialData.modeloPrecio === 'personalizado') return true
+      return validators.salonPrice(value)
     },
-    
-    descripcion: (value) => {
-      if (!value) return 'La descripción es requerida'
-      if (value.length < 50) return 'La descripción debe tener al menos 50 caracteres'
-      if (value.length > 1000) return 'La descripción no puede exceder 1000 caracteres'
-      return true
-    },
-    
-    direccion: (value) => {
-      if (!value) return 'La dirección es requerida'
-      if (value.length < 10) return 'La dirección debe ser más específica'
-      return true
-    },
-    
-    ciudad: (value) => {
-      if (!value) return 'La ciudad es requerida'
-      return true
-    },
-    
-    capacidadMinima: (value) => {
-      if (!value) return 'La capacidad mínima es requerida'
-      const num = parseInt(value)
-      if (isNaN(num) || num <= 0) return 'Debe ser un número positivo'
-      if (num > 10000) return 'No puede exceder 10,000 personas'
-      return true
-    },
-    
-    capacidadMaxima: (value, formData) => {
-      if (!value) return 'La capacidad máxima es requerida'
-      const num = parseInt(value)
-      if (isNaN(num) || num <= 0) return 'Debe ser un número positivo'
-      if (num > 10000) return 'No puede exceder 10,000 personas'
-      
-      const min = parseInt(formData.capacidadMinima)
-      if (!isNaN(min) && num < min) {
-        return 'Debe ser mayor o igual a la capacidad mínima'
-      }
-      return true
-    },
-    
-    precioBase: (value, formData) => {
-      if (formData.modeloPrecio === 'personalizado') return true
-      if (!value) return 'El precio es requerido'
-      const num = parseFloat(value)
-      if (isNaN(num) || num <= 0) return 'Debe ser un número positivo'
-      if (num < 100) return 'El precio mínimo es Bs. 100'
-      if (num > 1000000) return 'El precio no puede exceder Bs. 1,000,000'
-      return true
-    },
-    
-    telefonoContacto: (value) => {
-      if (!value) return 'El teléfono es requerido'
-      const phoneRegex = /^\d{7,8}$/
-      if (!phoneRegex.test(value)) return 'Debe tener 7 u 8 dígitos'
-      return true
-    },
-    
+    telefonoContacto: validators.phone,
     emailContacto: (value) => {
-      if (!value) return true // Opcional
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      if (!emailRegex.test(value)) return 'Email inválido'
-      return true
+      // Email es opcional
+      if (!value) return true
+      return validators.email(value)
     },
-    
     whatsapp: (value) => {
-      if (!value) return true // Opcional
-      const phoneRegex = /^\d{7,8}$/
-      if (!phoneRegex.test(value)) return 'Debe tener 7 u 8 dígitos'
+      // WhatsApp es opcional
+      if (!value) return true
+      return validators.phone(value)
+    }
+  }
+
+  return useFormValidation(initialData, validationRules)
+}
+
+// === COMPOSABLE PARA AUTH FORMS ===
+export const useAuthFormValidation = (formType = 'login', initialData = {}) => {
+  const baseRules = {
+    email: validators.email,
+    contrasena: (value) => {
+      if (!value) return 'La contraseña es requerida'
+      if (value.length < 6) return 'La contraseña debe tener al menos 6 caracteres'
       return true
+    }
+  }
+
+  let validationRules = { ...baseRules }
+
+  if (formType === 'register') {
+    validationRules = {
+      ...baseRules,
+      nombre: (value) => {
+        if (!value) return 'El nombre es requerido'
+        if (value.length < 2) return 'El nombre debe tener al menos 2 caracteres'
+        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) {
+          return 'El nombre solo puede contener letras'
+        }
+        return true
+      },
+      apellido: (value) => {
+        if (!value) return 'El apellido es requerido'
+        if (value.length < 2) return 'El apellido debe tener al menos 2 caracteres'
+        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) {
+          return 'El apellido solo puede contener letras'
+        }
+        return true
+      },
+      ciudad: validators.salonCity,
+      telefono: (value) => {
+        // Teléfono es opcional en registro
+        if (!value) return true
+        return validators.phone(value)
+      },
+      rol: validators.required,
+      confirmarContrasena: (value, formData) => {
+        if (!value) return 'Confirma tu contraseña'
+        if (value !== formData.contrasena) return 'Las contraseñas no coinciden'
+        return true
+      }
     }
   }
 

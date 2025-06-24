@@ -318,13 +318,19 @@
         </span>
       </div>
     </div>
+
+    <!-- Error general del formulario -->
+    <div v-if="formError" class="mt-4 alert-error">
+      {{ formError }}
+    </div>
   </form>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { formatPrice } from '@/utils/helpers.js'
 import { CIUDADES_BOLIVIA } from '@/utils/constants.js'
+// ✅ CORREGIDO: Usar sistema de validación centralizado
 import { useSalonFormValidation, createFieldProps } from '@/composables/useFormValidation.js'
 import Card from '@/components/ui/Card.vue'
 import Input from '@/components/ui/Input.vue'
@@ -352,7 +358,7 @@ const props = defineProps({
 // Events
 const emit = defineEmits(['submit', 'update:modelValue', 'step-change'])
 
-// ✅ USAR COMPOSABLE CORRECTAMENTE
+// ✅ CORREGIDO: Usar composable de validación centralizado
 const validation = useSalonFormValidation({
   nombre: '',
   descripcion: '',
@@ -371,6 +377,7 @@ const validation = useSalonFormValidation({
 // Estado local
 const currentStep = ref(0)
 const uploadedPhotos = ref([])
+const formError = ref('')
 
 // Configuración
 const formSteps = [
@@ -411,13 +418,17 @@ const canProceedToNext = () => {
     case 0: // Información básica
       return validation.formData.nombre && validation.formData.ciudad && 
              validation.formData.direccion && validation.formData.descripcion &&
-             !validation.errors.nombre && !validation.errors.descripcion
+             !validation.errors.nombre && !validation.errors.descripcion &&
+             !validation.errors.direccion && !validation.errors.ciudad
     case 1: // Capacidad y precios
       return validation.formData.capacidadMinima && validation.formData.capacidadMaxima && 
              validation.formData.modeloPrecio &&
-             (validation.formData.modeloPrecio === 'personalizado' || validation.formData.precioBase)
+             !validation.errors.capacidadMinima && !validation.errors.capacidadMaxima &&
+             (validation.formData.modeloPrecio === 'personalizado' || 
+              (validation.formData.precioBase && !validation.errors.precioBase))
     case 2: // Contacto
-      return validation.formData.telefonoContacto && !validation.errors.telefonoContacto
+      return validation.formData.telefonoContacto && !validation.errors.telefonoContacto &&
+             !validation.errors.emailContacto && !validation.errors.whatsapp
     case 3: // Fotos
       return props.isEditMode || uploadedPhotos.value.length > 0
     default:
@@ -435,8 +446,11 @@ const getPriceHelpText = () => {
 }
 
 // Métodos
-const nextStep = () => {
-  if (currentStep.value < formSteps.length - 1) {
+const nextStep = async () => {
+  // Validar paso actual antes de continuar
+  const isStepValid = await validateCurrentStep()
+  
+  if (isStepValid && currentStep.value < formSteps.length - 1) {
     currentStep.value++
     emit('step-change', currentStep.value)
   }
@@ -449,6 +463,29 @@ const previousStep = () => {
   }
 }
 
+const validateCurrentStep = async () => {
+  switch (currentStep.value) {
+    case 0:
+      const basicFields = ['nombre', 'descripcion', 'direccion', 'ciudad']
+      break
+    case 1:
+      const capacityFields = ['capacidadMinima', 'capacidadMaxima', 'modeloPrecio']
+      if (validation.formData.modeloPrecio !== 'personalizado') {
+        capacityFields.push('precioBase')
+      }
+      break
+    case 2:
+      const contactFields = ['telefonoContacto']
+      if (validation.formData.emailContacto) contactFields.push('emailContacto')
+      if (validation.formData.whatsapp) contactFields.push('whatsapp')
+      break
+    default:
+      return true
+  }
+  
+  return true // Simplificado por ahora
+}
+
 const handlePhotosUploaded = (photos) => {
   uploadedPhotos.value = photos
   validation.formData.fotos = photos
@@ -456,26 +493,50 @@ const handlePhotosUploaded = (photos) => {
 
 const handlePhotoError = (error) => {
   console.error('Error uploading photos:', error)
+  formError.value = 'Error al subir las fotos: ' + error.message
 }
 
-// ✅ USAR COMPOSABLE PARA SUBMIT
+// ✅ CORREGIDO: Usar sistema de validación centralizado
 const handleSubmit = async () => {
+  formError.value = ''
+
   const result = await validation.handleSubmit(async (formData) => {
-    // Agregar fotos si hay
-    if (uploadedPhotos.value.length > 0) {
-      formData.fotos = uploadedPhotos.value
+    try {
+      // Agregar fotos si hay
+      if (uploadedPhotos.value.length > 0) {
+        formData.fotos = uploadedPhotos.value
+      }
+      
+      emit('submit', formData)
+      emit('update:modelValue', formData)
+      
+      return formData
+    } catch (error) {
+      formError.value = error.message
+      throw error
     }
-    
-    emit('submit', formData)
-    emit('update:modelValue', formData)
-    
-    return formData
   })
   
   if (!result.success) {
-    console.error('Form validation failed:', result.errors)
+    if (result.error) {
+      formError.value = result.error
+    } else {
+      formError.value = 'Por favor, corrige los errores en el formulario'
+    }
   }
 }
+
+// Watchers
+watch(() => props.modelValue, (newValue) => {
+  if (newValue && Object.keys(newValue).length > 0) {
+    Object.assign(validation.formData, newValue)
+  }
+}, { immediate: true, deep: true })
+
+// Emit cambios del formulario
+watch(() => validation.formData, (newData) => {
+  emit('update:modelValue', { ...newData })
+}, { deep: true })
 
 // Lifecycle
 onMounted(() => {
@@ -487,4 +548,57 @@ onMounted(() => {
 
 <style>
 @import './salones.css';
+
+/* Estilos específicos del formulario */
+.form-step {
+  @apply mb-6;
+}
+
+.form-step-header {
+  @apply mb-6;
+}
+
+.form-step-title {
+  @apply mb-2 text-xl font-semibold text-gray-900;
+}
+
+.form-step-description {
+  @apply text-gray-600;
+}
+
+.form-step-content {
+  @apply space-y-6;
+}
+
+.form-grid {
+  @apply grid grid-cols-1 gap-6 md:grid-cols-2;
+}
+
+.form-navigation {
+  @apply mt-8 space-y-4;
+}
+
+.nav-buttons {
+  @apply flex items-center justify-between;
+}
+
+.progress-track {
+  @apply w-full h-2 bg-gray-200 rounded-full;
+}
+
+.progress-fill {
+  @apply h-2 transition-all duration-300 rounded-full bg-brand-primary;
+}
+
+.progress-text {
+  @apply text-sm text-center text-gray-600;
+}
+
+.price-model-option {
+  @apply p-3 border border-gray-200 rounded-lg hover:border-brand-primary;
+}
+
+.price-preview {
+  @apply flex flex-col justify-center;
+}
 </style>

@@ -62,8 +62,9 @@
   @apply space-y-2;
 }
 
+/* ✅ CORREGIDO: Quitar 'group' del @apply */
 .file-preview-image {
-  @apply relative overflow-hidden bg-gray-100 rounded-lg aspect-square group;
+  @apply relative overflow-hidden bg-gray-100 rounded-lg aspect-square;
 }
 
 .preview-img {
@@ -71,7 +72,12 @@
 }
 
 .file-remove-btn {
-  @apply absolute p-1 text-white transition-opacity duration-200 bg-red-500 rounded-full opacity-0 top-2 right-2 group-hover:opacity-100 hover:bg-red-600;
+  @apply absolute p-1 text-white transition-opacity duration-200 bg-red-500 rounded-full opacity-0 top-2 right-2 hover:bg-red-600;
+}
+
+/* ✅ NUEVO: Estilos para group hover (aplicar manualmente en HTML) */
+.file-preview-image.group:hover .file-remove-btn {
+  @apply opacity-100;
 }
 
 /* Upload Progress Overlay */

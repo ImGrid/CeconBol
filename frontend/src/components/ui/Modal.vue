@@ -86,7 +86,7 @@
 
 <script setup>
 import { computed, watch, onUnmounted } from 'vue'
-import Button from './Button.vue' // ✅ CORREGIDO: Import correcto
+import Button from './Button.vue' // ✅ CORREGIDO: Ruta correcta
 
 // Props SIMPLIFICADOS - Solo lo esencial
 const props = defineProps({

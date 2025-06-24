@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed, reactive } from 'vue'
+import * as busquedaService from '@/services/busqueda.service.js'
+import { saveSearchHistory } from '@/utils/storage.js'
 
 export const useBusquedaStore = defineStore('busqueda', () => {
   // === ESTADO ===
@@ -64,7 +66,7 @@ export const useBusquedaStore = defineStore('busqueda', () => {
     return params.toString()
   })
 
-  // === ACCIONES ===
+  // === ACCIONES DE ESTADO ===
   
   // Establecer resultados
   const setResultados = (data) => {
@@ -134,6 +136,9 @@ export const useBusquedaStore = defineStore('busqueda', () => {
     if (historial.value.length > 10) {
       historial.value = historial.value.slice(0, 10)
     }
+
+    // Guardar en localStorage
+    saveSearchHistory(termino)
   }
   
   const clearHistorial = () => {
@@ -179,6 +184,164 @@ export const useBusquedaStore = defineStore('busqueda', () => {
     pagination.value.page = page
   }
 
+  // === 🔥 NUEVOS MÉTODOS DE API ===
+
+  // Buscar salones (MÉTODO PRINCIPAL)
+  const buscarSalones = async (resetPage = true) => {
+    setLoading(true)
+    clearError()
+
+    try {
+      if (resetPage) {
+        pagination.value.page = 1
+      }
+
+      // Preparar criterios
+      const criterios = {
+        texto: filtros.texto || undefined,
+        ciudad: filtros.ciudad || undefined,
+        capacidadMinima: filtros.capacidadMinima || undefined,
+        capacidadMaxima: filtros.capacidadMaxima || undefined,
+        precioMin: filtros.precioMin || undefined,
+        precioMax: filtros.precioMax || undefined,
+        calificacion: filtros.calificacion || undefined,
+        ordenarPor: filtros.ordenarPor || 'relevancia',
+        orden: filtros.orden || 'desc'
+      }
+
+      // Limpiar valores undefined
+      const criteriosLimpios = Object.fromEntries(
+        Object.entries(criterios).filter(([_, value]) => value !== undefined)
+      )
+
+      const data = await busquedaService.buscarSalones(
+        criteriosLimpios,
+        {
+          page: pagination.value.page,
+          limit: pagination.value.limit
+        }
+      )
+
+      setResultados(data)
+
+      // Agregar al historial si hay texto de búsqueda
+      if (filtros.texto && filtros.texto.trim()) {
+        addToHistorial(filtros.texto.trim())
+      }
+
+      return data
+    } catch (err) {
+      console.error('Error en búsqueda:', err)
+      setError(err.message || 'Error al buscar salones')
+      throw err
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Cargar más resultados (paginación)
+  const cargarMasResultados = async () => {
+    if (loading.value || pagination.value.page >= pagination.value.totalPages) {
+      return
+    }
+
+    setLoading(true)
+    clearError()
+
+    try {
+      const nextPage = pagination.value.page + 1
+      const criterios = {
+        texto: filtros.texto || undefined,
+        ciudad: filtros.ciudad || undefined,
+        capacidadMinima: filtros.capacidadMinima || undefined,
+        capacidadMaxima: filtros.capacidadMaxima || undefined,
+        precioMin: filtros.precioMin || undefined,
+        precioMax: filtros.precioMax || undefined,
+        calificacion: filtros.calificacion || undefined,
+        ordenarPor: filtros.ordenarPor || 'relevancia',
+        orden: filtros.orden || 'desc'
+      }
+
+      const criteriosLimpios = Object.fromEntries(
+        Object.entries(criterios).filter(([_, value]) => value !== undefined)
+      )
+
+      const data = await busquedaService.buscarSalones(
+        criteriosLimpios,
+        {
+          page: nextPage,
+          limit: pagination.value.limit
+        }
+      )
+
+      // Agregar nuevos resultados
+      addResultados(data.salones || data)
+      
+      // Actualizar paginación
+      pagination.value = data.pagination
+
+      return data
+    } catch (err) {
+      console.error('Error cargando más resultados:', err)
+      setError(err.message || 'Error al cargar más resultados')
+      throw err
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Buscar sugerencias de autocompletado
+  const buscarSugerencias = async (texto) => {
+    if (!texto || texto.length < 2) {
+      clearSugerencias()
+      return []
+    }
+
+    try {
+      const data = await busquedaService.getAutocompletado(texto, 5)
+      setSugerencias(data)
+      return data
+    } catch (err) {
+      console.error('Error obteniendo sugerencias:', err)
+      clearSugerencias()
+      return []
+    }
+  }
+
+  // Obtener salones populares
+  const obtenerSalonesPopulares = async (limite = 8) => {
+    try {
+      const data = await busquedaService.getSalonesPopulares(limite)
+      return data
+    } catch (err) {
+      console.error('Error obteniendo salones populares:', err)
+      throw err
+    }
+  }
+
+  // Obtener salones destacados
+  const obtenerSalonesDestacados = async (limite = 6) => {
+    try {
+      const data = await busquedaService.getSalonesDestacados(limite)
+      return data
+    } catch (err) {
+      console.error('Error obteniendo salones destacados:', err)
+      throw err
+    }
+  }
+
+  // Obtener opciones de filtros del servidor
+  const cargarOpcionesFiltros = async () => {
+    try {
+      const data = await busquedaService.getOpcionesFiltros()
+      setOpcionesFiltros(data)
+      return data
+    } catch (err) {
+      console.error('Error cargando opciones de filtros:', err)
+      throw err
+    }
+  }
+
   return {
     // Estado
     resultados,
@@ -197,7 +360,7 @@ export const useBusquedaStore = defineStore('busqueda', () => {
     filtrosActivos,
     queryString,
     
-    // Acciones
+    // Acciones de estado
     setResultados,
     addResultados,
     updateFiltro,
@@ -212,6 +375,14 @@ export const useBusquedaStore = defineStore('busqueda', () => {
     setError,
     clearError,
     clearResultados,
-    setPage
+    setPage,
+
+    // 🔥 Nuevos métodos de API
+    buscarSalones,
+    cargarMasResultados,
+    buscarSugerencias,
+    obtenerSalonesPopulares,
+    obtenerSalonesDestacados,
+    cargarOpcionesFiltros
   }
 })

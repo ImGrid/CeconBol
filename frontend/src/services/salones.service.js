@@ -140,7 +140,8 @@ export const deleteSalon = async (salonId) => {
 
 export const toggleSalonVisibility = async (salonId, visible) => {
   try {
-    const endpoint = API_ENDPOINTS.SALONES.VISIBILITY.replace('{id}', salonId)
+    // ✅ CORREGIDO: Construir URL correctamente
+    const endpoint = `/api/salones/${salonId}/visibilidad`
     const response = await put(endpoint, { activo: visible })
     return response.data.data
   } catch (error) {
@@ -149,13 +150,12 @@ export const toggleSalonVisibility = async (salonId, visible) => {
   }
 }
 
-// === 📸 GESTIÓN DE FOTOS - FASE 4 ===
+// === 📸 GESTIÓN DE FOTOS - FASE 4 CORREGIDA ===
 
 export const updateSalonPhoto = async (salonId, photoId, updates) => {
   try {
-    const endpoint = API_ENDPOINTS.SALONES.UPDATE_PHOTO
-      .replace('{id}', salonId)
-      .replace('{photoId}', photoId)
+    // ✅ CORREGIDO: Construir URL correctamente sin placeholders
+    const endpoint = `/api/salones/${salonId}/fotos/${photoId}`
     const response = await put(endpoint, updates)
     return response.data.data
   } catch (error) {
@@ -166,9 +166,8 @@ export const updateSalonPhoto = async (salonId, photoId, updates) => {
 
 export const deleteSalonPhoto = async (salonId, photoId) => {
   try {
-    const endpoint = API_ENDPOINTS.SALONES.DELETE_PHOTO
-      .replace('{id}', salonId)
-      .replace('{photoId}', photoId)
+    // ✅ CORREGIDO: Construir URL correctamente sin placeholders
+    const endpoint = `/api/salones/${salonId}/fotos/${photoId}`
     const response = await del(endpoint)
     return response.data.data
   } catch (error) {
@@ -179,7 +178,8 @@ export const deleteSalonPhoto = async (salonId, photoId) => {
 
 export const reorderSalonPhotos = async (salonId, photoIds) => {
   try {
-    const endpoint = API_ENDPOINTS.SALONES.REORDER_PHOTOS.replace('{id}', salonId)
+    // ✅ CORREGIDO: Construir URL correctamente sin placeholders
+    const endpoint = `/api/salones/${salonId}/fotos/reorder`
     const response = await put(endpoint, { order: photoIds })
     return response.data.data
   } catch (error) {
@@ -188,11 +188,21 @@ export const reorderSalonPhotos = async (salonId, photoIds) => {
   }
 }
 
+export const setMainSalonPhoto = async (salonId, photoId) => {
+  try {
+    return await updateSalonPhoto(salonId, photoId, { esPrincipal: true })
+  } catch (error) {
+    console.error('Error setting main salon photo:', error)
+    throw error
+  }
+}
+
 // === 📊 CAMBIAR ESTADO DEL SALÓN ===
 
 export const changeSalonStatus = async (salonId, nuevoEstado) => {
   try {
-    const endpoint = API_ENDPOINTS.SALONES.CHANGE_STATUS.replace('{id}', salonId)
+    // ✅ CORREGIDO: Construir URL correctamente sin placeholders
+    const endpoint = `/api/salones/${salonId}/estado`
     const response = await put(endpoint, { estado: nuevoEstado })
     return response.data.data
   } catch (error) {
@@ -214,7 +224,8 @@ export const publishSalon = async (salonId) => {
 
 export const checkSalonAvailability = async (salonId, fecha) => {
   try {
-    const endpoint = API_ENDPOINTS.SALONES.DISPONIBILIDAD.replace('{id}', salonId)
+    // ✅ CORREGIDO: Construir URL correctamente sin placeholders
+    const endpoint = `/api/salones/${salonId}/disponibilidad`
     const response = await get(`${endpoint}?fecha=${fecha}`)
     return response.data.data
   } catch (error) {
@@ -332,7 +343,7 @@ const generateSlug = (nombre) => {
     .replace(/^-|-$/g, '') // Quitar guiones al inicio/final
 }
 
-// === 📊 FUNCIONES ADICIONALES PARA DASHBOARD ===
+// === 📊 FUNCIONES PARA DASHBOARD ===
 
 export const getSalonMetrics = async (salonId) => {
   try {
@@ -346,5 +357,52 @@ export const getSalonMetrics = async (salonId) => {
       calificacionPromedio: 0,
       totalResenas: 0
     }
+  }
+}
+
+// === 🎯 FUNCIONES ESPECÍFICAS PARA UPLOAD DE FOTOS ===
+
+export const uploadSalonPhotos = async (salonId, files, onProgress = null) => {
+  try {
+    if (!salonId) {
+      throw new Error('ID del salón requerido')
+    }
+    
+    if (!files || files.length === 0) {
+      throw new Error('No hay archivos para subir')
+    }
+
+    // Importar upload service solo cuando se necesite
+    const { upload } = await import('@/services/api.js')
+    
+    const formData = new FormData()
+    
+    // Agregar archivos
+    files.forEach((file, index) => {
+      formData.append('fotos', file)
+      
+      // Metadata opcional por archivo
+      if (file.caption) {
+        formData.append(`caption_${index}`, file.caption)
+      }
+      if (file.isMain && index === 0) {
+        formData.append(`main_${index}`, 'true')
+      }
+    })
+    
+    // ✅ CORREGIDO: Construir URL correctamente sin placeholders
+    const endpoint = `/api/salones/${salonId}/fotos`
+    
+    const response = await upload(endpoint, formData, (progressEvent) => {
+      if (onProgress && progressEvent.lengthComputable) {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        onProgress(progressEvent, percentCompleted)
+      }
+    })
+    
+    return response.data.data
+  } catch (error) {
+    console.error('Error uploading salon photos:', error)
+    throw error
   }
 }
