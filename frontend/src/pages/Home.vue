@@ -1,19 +1,19 @@
 <template>
   <DefaultLayout>
     <!-- Hero Section -->
-    <section class="hero-gradient">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+    <section class="hero-section">
+      <div class="px-4 py-24 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="text-center">
-          <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+          <h1 class="mb-6 text-4xl font-bold text-white md:text-6xl">
             Celebra y conecta tu salón en Bolivia
           </h1>
           
-          <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+          <p class="max-w-2xl mx-auto mb-8 text-xl text-white/90">
             La plataforma líder en Bolivia para conectar organizadores de eventos 
             con los mejores salones del país.
           </p>
 
-          <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div class="flex flex-col justify-center gap-4 mb-12 sm:flex-row">
             <Button
               variant="secondary"
               size="large"
@@ -48,28 +48,28 @@
 
     <!-- Estadísticas rápidas -->
     <section class="py-12 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
           <div>
-            <div class="text-3xl font-bold text-brand-primary mb-2">
+            <div class="mb-2 text-3xl font-bold text-brand-primary">
               {{ stats.totalSalones }}+
             </div>
             <div class="text-gray-600">Salones Disponibles</div>
           </div>
           <div>
-            <div class="text-3xl font-bold text-brand-secondary mb-2">
+            <div class="mb-2 text-3xl font-bold text-brand-secondary">
               {{ CIUDADES_BOLIVIA.length }}
             </div>
             <div class="text-gray-600">Ciudades</div>
           </div>
           <div>
-            <div class="text-3xl font-bold text-brand-tertiary mb-2">
+            <div class="mb-2 text-3xl font-bold text-brand-tertiary">
               {{ stats.totalEventos }}+
             </div>
             <div class="text-gray-600">Eventos Realizados</div>
           </div>
           <div>
-            <div class="text-3xl font-bold text-brand-accent mb-2">
+            <div class="mb-2 text-3xl font-bold text-brand-accent">
               {{ stats.totalResenas }}+
             </div>
             <div class="text-gray-600">Reseñas</div>
@@ -80,18 +80,18 @@
 
     <!-- Salones Destacados -->
     <section class="py-20 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+      <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="mb-12 text-center">
+          <h2 class="mb-4 text-3xl font-bold text-gray-900">
             Salones Destacados
           </h2>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p class="max-w-2xl mx-auto text-lg text-gray-600">
             Descubre los salones mejor valorados por nuestros usuarios en toda Bolivia
           </p>
         </div>
 
         <!-- Loading state -->
-        <div v-if="loadingSalones" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-if="loadingSalones" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <div 
             v-for="n in 6" 
             :key="n"
@@ -102,7 +102,7 @@
         </div>
 
         <!-- Salones destacados -->
-        <div v-else-if="salonesDestacados.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-else-if="salonesDestacados.length > 0" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <SalonCard 
             v-for="salon in salonesDestacados" 
             :key="salon.id"
@@ -111,14 +111,14 @@
         </div>
 
         <!-- Estado vacío -->
-        <div v-else class="text-center py-12">
-          <p class="text-gray-500 mb-6">
+        <div v-else class="py-12 text-center">
+          <p class="mb-6 text-gray-500">
             Aún no hay salones destacados disponibles
           </p>
         </div>
 
         <!-- Ver todos los salones -->
-        <div class="text-center mt-12">
+        <div class="mt-12 text-center">
           <Button
             variant="outline-primary"
             size="large"
@@ -132,18 +132,18 @@
 
     <!-- Salones Populares -->
     <section class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+      <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="mb-12 text-center">
+          <h2 class="mb-4 text-3xl font-bold text-gray-900">
             Salones Más Populares
           </h2>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p class="max-w-2xl mx-auto text-lg text-gray-600">
             Los salones con mejor calificación y más reservas
           </p>
         </div>
 
         <!-- Salones populares -->
-        <div v-if="salonesPopulares.length > 0" class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div v-if="salonesPopulares.length > 0" class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <SalonCard 
             v-for="salon in salonesPopulares" 
             :key="salon.id"
@@ -155,23 +155,23 @@
 
     <!-- Features Section -->
     <section class="py-20 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+      <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="mb-16 text-center">
+          <h2 class="mb-4 text-3xl font-bold text-gray-900">
             ¿Por qué elegir CECONBOL?
           </h2>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p class="max-w-2xl mx-auto text-lg text-gray-600">
             Conectamos a organizadores de eventos con salones en toda Bolivia de manera simple y segura.
           </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid gap-8 md:grid-cols-3">
           <!-- Feature 1 -->
           <div class="text-center">
-            <div class="w-16 h-16 bg-brand-primary rounded-full flex items-center justify-center mx-auto mb-4">
+            <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-brand-primary">
               <span class="text-2xl text-white">🎪</span>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            <h3 class="mb-2 text-xl font-semibold text-gray-900">
               Variedad de Salones
             </h3>
             <p class="text-gray-600">
@@ -181,10 +181,10 @@
 
           <!-- Feature 2 -->
           <div class="text-center">
-            <div class="w-16 h-16 bg-brand-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+            <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-brand-secondary">
               <span class="text-2xl text-white">💬</span>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            <h3 class="mb-2 text-xl font-semibold text-gray-900">
               Comunicación Directa
             </h3>
             <p class="text-gray-600">
@@ -194,10 +194,10 @@
 
           <!-- Feature 3 -->
           <div class="text-center">
-            <div class="w-16 h-16 bg-brand-tertiary rounded-full flex items-center justify-center mx-auto mb-4">
+            <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-brand-tertiary">
               <span class="text-2xl text-white">⭐</span>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            <h3 class="mb-2 text-xl font-semibold text-gray-900">
               Reseñas Reales
             </h3>
             <p class="text-gray-600">
@@ -210,9 +210,9 @@
 
     <!-- Búsqueda por ciudad -->
     <section class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+      <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="mb-12 text-center">
+          <h2 class="mb-4 text-3xl font-bold text-gray-900">
             Buscar por Ciudad
           </h2>
           <p class="text-lg text-gray-600">
@@ -220,7 +220,7 @@
           </p>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
           <button
             v-for="ciudad in CIUDADES_BOLIVIA"
             :key="ciudad"
@@ -239,16 +239,16 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="cta-gradient py-20">
-      <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-white mb-4">
+    <section class="py-20 cta-gradient">
+      <div class="max-w-4xl px-4 mx-auto text-center sm:px-6 lg:px-8">
+        <h2 class="mb-4 text-3xl font-bold text-white">
           ¿Listo para encontrar tu salón ideal?
         </h2>
-        <p class="text-xl text-white/90 mb-8">
+        <p class="mb-8 text-xl text-white/90">
           Únete a miles de bolivianos que ya confían en CECONBOL para sus eventos especiales.
         </p>
         
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div class="flex flex-col justify-center gap-4 sm:flex-row">
           <Button
             variant="secondary"
             size="large"

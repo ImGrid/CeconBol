@@ -33,7 +33,28 @@ body {
 
 /* Componentes reutilizables con la nueva paleta */
 @layer components {
-  
+  /* Agregar estas clases a la sección @layer components en tu main.css */
+
+  /* === GRADIENTES DE FONDO === */
+  .hero-section {
+    background-color: var(--color-brand-primary); /* #0F766E */
+  }
+
+  .cta-gradient {
+    background: linear-gradient(90deg, 
+      var(--color-brand-accent) 0%, 
+      var(--color-brand-secondary) 100%
+    );
+  }
+
+  /* Gradiente adicional para otras secciones */
+  .section-gradient {
+    background: linear-gradient(180deg, 
+      var(--color-brand-primary) 0%, 
+      var(--color-brand-tertiary) 100%
+    );
+  }
+
   /* === BOTONES (Solo los que se usan) === */
   .btn-primary {
     @apply px-6 py-3 font-medium text-white transition-all duration-200 rounded-lg shadow-sm bg-brand-primary hover:bg-primary-800 hover:shadow-md;
@@ -54,6 +75,7 @@ body {
   .btn-outline-secondary {
     @apply px-6 py-3 font-medium transition-all duration-200 border-2 rounded-lg border-brand-secondary text-brand-secondary hover:bg-brand-secondary hover:text-white;
   }
+  
 
   /* === CARDS (Solo los que se usan) === */
   .card {

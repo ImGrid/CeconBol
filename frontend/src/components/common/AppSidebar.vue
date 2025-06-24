@@ -140,13 +140,11 @@ const {
   isCliente,
   navigationPermissions 
 } = usePermissions()
-
-// Computed
 const sidebarClass = computed(() => {
   return [
     'dashboard-sidebar',
-    props.show ? '' : 'dashboard-sidebar-hidden'
-  ].filter(Boolean).join(' ')
+    props.show ? 'dashboard-sidebar-visible' : 'dashboard-sidebar-hidden'
+  ].join(' ')
 })
 
 const userInitials = computed(() => {

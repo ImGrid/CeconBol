@@ -8,15 +8,15 @@
     
     <!-- Overlay para móvil -->
     <div 
-      v-if="showSidebar" 
-      class="sidebar-overlay lg:hidden"
+      v-if="showSidebar && isMobile" 
+      class="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
       @click="closeSidebar"
-    ></div>
+    />
     
     <!-- Contenido principal -->
-    <div class="dashboard-main">
+    <div :class="['dashboard-main', showSidebar ? 'dashboard-main-with-sidebar' : '']">
       <!-- Header -->
-      <header class="bg-white border-b border-gray-200 shadow-sm lg:ml-64">
+      <header class="bg-white border-b border-gray-200 shadow-sm">
         <div class="flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <!-- Botón menú móvil -->
           <button
@@ -115,7 +115,7 @@
       </header>
       
       <!-- Contenido -->
-      <main class="lg:ml-64">
+      <main>
         <div class="dashboard-content">
           <slot />
         </div>
@@ -152,6 +152,7 @@ const { isProveedor } = usePermissions()
 
 // Estado
 const showSidebar = ref(false)
+const isMobile = ref(false)
 const showUserMenu = ref(false)
 const notificationCount = ref(3) // Simulado por ahora
 
@@ -166,16 +167,19 @@ const userInitials = computed(() => {
 })
 
 // Métodos
+const updateScreenSize = () => {
+  isMobile.value = window.innerWidth < 1024
+  showSidebar.value = !isMobile.value // Mostrar en desktop, ocultar en mobile
+}
+
 const toggleSidebar = () => {
   showSidebar.value = !showSidebar.value
 }
 
 const closeSidebar = () => {
-  showSidebar.value = false
-}
-
-const toggleUserMenu = () => {
-  showUserMenu.value = !showUserMenu.value
+  if (isMobile.value) {
+    showSidebar.value = false
+  }
 }
 
 const handleLogout = async () => {
@@ -197,10 +201,13 @@ const handleClickOutside = (event) => {
 
 // Lifecycle
 onMounted(() => {
+  updateScreenSize()
+  window.addEventListener('resize', updateScreenSize)
   document.addEventListener('click', handleClickOutside)
 })
 
 onUnmounted(() => {
+  window.removeEventListener('resize', updateScreenSize)
   document.removeEventListener('click', handleClickOutside)
 })
 </script>

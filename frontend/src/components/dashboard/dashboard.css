@@ -6,7 +6,11 @@
 }
 
 .dashboard-sidebar {
-  @apply fixed inset-y-0 left-0 z-50 w-64 transition-transform duration-300 ease-in-out transform bg-white shadow-lg lg:translate-x-0 lg:static lg:inset-0;
+  @apply fixed inset-y-0 left-0 z-50 w-64 transition-transform duration-300 bg-white shadow-lg;
+}
+
+.dashboard-sidebar-visible {
+  @apply translate-x-0;
 }
 
 .dashboard-sidebar-hidden {
@@ -14,15 +18,19 @@
 }
 
 .dashboard-main {
-  @apply flex-1 lg:ml-0;
+  @apply min-h-screen transition-all duration-300;
+}
+
+.dashboard-main-with-sidebar {
+  @apply lg:ml-64;
 }
 
 .dashboard-content {
   @apply px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8;
 }
 
-.dashboard-header {
-  @apply mb-8;
+.dashboard-content {
+  @apply px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8;
 }
 
 .dashboard-title {
@@ -113,21 +121,6 @@
 
 .stat-card-change-negative {
   @apply text-red-600;
-}
-
-/* === RESPONSIVE DASHBOARD === */
-@media (max-width: 1023px) {
-  .dashboard-sidebar {
-    @apply -translate-x-full;
-  }
-  
-  .dashboard-sidebar.is-open {
-    @apply translate-x-0;
-  }
-  
-  .dashboard-main {
-    @apply ml-0;
-  }
 }
 
 /* Mobile sidebar overlay */
