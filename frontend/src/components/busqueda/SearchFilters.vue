@@ -1,7 +1,7 @@
 <template>
   <div class="search-filters">
     <!-- Header con toggle de filtros en móvil -->
-    <div class="flex items-center justify-between mb-4 md:mb-6">
+    <div class="flex items-center justify-between mb-3 md:mb-4">
       <h3 class="text-lg font-semibold text-gray-900">
         Filtros de Búsqueda
       </h3>
@@ -13,7 +13,7 @@
     </div>
 
     <!-- Filtros -->
-    <div class="space-y-6">
+    <div class="space-y-4">
       
       <!-- Ciudad -->
       <div class="form-group">
@@ -38,9 +38,9 @@
       <div class="form-group">
         <label class="form-label">Capacidad</label>
         
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="text-xs text-gray-600 mb-1 block">Mínima</label>
+            <label class="block mb-1 text-xs text-gray-600">Mínima</label>
             <input
               v-model.number="localFilters.capacidadMinima"
               type="number"
@@ -53,7 +53,7 @@
           </div>
           
           <div>
-            <label class="text-xs text-gray-600 mb-1 block">Máxima</label>
+            <label class="block mb-1 text-xs text-gray-600">Máxima</label>
             <input
               v-model.number="localFilters.capacidadMaxima"
               type="number"
@@ -67,18 +67,20 @@
         </div>
 
         <!-- Capacidad rápida -->
-        <div class="capacity-ranges">
-          <button
-            v-for="range in capacityRanges"
-            :key="range.label"
-            @click="setCapacityRange(range)"
-            :class="[
-              'capacity-range-btn',
-              isCapacityRangeActive(range) ? 'capacity-range-active' : 'capacity-range-inactive'
-            ]"
-          >
-            {{ range.label }}
-          </button>
+        <div class="mt-2 capacity-ranges">
+          <div class="grid grid-cols-2 gap-1">
+            <button
+              v-for="range in capacityRanges"
+              :key="range.label"
+              @click="setCapacityRange(range)"
+              :class="[
+                'capacity-range-btn text-xs py-1.5 px-2',
+                isCapacityRangeActive(range) ? 'capacity-range-active' : 'capacity-range-inactive'
+              ]"
+            >
+              {{ range.label }}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -86,11 +88,11 @@
       <div class="form-group">
         <label class="form-label">Rango de Precio</label>
         
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="text-xs text-gray-600 mb-1 block">Mínimo</label>
+            <label class="block mb-1 text-xs text-gray-600">Mínimo</label>
             <div class="relative">
-              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
+              <span class="absolute text-sm text-gray-500 transform -translate-y-1/2 left-3 top-1/2">
                 Bs.
               </span>
               <input
@@ -98,16 +100,16 @@
                 type="number"
                 min="0"
                 placeholder="0"
-                class="form-input pl-8"
+                class="pl-8 form-input"
                 @input="updateFiltersDebounced"
               />
             </div>
           </div>
           
           <div>
-            <label class="text-xs text-gray-600 mb-1 block">Máximo</label>
+            <label class="block mb-1 text-xs text-gray-600">Máximo</label>
             <div class="relative">
-              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
+              <span class="absolute text-sm text-gray-500 transform -translate-y-1/2 left-3 top-1/2">
                 Bs.
               </span>
               <input
@@ -115,7 +117,7 @@
                 type="number"
                 min="0"
                 placeholder="Sin límite"
-                class="form-input pl-8"
+                class="pl-8 form-input"
                 @input="updateFiltersDebounced"
               />
             </div>
@@ -123,18 +125,20 @@
         </div>
 
         <!-- Precio rápido -->
-        <div class="price-ranges">
-          <button
-            v-for="range in priceRanges"
-            :key="range.label"
-            @click="setPriceRange(range)"
-            :class="[
-              'price-range-btn',
-              isPriceRangeActive(range) ? 'price-range-active' : 'price-range-inactive'
-            ]"
-          >
-            {{ range.label }}
-          </button>
+        <div class="mt-2 price-ranges">
+          <div class="grid grid-cols-1 gap-1">
+            <button
+              v-for="range in priceRanges"
+              :key="range.label"
+              @click="setPriceRange(range)"
+              :class="[
+                'price-range-btn text-xs py-1.5 px-2 text-left',
+                isPriceRangeActive(range) ? 'price-range-active' : 'price-range-inactive'
+              ]"
+            >
+              {{ range.label }}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -142,7 +146,7 @@
       <div class="form-group">
         <label class="form-label">Calificación Mínima</label>
         
-        <div class="space-y-2">
+        <div class="space-y-1.5">
           <div
             v-for="rating in [4, 3, 2, 1]"
             :key="rating"
@@ -158,7 +162,7 @@
             />
             <label 
               :for="`rating-${rating}`" 
-              class="ml-2 flex items-center cursor-pointer"
+              class="flex items-center ml-2 cursor-pointer"
             >
               <Rating :value="rating" :show-value="false" size="small" />
               <span class="ml-1 text-sm text-gray-600">y más</span>
@@ -203,7 +207,7 @@
     </div>
 
     <!-- Botones de acción -->
-    <div class="border-t pt-6 mt-6 space-y-3">
+    <div class="pt-4 mt-4 space-y-2 border-t">
       <Button
         variant="outline-primary"
         full-width

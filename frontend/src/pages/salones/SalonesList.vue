@@ -1,6 +1,6 @@
 <template>
   <DefaultLayout>
-    <div class="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <div class="px-2 py-8 mx-auto max-w-screen-2xl sm:px-4 lg:px-6">
       
       <!-- Header con búsqueda -->
       <div class="mb-8">
@@ -26,10 +26,10 @@
       </div>
 
       <!-- Layout principal -->
-      <div class="lg:grid lg:grid-cols-4 lg:gap-8">
+      <div class="grid grid-cols-1 gap-4 xl:grid-cols-6 xl:gap-6 lg:grid-cols-4 lg:gap-6">
         
         <!-- Sidebar de filtros -->
-        <div class="lg:col-span-1">
+        <div class="xl:col-span-2 lg:col-span-1">
           <FilterSidebar
             v-model="filtros"
             :result-count="pagination?.total || 0"
@@ -39,7 +39,7 @@
         </div>
 
         <!-- Contenido principal -->
-        <div class="mt-6 lg:col-span-3 lg:mt-0">
+        <div class="mt-6 xl:col-span-4 lg:col-span-3 lg:mt-0">
           
           <!-- Header de resultados -->
           <div class="flex flex-col mb-6 sm:flex-row sm:items-center sm:justify-between">
@@ -94,7 +94,7 @@
         </div>
       </div>
 
-      <!-- Salones destacados (si no hay búsqueda activa) -->
+      <!-- Salones destacados (sin cambios, mantener como estaba) -->
       <div v-if="!hasSearchOrFilters && !loading" class="mt-16">
         <div class="mb-8 text-center">
           <h2 class="mb-2 text-2xl font-bold text-gray-900">

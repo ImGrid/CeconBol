@@ -2,7 +2,7 @@
   <div class="filter-sidebar">
     
     <!-- Header para móvil -->
-    <div class="lg:hidden mb-4">
+    <div class="mb-4 lg:hidden">
       <Button
         variant="outline-primary"
         full-width
@@ -21,12 +21,12 @@
     <!-- Sidebar para desktop -->
     <div class="hidden lg:block">
       <Card class="sticky top-6">
-        <SearchFilters
-          :filters="modelValue"
-          @update:filters="updateFilters"
-          @apply="handleApply"
-          @clear="handleClear"
-        />
+          <SearchFilters
+            :filters="modelValue"
+            @update:filters="updateFilters"
+            @apply="handleApply"
+            @clear="handleClear"
+          />
       </Card>
     </div>
 
@@ -37,7 +37,7 @@
       size="large"
       :hide-footer="true"
     >
-      <div class="max-h-96 overflow-y-auto">
+      <div class="overflow-y-auto max-h-96">
         <SearchFilters
           :filters="modelValue"
           @update:filters="updateFilters"
@@ -48,7 +48,7 @@
     </Modal>
 
     <!-- Filtros activos (chips) -->
-    <div v-if="activeFiltersChips.length > 0" class="active-filters">
+    <div v-if="activeFiltersChips.length > 0" class="mt-4 active-filters">
       <div class="active-filters-header">
         <h4 class="active-filters-title">Filtros activos:</h4>
         <button
@@ -59,7 +59,7 @@
         </button>
       </div>
       
-      <div class="flex flex-wrap gap-2">
+      <div class="flex flex-wrap gap-1.5">
         <div
           v-for="chip in activeFiltersChips"
           :key="chip.key"
@@ -79,7 +79,7 @@
     </div>
 
     <!-- Resultados count -->
-    <div v-if="showResultsCount && resultCount !== null" class="results-count">
+    <div v-if="showResultsCount && resultCount !== null" class="mt-3 results-count">
       <p class="results-count-text">
         <span class="results-count-number">{{ resultCount }}</span>
         {{ resultCount === 1 ? 'salón encontrado' : 'salones encontrados' }}

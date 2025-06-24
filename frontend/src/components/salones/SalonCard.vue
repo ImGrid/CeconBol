@@ -16,7 +16,7 @@
       />
       
       <!-- Badges en la imagen -->
-      <div class="absolute top-3 left-3 flex flex-col space-y-2">
+      <div class="absolute flex flex-col space-y-2 top-3 left-3">
         <Badge v-if="salon.destacado" variant="premium" size="small">
           ⭐ Destacado
         </Badge>
@@ -27,8 +27,8 @@
 
       <!-- Precio destacado -->
       <div class="absolute bottom-3 right-3">
-        <div class="bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1">
-          <span class="price-text text-sm font-bold">
+        <div class="px-3 py-1 rounded-lg bg-white/90 backdrop-blur-sm">
+          <span class="text-sm font-bold price-text">
             {{ formatPrice(salon.precioBase) }}
           </span>
           <span v-if="salon.modeloPrecio === 'por_persona'" class="text-xs text-gray-600">
@@ -39,13 +39,13 @@
     </div>
 
     <!-- Contenido de la tarjeta -->
-    <div class="card-body card-padding-medium">
+    <div>
       <!-- Título y ubicación -->
       <div class="mb-3">
         <h3 class="card-venue-title line-clamp-2">
           {{ salon.nombre }}
         </h3>
-        <p class="text-sm text-gray-600 flex items-center">
+        <p class="flex items-center text-sm text-gray-600">
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -56,7 +56,7 @@
 
       <!-- Capacidad -->
       <div class="mb-3">
-        <p class="text-sm text-gray-700 flex items-center">
+        <p class="flex items-center text-sm text-gray-700">
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
@@ -82,7 +82,7 @@
       </div>
 
       <!-- Descripción -->
-      <p class="card-description line-clamp-2 mb-4">
+      <p class="mb-4 card-description line-clamp-2">
         {{ salon.descripcion }}
       </p>
 

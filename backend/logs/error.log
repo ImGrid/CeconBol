@@ -1,0 +1,60 @@
+2025-06-24 13:12:22 [ERROR]: Error caught by middleware Ruta no encontrada: /api/actividad/reciente?limite=5
+Error: Ruta no encontrada: /api/actividad/reciente?limite=5
+    at notFoundHandler (C:\Users\lenovo\Documents\CeconBol\backend\src\middlewares\manejoErrores.js:148:17)
+    at Layer.handleRequest (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:342:13)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:297:9
+    at processParams (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:582:12)
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:291:5)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+    at Function.handle (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:186:3)
+    at router (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:60:12)
+2025-06-24 13:12:32 [ERROR]: Error caught by middleware Ruta no encontrada: /api/salones/mis-salones/stats
+Error: Ruta no encontrada: /api/salones/mis-salones/stats
+    at notFoundHandler (C:\Users\lenovo\Documents\CeconBol\backend\src\middlewares\manejoErrores.js:148:17)
+    at Layer.handleRequest (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:342:13)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:297:9
+    at processParams (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:582:12)
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:291:5)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+2025-06-24 13:13:06 [ERROR]: Error caught by middleware Ruta no encontrada: /api/salones/mis-salones/stats
+Error: Ruta no encontrada: /api/salones/mis-salones/stats
+    at notFoundHandler (C:\Users\lenovo\Documents\CeconBol\backend\src\middlewares\manejoErrores.js:148:17)
+    at Layer.handleRequest (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:342:13)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:297:9
+    at processParams (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:582:12)
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:291:5)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+2025-06-24 13:13:14 [ERROR]: Error caught by middleware Ruta no encontrada: /api/salones/mis-salones/stats
+Error: Ruta no encontrada: /api/salones/mis-salones/stats
+    at notFoundHandler (C:\Users\lenovo\Documents\CeconBol\backend\src\middlewares\manejoErrores.js:148:17)
+    at Layer.handleRequest (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:342:13)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:297:9
+    at processParams (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:582:12)
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:291:5)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+2025-06-24 13:17:24 [ERROR]: Error caught by middleware Ruta no encontrada: /api/actividad/reciente?limite=5
+Error: Ruta no encontrada: /api/actividad/reciente?limite=5
+    at notFoundHandler (C:\Users\lenovo\Documents\CeconBol\backend\src\middlewares\manejoErrores.js:148:17)
+    at Layer.handleRequest (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:342:13)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:297:9
+    at processParams (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:582:12)
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:291:5)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+    at Function.handle (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:186:3)
+    at router (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:60:12)

@@ -41,7 +41,7 @@
                   v-if="!hideCloseButton"
                   type="button"
                   class="modal-close-btn"
-                  @click="$emit('close')"
+                  @click="$emit('update:show', false)"
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -61,7 +61,7 @@
                     <Button
                       v-if="!hideCancelButton"
                       variant="outline-primary"
-                      @click="$emit('close')"
+                      @click="$emit('update:show', false)"
                     >
                       {{ cancelText }}
                     </Button>
@@ -86,7 +86,7 @@
 
 <script setup>
 import { computed, watch, onUnmounted } from 'vue'
-import Button from './Button.vue' // ✅ CORREGIDO: Ruta correcta
+import Button from './Button.vue'
 
 // Props SIMPLIFICADOS - Solo lo esencial
 const props = defineProps({
@@ -101,7 +101,7 @@ const props = defineProps({
   size: {
     type: String,
     default: 'medium',
-    validator: (value) => ['small', 'medium', 'large'].includes(value) // Eliminamos 'xl'
+    validator: (value) => ['small', 'medium', 'large'].includes(value)
   },
   closeOnBackdrop: {
     type: Boolean,
@@ -141,14 +141,12 @@ const props = defineProps({
   }
 })
 
-// Events
-const emit = defineEmits(['close', 'confirm'])
+const emit = defineEmits(['update:show', 'close', 'confirm'])
 
 // Computed
 const modalClass = computed(() => {
   const classes = ['modal-content']
   
-  // Solo 3 tamaños reales (eliminamos xl que nunca se usa)
   const sizeClasses = {
     'small': 'modal-small',
     'medium': 'modal-medium',
@@ -159,17 +157,16 @@ const modalClass = computed(() => {
   return classes.join(' ')
 })
 
-// Métodos
 const handleBackdropClick = () => {
   if (props.closeOnBackdrop) {
-    emit('close')
+    emit('update:show', false)
   }
 }
 
-// Manejar tecla ESC
+// Manejar tecla ESC - CORREGIDO
 const handleEscKey = (event) => {
   if (event.key === 'Escape' && props.closeOnBackdrop) {
-    emit('close')
+    emit('update:show', false)
   }
 }
 

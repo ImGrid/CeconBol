@@ -65,11 +65,11 @@
 }
 
 .filter-chip {
-  @apply inline-flex items-center px-3 py-1 text-sm rounded-full bg-brand-primary bg-opacity-10 text-brand-primary;
+  @apply inline-flex items-center px-3 py-1 text-sm text-white rounded-full bg-brand-primary;
 }
 
 .filter-chip-remove {
-  @apply ml-2 cursor-pointer hover:opacity-80;
+  @apply ml-2 text-white cursor-pointer hover:opacity-80;
 }
 
 /* === RESULTADOS COUNT === */
@@ -83,4 +83,39 @@
 
 .results-count-number {
   @apply font-medium;
+}
+
+.filter-sidebar {
+  @apply space-y-3;
+}
+
+.active-filters {
+  @apply mt-3;
+}
+
+.active-filters-header {
+  @apply flex items-center justify-between mb-2;
+}
+
+.search-filters {
+  @apply space-y-4;
+}
+
+.form-group {
+  @apply space-y-2;
+}
+
+.capacity-range-btn, 
+.price-range-btn {
+  @apply w-full text-center transition-colors border rounded;
+}
+
+.capacity-range-active,
+.price-range-active {
+  @apply text-white bg-brand-primary border-brand-primary;
+}
+
+.capacity-range-inactive,
+.price-range-inactive {
+  @apply text-gray-700 border-gray-200 bg-gray-50 hover:bg-gray-100;
 }

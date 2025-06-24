@@ -1,0 +1,188 @@
+2025-06-24 13:10:20 [INFO]: Mongoose connected to MongoDB
+2025-06-24 13:10:20 [INFO]: Database connected: ceconbol
+2025-06-24 13:10:20 [INFO]: DB: CONNECTION_SUCCESS
+2025-06-24 13:10:20 [INFO]: HTTP server started successfully
+2025-06-24 13:10:24 [INFO]: HTTP: GET /destacados?limite=6 - 200 (57ms)
+2025-06-24 13:10:24 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:10:24 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (149ms)
+2025-06-24 13:10:32 [INFO]: HTTP: GET /destacados?limite=6 - 200 (12ms)
+2025-06-24 13:10:32 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:10:32 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (27ms)
+2025-06-24 13:10:35 [INFO]: HTTP: GET /destacados?limite=6 - 200 (11ms)
+2025-06-24 13:10:35 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:10:35 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (26ms)
+2025-06-24 13:10:41 [INFO]: HTTP: GET /destacados?limite=6 - 200 (10ms)
+2025-06-24 13:10:41 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:10:41 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (19ms)
+2025-06-24 13:11:01 [INFO]: HTTP: GET /destacados?limite=6 - 200 (24ms)
+2025-06-24 13:11:01 [INFO]: HTTP: GET /populares?limite=8 - 200 (23ms)
+2025-06-24 13:11:04 [INFO]: HTTP: GET /destacados?limite=6 - 200 (5ms)
+2025-06-24 13:11:04 [INFO]: HTTP: GET /populares?limite=8 - 200 (6ms)
+2025-06-24 13:11:40 [INFO]: AUTH: USER_REGISTERED
+2025-06-24 13:11:40 [INFO]: HTTP: POST /register - 201 (557ms)
+2025-06-24 13:11:46 [INFO]: HTTP: GET /destacados?limite=6 - 200 (14ms)
+2025-06-24 13:11:46 [INFO]: HTTP: GET /populares?limite=8 - 200 (13ms)
+2025-06-24 13:11:49 [INFO]: HTTP: GET /destacados?limite=6 - 200 (5ms)
+2025-06-24 13:11:49 [INFO]: HTTP: GET /populares?limite=8 - 200 (7ms)
+2025-06-24 13:11:58 [INFO]: HTTP: GET /destacados?limite=6 - 200 (19ms)
+2025-06-24 13:11:58 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:11:58 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (43ms)
+2025-06-24 13:12:03 [INFO]: AUTH: USER_LOGOUT
+2025-06-24 13:12:03 [INFO]: HTTP: POST /logout - 200 (24ms)
+2025-06-24 13:12:03 [INFO]: HTTP: GET /destacados?limite=6 - 200 (7ms)
+2025-06-24 13:12:03 [INFO]: HTTP: GET /populares?limite=8 - 200 (8ms)
+2025-06-24 13:12:17 [INFO]: AUTH: USER_LOGIN
+2025-06-24 13:12:17 [INFO]: HTTP: POST /login - 200 (456ms)
+2025-06-24 13:12:20 [INFO]: HTTP: GET /destacados?limite=6 - 200 (9ms)
+2025-06-24 13:12:20 [INFO]: HTTP: GET /populares?limite=8 - 200 (9ms)
+2025-06-24 13:12:22 [ERROR]: Error caught by middleware Ruta no encontrada: /api/actividad/reciente?limite=5
+Error: Ruta no encontrada: /api/actividad/reciente?limite=5
+    at notFoundHandler (C:\Users\lenovo\Documents\CeconBol\backend\src\middlewares\manejoErrores.js:148:17)
+    at Layer.handleRequest (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:342:13)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:297:9
+    at processParams (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:582:12)
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:291:5)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+    at Function.handle (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:186:3)
+    at router (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:60:12)
+2025-06-24 13:12:22 [INFO]: HTTP: GET /dashboard - 200 (34ms)
+2025-06-24 13:12:22 [INFO]: HTTP: GET /dashboard - 200 (42ms)
+2025-06-24 13:12:22 [WARN]: HTTP: GET /api/actividad/reciente?limite=5 - 404 (35ms)
+2025-06-24 13:12:22 [INFO]: HTTP: GET /dashboard - 200 (57ms)
+2025-06-24 13:12:32 [ERROR]: Error caught by middleware Ruta no encontrada: /api/salones/mis-salones/stats
+Error: Ruta no encontrada: /api/salones/mis-salones/stats
+    at notFoundHandler (C:\Users\lenovo\Documents\CeconBol\backend\src\middlewares\manejoErrores.js:148:17)
+    at Layer.handleRequest (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:342:13)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:297:9
+    at processParams (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:582:12)
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:291:5)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+2025-06-24 13:12:32 [INFO]: HTTP: GET /mis-salones?page=1&limit=10 - 200 (19ms)
+2025-06-24 13:12:32 [WARN]: HTTP: GET /api/salones/mis-salones/stats - 404 (17ms)
+2025-06-24 13:13:06 [ERROR]: Error caught by middleware Ruta no encontrada: /api/salones/mis-salones/stats
+Error: Ruta no encontrada: /api/salones/mis-salones/stats
+    at notFoundHandler (C:\Users\lenovo\Documents\CeconBol\backend\src\middlewares\manejoErrores.js:148:17)
+    at Layer.handleRequest (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:342:13)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:297:9
+    at processParams (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:582:12)
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:291:5)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+2025-06-24 13:13:06 [INFO]: HTTP: GET /mis-salones?page=1&limit=10 - 200 (14ms)
+2025-06-24 13:13:06 [WARN]: HTTP: GET /api/salones/mis-salones/stats - 404 (8ms)
+2025-06-24 13:13:14 [INFO]: HTTP: GET /mis-salones?page=1&limit=10 - 200 (14ms)
+2025-06-24 13:13:14 [ERROR]: Error caught by middleware Ruta no encontrada: /api/salones/mis-salones/stats
+Error: Ruta no encontrada: /api/salones/mis-salones/stats
+    at notFoundHandler (C:\Users\lenovo\Documents\CeconBol\backend\src\middlewares\manejoErrores.js:148:17)
+    at Layer.handleRequest (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:342:13)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:297:9
+    at processParams (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:582:12)
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:291:5)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+2025-06-24 13:13:14 [WARN]: HTTP: GET /api/salones/mis-salones/stats - 404 (4ms)
+2025-06-24 13:17:24 [ERROR]: Error caught by middleware Ruta no encontrada: /api/actividad/reciente?limite=5
+Error: Ruta no encontrada: /api/actividad/reciente?limite=5
+    at notFoundHandler (C:\Users\lenovo\Documents\CeconBol\backend\src\middlewares\manejoErrores.js:148:17)
+    at Layer.handleRequest (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:342:13)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:297:9
+    at processParams (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:582:12)
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:291:5)
+    at C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:688:15
+    at next (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:276:14)
+    at Function.handle (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:186:3)
+    at router (C:\Users\lenovo\Documents\CeconBol\backend\node_modules\router\index.js:60:12)
+2025-06-24 13:17:24 [INFO]: HTTP: GET /dashboard - 200 (30ms)
+2025-06-24 13:17:24 [INFO]: HTTP: GET /dashboard - 200 (27ms)
+2025-06-24 13:17:24 [INFO]: HTTP: GET /dashboard - 200 (23ms)
+2025-06-24 13:17:24 [WARN]: HTTP: GET /api/actividad/reciente?limite=5 - 404 (19ms)
+2025-06-24 13:17:59 [INFO]: HTTP: GET /destacados?limite=6 - 200 (4ms)
+2025-06-24 13:17:59 [INFO]: HTTP: GET /populares?limite=8 - 200 (6ms)
+2025-06-24 13:18:04 [INFO]: HTTP: GET /destacados?limite=6 - 200 (11ms)
+2025-06-24 13:18:04 [INFO]: HTTP: GET /populares?limite=8 - 200 (12ms)
+2025-06-24 13:18:06 [INFO]: HTTP: GET /destacados?limite=6 - 200 (9ms)
+2025-06-24 13:18:06 [INFO]: HTTP: GET /populares?limite=8 - 200 (10ms)
+2025-06-24 13:18:08 [INFO]: AUTH: USER_LOGOUT
+2025-06-24 13:18:08 [INFO]: HTTP: POST /logout - 200 (9ms)
+2025-06-24 13:18:10 [INFO]: HTTP: GET /destacados?limite=6 - 200 (5ms)
+2025-06-24 13:18:10 [INFO]: HTTP: GET /populares?limite=8 - 200 (6ms)
+2025-06-24 13:26:42 [INFO]: HTTP: GET /destacados?limite=6 - 200 (6ms)
+2025-06-24 13:26:42 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:26:42 [INFO]: HTTP: GET /salones?ciudad=La+Paz&ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (70ms)
+2025-06-24 13:26:43 [INFO]: HTTP: GET /destacados?limite=6 - 200 (7ms)
+2025-06-24 13:26:43 [INFO]: HTTP: GET /populares?limite=8 - 200 (7ms)
+2025-06-24 13:32:19 [INFO]: HTTP: GET /destacados?limite=6 - 200 (7ms)
+2025-06-24 13:32:19 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:32:19 [INFO]: HTTP: GET /salones?ciudad=La+Paz&ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (20ms)
+2025-06-24 13:42:17 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:42:17 [INFO]: HTTP: GET /salones?ciudad=La+Paz&ordenarPor=fecha&orden=desc&page=1&limit=12 - 200 (10ms)
+2025-06-24 13:42:20 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:42:20 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (8ms)
+2025-06-24 13:42:20 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:42:20 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (10ms)
+2025-06-24 13:42:22 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:42:22 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (8ms)
+2025-06-24 13:42:22 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:42:22 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (8ms)
+2025-06-24 13:42:35 [INFO]: HTTP: GET /destacados?limite=6 - 200 (8ms)
+2025-06-24 13:42:35 [INFO]: HTTP: GET /populares?limite=8 - 200 (7ms)
+2025-06-24 13:42:55 [INFO]: HTTP: GET /destacados?limite=6 - 200 (8ms)
+2025-06-24 13:42:55 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:42:55 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (17ms)
+2025-06-24 13:56:13 [INFO]: HTTP: GET /destacados?limite=6 - 200 (8ms)
+2025-06-24 13:56:14 [INFO]: HTTP: GET /populares?limite=8 - 200 (7ms)
+2025-06-24 13:56:15 [INFO]: HTTP: GET /destacados?limite=6 - 200 (5ms)
+2025-06-24 13:56:15 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:56:15 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (14ms)
+2025-06-24 13:56:26 [INFO]: HTTP: GET /destacados?limite=6 - 200 (6ms)
+2025-06-24 13:56:26 [INFO]: HTTP: GET /populares?limite=8 - 200 (6ms)
+2025-06-24 13:56:31 [INFO]: HTTP: GET /destacados?limite=6 - 200 (6ms)
+2025-06-24 13:56:31 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:56:31 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (14ms)
+2025-06-24 13:56:54 [INFO]: HTTP: GET /destacados?limite=6 - 200 (8ms)
+2025-06-24 13:56:54 [INFO]: HTTP: GET /populares?limite=8 - 200 (9ms)
+2025-06-24 13:56:55 [INFO]: HTTP: GET /destacados?limite=6 - 200 (6ms)
+2025-06-24 13:56:55 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 13:56:55 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (14ms)
+2025-06-24 14:04:27 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 14:04:27 [INFO]: HTTP: GET /salones?ciudad=Cochabamba&capacidadMinima=500&precioMin=1000&precioMax=3000&calificacion=4&ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (21ms)
+2025-06-24 14:09:32 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 14:09:32 [INFO]: HTTP: GET /salones?ciudad=Cochabamba&precioMin=1000&precioMax=3000&calificacion=4&ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (5ms)
+2025-06-24 14:09:35 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 14:09:35 [INFO]: HTTP: GET /salones?ciudad=Cochabamba&precioMin=1000&precioMax=3000&calificacion=4&ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (5ms)
+2025-06-24 14:09:39 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 14:09:39 [INFO]: HTTP: GET /salones?ciudad=Cochabamba&ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (5ms)
+2025-06-24 14:09:39 [INFO]: HTTP: GET /destacados?limite=6 - 200 (5ms)
+2025-06-24 14:09:41 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 14:09:41 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (6ms)
+2025-06-24 14:09:49 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 14:09:49 [INFO]: HTTP: GET /salones?capacidadMinima=500&precioMax=1000&calificacion=4&ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (7ms)
+2025-06-24 14:10:06 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 14:10:06 [INFO]: HTTP: GET /salones?precioMax=1000&calificacion=4&ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (6ms)
+2025-06-24 14:17:45 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 14:17:45 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (8ms)
+2025-06-24 14:17:45 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 14:17:45 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (6ms)
+2025-06-24 14:17:58 [INFO]: HTTP: GET /destacados?limite=6 - 200 (8ms)
+2025-06-24 14:17:58 [INFO]: HTTP: GET /populares?limite=8 - 200 (8ms)
+2025-06-24 14:18:32 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 14:18:32 [INFO]: HTTP: GET /salones?ciudad=Cochabamba&ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (13ms)
+2025-06-24 14:18:32 [INFO]: HTTP: GET /destacados?limite=6 - 200 (10ms)
+2025-06-24 14:18:34 [INFO]: BUSINESS: BUSQUEDA_REALIZADA
+2025-06-24 14:18:34 [INFO]: HTTP: GET /salones?ordenarPor=relevancia&orden=desc&page=1&limit=12 - 200 (6ms)
+2025-06-24 14:18:48 [INFO]: HTTP: GET /destacados?limite=6 - 200 (7ms)
+2025-06-24 14:18:48 [INFO]: HTTP: GET /populares?limite=8 - 200 (6ms)
+2025-06-24 14:18:52 [INFO]: Received SIGINT, closing database connection...

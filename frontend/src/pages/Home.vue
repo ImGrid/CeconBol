@@ -12,7 +12,6 @@
             La plataforma líder en Bolivia para conectar organizadores de eventos 
             con los mejores salones del país.
           </p>
-
           <div class="flex flex-col justify-center gap-4 mb-12 sm:flex-row">
             <Button
               variant="secondary"
@@ -24,7 +23,7 @@
             
             <Button
               v-if="!isAuthenticated"
-              variant="outline-primary"
+              variant="secondary" 
               size="large"
               @click="goToRegister"
             >
@@ -41,38 +40,6 @@
               @search="handleHeroSearch"
               @quick-filter="handleQuickFilter"
             />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Estadísticas rápidas -->
-    <section class="py-12 bg-white">
-      <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
-          <div>
-            <div class="mb-2 text-3xl font-bold text-brand-primary">
-              {{ stats.totalSalones }}+
-            </div>
-            <div class="text-gray-600">Salones Disponibles</div>
-          </div>
-          <div>
-            <div class="mb-2 text-3xl font-bold text-brand-secondary">
-              {{ CIUDADES_BOLIVIA.length }}
-            </div>
-            <div class="text-gray-600">Ciudades</div>
-          </div>
-          <div>
-            <div class="mb-2 text-3xl font-bold text-brand-tertiary">
-              {{ stats.totalEventos }}+
-            </div>
-            <div class="text-gray-600">Eventos Realizados</div>
-          </div>
-          <div>
-            <div class="mb-2 text-3xl font-bold text-brand-accent">
-              {{ stats.totalResenas }}+
-            </div>
-            <div class="text-gray-600">Reseñas</div>
           </div>
         </div>
       </div>
@@ -221,19 +188,16 @@
         </div>
 
         <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
-          <button
+          <Button
             v-for="ciudad in CIUDADES_BOLIVIA"
             :key="ciudad"
+            variant="outline-primary"
+            class="!p-6 !h-auto flex flex-col items-center justify-center"
             @click="searchByCity(ciudad)"
-            class="city-card"
           >
-            <div class="city-card-title">
-              {{ ciudad }}
-            </div>
-            <div class="city-card-count">
-              {{ getCiudadStats(ciudad) }} salones
-            </div>
-          </button>
+            <span class="mb-1 text-lg font-semibold">{{ ciudad }}</span>
+            <span class="text-sm opacity-75">{{ getCiudadStats(ciudad) }} salones</span>
+          </Button>
         </div>
       </div>
     </section>
@@ -314,7 +278,6 @@ const getCiudadStats = computed(() => {
   }
 })
 
-// Métodos
 const loadInitialData = async () => {
   loadingSalones.value = true
   
