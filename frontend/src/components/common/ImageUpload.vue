@@ -10,9 +10,9 @@
     <div
       :class="uploadAreaClass"
       @drop="handleDrop"
-      @dragover="handleDragOver"
-      @dragenter="handleDragEnter"
-      @dragleave="handleDragLeave"
+      @dragover.prevent
+      @dragenter.prevent
+      @dragleave="isDragging = false"
       @click="openFileSelector"
     >
       <!-- Hidden file input -->
@@ -20,21 +20,19 @@
         ref="fileInputRef"
         type="file"
         :multiple="multiple"
-        :accept="acceptedTypes"
+        accept="image/jpeg,image/png,image/webp"
         class="hidden"
         @change="handleFileSelect"
       />
 
-      <!-- Upload Content -->
-      <div v-if="!hasFiles" class="upload-content">
-        <!-- Upload Icon -->
+      <!-- Upload Content (cuando no hay archivos) -->
+      <div v-if="files.length === 0" class="upload-content">
         <div class="upload-icon">
           <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
           </svg>
         </div>
 
-        <!-- Upload Text -->
         <div class="upload-text">
           <p class="upload-primary-text">
             {{ uploadText }}
@@ -42,86 +40,36 @@
           <p class="upload-secondary-text">
             {{ supportText }}
           </p>
-          <p v-if="maxFiles > 1" class="upload-limit-text">
-            Máximo {{ maxFiles }} {{ maxFiles === 1 ? 'archivo' : 'archivos' }}
+          <p v-if="multiple && maxFiles > 1" class="upload-limit-text">
+            Máximo {{ maxFiles }} archivos
           </p>
         </div>
 
-        <!-- Upload Button -->
         <Button variant="outline-primary" size="small" class="mt-4">
-          {{ buttonText }}
+          Seleccionar Archivos
         </Button>
       </div>
 
-      <!-- Files Preview -->
+      <!-- Files Preview (cuando hay archivos) -->
       <div v-else class="files-preview">
         <div class="files-grid">
           <div
-            v-for="(preview, index) in previews"
-            :key="`preview-${index}`"
+            v-for="(file, index) in files"
+            :key="`file-${index}`"
             class="file-preview-item"
           >
-            <!-- Image Preview -->
             <div class="file-preview-image">
               <img 
-                :src="preview.preview" 
-                :alt="preview.name"
+                :src="file.preview" 
+                :alt="file.name"
                 class="preview-img"
               />
               
-              <!-- Upload Progress Overlay -->
-              <div 
-                v-if="getFileState(preview.file.name).uploading"
-                class="upload-progress-overlay"
-              >
-                <div class="upload-progress-circle">
-                  <svg class="progress-ring" viewBox="0 0 36 36">
-                    <path
-                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.3)"
-                      stroke-width="3"
-                    />
-                    <path
-                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                      fill="none"
-                      stroke="white"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      :stroke-dasharray="`${getFileState(preview.file.name).progress || 0}, 100`"
-                    />
-                  </svg>
-                  <span class="progress-text">
-                    {{ getFileState(preview.file.name).progress || 0 }}%
-                  </span>
-                </div>
-              </div>
-
-              <!-- Success Overlay -->
-              <div 
-                v-if="getFileState(preview.file.name).uploaded"
-                class="upload-success-overlay"
-              >
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-              </div>
-
-              <!-- Error Overlay -->
-              <div 
-                v-if="getFileState(preview.file.name).error"
-                class="upload-error-overlay"
-              >
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-              </div>
-
               <!-- Remove Button -->
               <button
-                @click.stop="removeFile(preview.file)"
+                @click.stop="removeFile(index)"
                 class="file-remove-btn"
-                :title="`Eliminar ${preview.name}`"
+                :title="`Eliminar ${file.name}`"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -129,104 +77,50 @@
               </button>
             </div>
 
-            <!-- File Info -->
             <div class="file-info">
-              <p class="file-name" :title="preview.name">
-                {{ truncateFileName(preview.name) }}
+              <p class="file-name" :title="file.name">
+                {{ truncateFileName(file.name) }}
               </p>
               <p class="file-size">
-                {{ formatFileSize(preview.size) }}
-              </p>
-              
-              <!-- File Error -->
-              <p v-if="getFileState(preview.file.name).error" class="file-error">
-                {{ getFileState(preview.file.name).error }}
+                {{ formatFileSize(file.size) }}
               </p>
             </div>
           </div>
-        </div>
 
-        <!-- Add More Button -->
-        <div v-if="canAddMore" class="add-more-area" @click="openFileSelector">
-          <div class="add-more-content">
-            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-            </svg>
-            <p class="mt-2 text-sm text-gray-600">Agregar más</p>
+          <!-- Add More Button -->
+          <div 
+            v-if="canAddMore" 
+            class="add-more-area" 
+            @click="openFileSelector"
+          >
+            <div class="add-more-content">
+              <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+              </svg>
+              <p class="mt-2 text-sm text-gray-600">Agregar más</p>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Upload Actions -->
-    <div v-if="hasFiles && !autoUpload" class="upload-actions">
-      <div class="flex items-center justify-between">
-        <p class="upload-summary">
-          {{ files.length }} {{ files.length === 1 ? 'archivo' : 'archivos' }} seleccionados
-          <span class="text-gray-500">({{ formatFileSize(totalSize) }})</span>
-        </p>
-        
-        <div class="flex space-x-2">
-          <Button
-            variant="outline-primary"
-            size="small"
-            @click="clearFiles"
-            :disabled="uploading"
-          >
-            Limpiar
-          </Button>
-          
-          <Button
-            variant="primary"
-            size="small"
-            @click="startUpload"
-            :disabled="!canUpload"
-            :loading="uploading"
-          >
-            {{ uploading ? 'Subiendo...' : 'Subir Archivos' }}
-          </Button>
-        </div>
-      </div>
-
-      <!-- Global Upload Progress -->
-      <div v-if="uploading" class="upload-progress-bar">
-        <div class="progress-bar-track">
-          <div 
-            class="progress-bar-fill"
-            :style="{ width: `${uploadProgress}%` }"
-          ></div>
-        </div>
-        <span class="progress-text">{{ uploadProgress }}%</span>
       </div>
     </div>
 
     <!-- Error Messages -->
-    <div v-if="hasErrors" class="upload-errors">
-      <div 
-        v-for="(error, index) in errors" 
-        :key="`error-${index}`"
-        class="upload-error-item"
-      >
-        <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <span>{{ error }}</span>
-      </div>
+    <div v-if="error" class="mt-2 text-sm text-red-600">
+      {{ error }}
     </div>
 
     <!-- Help Text -->
-    <p v-if="helpText && !hasErrors" class="input-help-text">
+    <p v-if="helpText && !error" class="mt-2 text-sm text-gray-500">
       {{ helpText }}
     </p>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { useImageUpload } from '@/composables/useImageUpload.js'
+import { ref, computed } from 'vue'
 import Button from '@/components/ui/Button.vue'
 
-// Props
+// Props SIMPLIFICADOS
 const props = defineProps({
   modelValue: {
     type: Array,
@@ -252,18 +146,6 @@ const props = defineProps({
     type: Number,
     default: 10
   },
-  autoUpload: {
-    type: Boolean,
-    default: false
-  },
-  compressImages: {
-    type: Boolean,
-    default: true
-  },
-  acceptedTypes: {
-    type: String,
-    default: 'image/jpeg,image/png,image/webp'
-  },
   uploadText: {
     type: String,
     default: 'Arrastra tus imágenes aquí o haz clic para seleccionar'
@@ -271,47 +153,17 @@ const props = defineProps({
   supportText: {
     type: String,
     default: 'JPG, PNG o WebP hasta 5MB cada una'
-  },
-  buttonText: {
-    type: String,
-    default: 'Seleccionar Archivos'
   }
 })
 
 // Events
 const emit = defineEmits(['update:modelValue', 'upload-complete', 'upload-error'])
 
-// Refs
+// Estado
 const fileInputRef = ref(null)
 const isDragging = ref(false)
-
-// Composable
-const {
-  files,
-  previews,
-  uploading,
-  uploadProgress,
-  errors,
-  uploadedFiles,
-  hasFiles,
-  hasErrors,
-  canUpload,
-  canAddMore,
-  totalSize,
-  addFiles,
-  removeFile,
-  clearFiles,
-  uploadFiles,
-  getFileState,
-  formatFileSize,
-  handleDrop: composableHandleDrop,
-  handleDragOver
-} = useImageUpload({
-  multiple: props.multiple,
-  maxFiles: props.maxFiles,
-  autoUpload: props.autoUpload,
-  compressImages: props.compressImages
-})
+const files = ref([])
+const error = ref('')
 
 // Computed
 const uploadAreaClass = computed(() => {
@@ -319,15 +171,17 @@ const uploadAreaClass = computed(() => {
   
   if (isDragging.value) {
     classes.push('upload-area-dragging')
-  }
-  
-  if (hasFiles.value) {
+  } else if (files.value.length > 0) {
     classes.push('upload-area-with-files')
   } else {
     classes.push('upload-area-empty')
   }
   
   return classes.join(' ')
+})
+
+const canAddMore = computed(() => {
+  return props.multiple && files.value.length < props.maxFiles
 })
 
 // Métodos
@@ -338,37 +192,81 @@ const openFileSelector = () => {
 const handleFileSelect = async (event) => {
   const selectedFiles = Array.from(event.target.files)
   await addFiles(selectedFiles)
-  
-  // Reset input para permitir seleccionar el mismo archivo de nuevo
-  event.target.value = ''
+  event.target.value = '' // Reset
 }
 
 const handleDrop = async (event) => {
+  event.preventDefault()
   isDragging.value = false
-  await composableHandleDrop(event)
+  
+  const droppedFiles = Array.from(event.dataTransfer.files)
+  await addFiles(droppedFiles)
 }
 
-const handleDragEnter = (event) => {
-  event.preventDefault()
-  isDragging.value = true
-}
-
-const handleDragLeave = (event) => {
-  event.preventDefault()
-  // Solo cambiar isDragging si realmente salimos del área
-  if (!event.currentTarget.contains(event.relatedTarget)) {
-    isDragging.value = false
+const addFiles = async (newFiles) => {
+  error.value = ''
+  
+  // Validar límite
+  if (files.value.length + newFiles.length > props.maxFiles) {
+    error.value = `Máximo ${props.maxFiles} archivos permitidos`
+    return
   }
+
+  // Validar y procesar archivos
+  for (const file of newFiles) {
+    const validation = validateFile(file)
+    if (validation.isValid) {
+      const preview = await createPreview(file)
+      files.value.push({
+        file,
+        name: file.name,
+        size: file.size,
+        preview
+      })
+    } else {
+      error.value = validation.error
+      break
+    }
+  }
+
+  // Emitir cambios
+  emit('update:modelValue', files.value.map(f => f.file))
 }
 
-const startUpload = async () => {
-  try {
-    const results = await uploadFiles()
-    emit('upload-complete', results)
-    emit('update:modelValue', uploadedFiles.value)
-  } catch (error) {
-    emit('upload-error', error)
+const removeFile = (index) => {
+  const file = files.value[index]
+  
+  // Limpiar preview URL
+  if (file.preview) {
+    URL.revokeObjectURL(file.preview)
   }
+  
+  files.value.splice(index, 1)
+  emit('update:modelValue', files.value.map(f => f.file))
+}
+
+const validateFile = (file) => {
+  // Validar tipo
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
+  if (!allowedTypes.includes(file.type)) {
+    return { isValid: false, error: 'Solo se permiten imágenes JPG, PNG o WebP' }
+  }
+
+  // Validar tamaño (5MB)
+  const maxSize = 5 * 1024 * 1024
+  if (file.size > maxSize) {
+    return { isValid: false, error: 'La imagen no puede exceder 5MB' }
+  }
+
+  return { isValid: true }
+}
+
+const createPreview = (file) => {
+  return new Promise((resolve) => {
+    const reader = new FileReader()
+    reader.onload = (e) => resolve(e.target.result)
+    reader.readAsDataURL(file)
+  })
 }
 
 const truncateFileName = (name, maxLength = 20) => {
@@ -381,17 +279,24 @@ const truncateFileName = (name, maxLength = 20) => {
   return `${truncated}...${extension}`
 }
 
-// Watchers
-watch(uploadedFiles, (newFiles) => {
-  emit('update:modelValue', newFiles)
-}, { deep: true })
+const formatFileSize = (bytes) => {
+  if (bytes === 0) return '0 B'
+  const k = 1024
+  const sizes = ['B', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i]
+}
 
-// Sync external modelValue changes
-watch(() => props.modelValue, (newValue) => {
-  if (newValue && newValue.length !== uploadedFiles.value.length) {
-    // Handle external changes if needed
-    uploadedFiles.value = [...newValue]
-  }
+// Cleanup al desmontar
+import { onUnmounted } from 'vue'
+
+onUnmounted(() => {
+  // Limpiar todas las preview URLs
+  files.value.forEach(file => {
+    if (file.preview) {
+      URL.revokeObjectURL(file.preview)
+    }
+  })
 })
 </script>
 

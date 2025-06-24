@@ -123,40 +123,6 @@ export const getEstadoBadgeColor = (estado, tipo = 'consulta') => {
   return colors[tipo]?.[estado] || 'bg-gray-50 text-gray-700 border border-gray-200'
 }
 
-// ✨ NUEVA: Función para iconos de estado (opcional, para mejorar UX)
-export const getEstadoIcon = (estado, tipo = 'consulta') => {
-  const icons = {
-    consulta: {
-      'nueva': '💬',
-      'contactado': '📞', 
-      'cotizado': '💰',
-      'negociando': '🤝',
-      'ganada': '✅',
-      'perdida': '❌'
-    },
-    evento: {
-      'confirmado': '📅',
-      'en_progreso': '🎉', 
-      'completado': '✅',
-      'cancelado': '❌'
-    },
-    salon: {
-      'borrador': '📝',
-      'pendiente': '⏳',
-      'aprobado': '✅', 
-      'rechazado': '❌',
-      'suspendido': '⏸️'
-    },
-    resena: {
-      'pendiente': '⏳',
-      'aprobado': '⭐',
-      'rechazado': '❌'
-    }
-  }
-  
-  return icons[tipo]?.[estado] || '📄'
-}
-
 // Corta texto largo
 export const truncateText = (text, length = 100) => {
   if (!text || text.length <= length) return text

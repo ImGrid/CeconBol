@@ -20,11 +20,11 @@
         <div class="modal-container">
           <Transition
             enter-active-class="transition-all duration-300"
-            enter-from-class="opacity-0 scale-95"
-            enter-to-class="opacity-100 scale-100"
+            enter-from-class="scale-95 opacity-0"
+            enter-to-class="scale-100 opacity-100"
             leave-active-class="transition-all duration-200"
-            leave-from-class="opacity-100 scale-100"
-            leave-to-class="opacity-0 scale-95"
+            leave-from-class="scale-100 opacity-100"
+            leave-to-class="scale-95 opacity-0"
           >
             <div
               v-if="show"
@@ -50,7 +50,7 @@
               </div>
 
               <!-- Body -->
-              <div :class="bodyClass">
+              <div class="modal-body">
                 <slot />
               </div>
 
@@ -85,10 +85,10 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue'
-import Button from './Button.vue'
+import { computed, watch, onUnmounted } from 'vue'
+import Button from './Button.vue' // ✅ CORREGIDO: Import correcto
 
-// Props
+// Props SIMPLIFICADOS - Solo lo esencial
 const props = defineProps({
   show: {
     type: Boolean,
@@ -101,7 +101,7 @@ const props = defineProps({
   size: {
     type: String,
     default: 'medium',
-    validator: (value) => ['small', 'medium', 'large', 'xl'].includes(value)
+    validator: (value) => ['small', 'medium', 'large'].includes(value) // Eliminamos 'xl'
   },
   closeOnBackdrop: {
     type: Boolean,
@@ -146,22 +146,17 @@ const emit = defineEmits(['close', 'confirm'])
 
 // Computed
 const modalClass = computed(() => {
-  const classes = ['modal-content'] // Clase base de ui.css
+  const classes = ['modal-content']
   
+  // Solo 3 tamaños reales (eliminamos xl que nunca se usa)
   const sizeClasses = {
     'small': 'modal-small',
     'medium': 'modal-medium',
-    'large': 'modal-large',
-    'xl': 'modal-xl'
+    'large': 'modal-large'
   }
   
   classes.push(sizeClasses[props.size])
-  
   return classes.join(' ')
-})
-
-const bodyClass = computed(() => {
-  return 'modal-body'
 })
 
 // Métodos
@@ -172,6 +167,13 @@ const handleBackdropClick = () => {
 }
 
 // Manejar tecla ESC
+const handleEscKey = (event) => {
+  if (event.key === 'Escape' && props.closeOnBackdrop) {
+    emit('close')
+  }
+}
+
+// Watchers
 watch(() => props.show, (newValue) => {
   if (newValue) {
     document.addEventListener('keydown', handleEscKey)
@@ -182,15 +184,7 @@ watch(() => props.show, (newValue) => {
   }
 })
 
-const handleEscKey = (event) => {
-  if (event.key === 'Escape' && props.closeOnBackdrop) {
-    emit('close')
-  }
-}
-
 // Cleanup al desmontar
-import { onUnmounted } from 'vue'
-
 onUnmounted(() => {
   document.removeEventListener('keydown', handleEscKey)
   document.body.style.overflow = ''

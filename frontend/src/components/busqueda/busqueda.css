@@ -1,4 +1,4 @@
-/* Estilos específicos para componentes de búsqueda */
+/* Estilos específicos para componentes de búsqueda - SIN DUPLICACIONES */
 
 /* === SEARCH BAR === */
 .search-bar {
@@ -7,10 +7,6 @@
 
 .search-input {
   @apply pl-10 pr-10;
-}
-
-.search-suggestions {
-  @apply absolute z-50 w-full mt-2 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg max-h-80;
 }
 
 .suggestions-dropdown {
@@ -49,40 +45,6 @@
 /* === SEARCH FILTERS === */
 .search-filters {
   @apply space-y-6;
-}
-
-/* Filtros rápidos específicos de capacidad */
-.capacity-ranges {
-  @apply flex flex-wrap gap-2 mt-3;
-}
-
-.capacity-range-btn {
-  @apply px-3 py-1 text-sm transition-colors border rounded-full cursor-pointer;
-}
-
-.capacity-range-active {
-  @apply text-white bg-brand-primary border-brand-primary;
-}
-
-.capacity-range-inactive {
-  @apply text-gray-700 bg-white border-gray-300 hover:border-brand-primary;
-}
-
-/* Filtros rápidos específicos de precio */
-.price-ranges {
-  @apply flex flex-wrap gap-2 mt-3;
-}
-
-.price-range-btn {
-  @apply px-3 py-1 text-sm transition-colors border rounded-full cursor-pointer;
-}
-
-.price-range-active {
-  @apply text-white bg-brand-primary border-brand-primary;
-}
-
-.price-range-inactive {
-  @apply text-gray-700 bg-white border-gray-300 hover:border-brand-primary;
 }
 
 /* === FILTROS ACTIVOS (CHIPS) === */

@@ -1,4 +1,4 @@
-/* Estilos específicos para componentes de salones */
+/* Estilos específicos para componentes de salones - SOLO LO QUE SE USA */
 
 /* === SALON CARD === */
 .salon-card {
@@ -235,27 +235,10 @@
   @apply text-gray-700;
 }
 
-.salon-contact-email {
-  @apply text-sm text-gray-700;
-}
-
 /* === TRUNCATE TEXT === */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-/* === CITY CARDS === */
-.city-card {
-  @apply p-6 text-left transition-all duration-200 bg-white border border-gray-200 rounded-lg hover:border-brand-primary hover:shadow-md hover:transform hover:-translate-y-1;
-}
-
-.city-card-title {
-  @apply mb-1 text-lg font-semibold text-gray-900;
-}
-
-.city-card-count {
-  @apply text-sm text-gray-600;
 }

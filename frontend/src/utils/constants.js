@@ -16,7 +16,7 @@ export const API_ENDPOINTS = {
     CHANGE_PASSWORD: '/api/auth/change-password'
   },
   
-  // Salones
+  // 🏢 Salones - FASE 4 COMPLETADA
   SALONES: {
     LIST: '/api/salones',
     CREATE: '/api/salones',
@@ -24,7 +24,15 @@ export const API_ENDPOINTS = {
     BY_SLUG: '/api/salones/slug',
     MIS_SALONES: '/api/salones/mis-salones',
     UPLOAD_PHOTOS: '/api/salones/{id}/fotos',
-    CHANGE_STATUS: '/api/salones/{id}/estado'
+    CHANGE_STATUS: '/api/salones/{id}/estado',
+    
+    // ⭐ NUEVOS ENDPOINTS FASE 4:
+    STATS: '/api/salones/mis-salones/stats',
+    VISIBILITY: '/api/salones/{id}/visibilidad',
+    DELETE_PHOTO: '/api/salones/{id}/fotos/{photoId}',
+    UPDATE_PHOTO: '/api/salones/{id}/fotos/{photoId}',
+    REORDER_PHOTOS: '/api/salones/{id}/fotos/reorder',
+    DISPONIBILIDAD: '/api/salones/{id}/disponibilidad'
   },
   
   // Búsqueda
@@ -68,6 +76,13 @@ export const API_ENDPOINTS = {
     RESPOND: '/api/resenas/{id}/responder',
     MODERATE: '/api/resenas/{id}/moderar',
     DASHBOARD: '/api/resenas/dashboard'
+  },
+  
+  // 📁 Upload - FASE 4
+  UPLOAD: {
+    IMAGE: '/api/upload/image',
+    IMAGES: '/api/upload/images',
+    DELETE: '/api/upload/{id}'
   }
 }
 
@@ -143,10 +158,23 @@ export const PAGINATION = {
   DASHBOARD_LIMIT: 10
 }
 
+// 📁 Configuración de archivos - FASE 4
 export const FILE_CONFIG = {
   MAX_SIZE: 5 * 1024 * 1024, // 5MB
   ALLOWED_TYPES: ['image/jpeg', 'image/png', 'image/webp'],
-  MAX_FILES: 10
+  MAX_FILES: 10,
+  
+  // Nuevas configuraciones para Fase 4:
+  COMPRESSION: {
+    MAX_WIDTH: 1920,
+    MAX_HEIGHT: 1080,
+    QUALITY: 0.8
+  },
+  THUMBNAILS: {
+    SMALL: { width: 150, height: 150 },
+    MEDIUM: { width: 400, height: 300 },
+    LARGE: { width: 800, height: 600 }
+  }
 }
 
 export const MONEDA = 'BOB'
@@ -159,5 +187,12 @@ export const MESSAGES = {
   ERROR_UNAUTHORIZED: 'No tienes permisos para realizar esta acción',
   SUCCESS_SAVE: 'Guardado exitosamente',
   SUCCESS_DELETE: 'Eliminado exitosamente',
-  CONFIRM_DELETE: '¿Estás seguro de que deseas eliminar este elemento?'
+  CONFIRM_DELETE: '¿Estás seguro de que deseas eliminar este elemento?',
+  
+  // Mensajes específicos de Fase 4:
+  SALON_CREATED: 'Salón creado exitosamente',
+  SALON_UPDATED: 'Salón actualizado exitosamente',
+  SALON_DELETED: 'Salón eliminado exitosamente',
+  PHOTOS_UPLOADED: 'Fotos subidas exitosamente',
+  PHOTO_DELETED: 'Foto eliminada exitosamente'
 }

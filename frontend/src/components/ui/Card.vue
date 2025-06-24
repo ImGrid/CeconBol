@@ -1,7 +1,7 @@
 <template>
   <div :class="cardClass" @click="handleClick">
     <!-- Header del card -->
-    <header v-if="$slots.header" :class="headerClass">
+    <header v-if="$slots.header" class="card-header">
       <slot name="header" />
     </header>
 
@@ -9,7 +9,7 @@
     <div v-if="image" class="relative">
       <img 
         :src="image" 
-        :alt="imageAlt || title" 
+        :alt="imageAlt || 'Card image'" 
         :class="imageClass"
         @error="handleImageError"
       />
@@ -22,29 +22,11 @@
 
     <!-- Contenido principal -->
     <div :class="bodyClass">
-      <!-- Título -->
-      <h3 v-if="title" :class="titleClass">
-        {{ title }}
-      </h3>
-      
-      <!-- Subtítulo -->
-      <p v-if="subtitle" class="card-subtitle">
-        {{ subtitle }}
-      </p>
-
-      <!-- Contenido del slot por defecto -->
-      <div v-if="$slots.default">
-        <slot />
-      </div>
-      
-      <!-- Descripción -->
-      <p v-if="description" class="card-description">
-        {{ description }}
-      </p>
+      <slot />
     </div>
 
     <!-- Footer del card -->
-    <footer v-if="$slots.footer" :class="footerClass">
+    <footer v-if="$slots.footer" class="card-footer">
       <slot name="footer" />
     </footer>
   </div>
@@ -53,20 +35,12 @@
 <script setup>
 import { computed } from 'vue'
 
-// Props
+// Props SIMPLIFICADOS - Solo 4 esenciales
 const props = defineProps({
-  // Contenido
-  title: {
+  variant: {
     type: String,
-    default: ''
-  },
-  subtitle: {
-    type: String,
-    default: ''
-  },
-  description: {
-    type: String,
-    default: ''
+    default: 'default',
+    validator: (value) => ['default', 'venue'].includes(value)
   },
   image: {
     type: String,
@@ -76,29 +50,9 @@ const props = defineProps({
     type: String,
     default: ''
   },
-  
-  // Variantes
-  variant: {
-    type: String,
-    default: 'default',
-    validator: (value) => ['default', 'venue', 'simple', 'bordered'].includes(value)
-  },
-  
-  // Estados
-  hover: {
-    type: Boolean,
-    default: true
-  },
   clickable: {
     type: Boolean,
     default: false
-  },
-  
-  // Tamaños
-  padding: {
-    type: String,
-    default: 'medium',
-    validator: (value) => ['none', 'small', 'medium', 'large'].includes(value)
   }
 })
 
@@ -107,69 +61,30 @@ const emit = defineEmits(['click', 'image-error'])
 
 // Computed classes
 const cardClass = computed(() => {
-  const classes = ['card-base'] // Clase base de ui.css
+  const classes = ['card-base']
   
-  // Variantes usando clases de main.css y ui.css
-  const variantClasses = {
-    'default': 'card',
-    'venue': 'card-venue', 
-    'simple': 'card-simple',
-    'bordered': 'card-bordered'
+  // Solo 2 variantes que realmente se usan
+  if (props.variant === 'venue') {
+    classes.push('card-venue')
+  } else {
+    classes.push('card')
   }
-  
-  classes.push(variantClasses[props.variant])
   
   // Estados
-  if (props.hover) {
-    classes.push('card-hover hover-glow hover-lift')
-  }
-  
   if (props.clickable) {
-    classes.push('card-clickable')
+    classes.push('card-clickable', 'hover-glow', 'hover-lift')
   }
   
   return classes.join(' ')
 })
 
-const headerClass = computed(() => {
-  const paddingClasses = {
-    'none': 'card-padding-none',
-    'small': 'card-padding-small',
-    'medium': 'card-padding-medium',
-    'large': 'card-padding-large'
-  }
-  
-  return ['card-header', paddingClasses[props.padding]].join(' ')
-})
-
 const bodyClass = computed(() => {
-  const paddingClasses = {
-    'none': 'card-padding-none',
-    'small': 'card-padding-small',
-    'medium': 'card-padding-medium',
-    'large': 'card-padding-large'
-  }
-  
-  return paddingClasses[props.padding]
-})
-
-const footerClass = computed(() => {
-  const paddingClasses = {
-    'none': 'card-padding-none',
-    'small': 'card-padding-small',
-    'medium': 'card-padding-medium', 
-    'large': 'card-padding-large'
-  }
-  
-  return ['card-footer', paddingClasses[props.padding]].join(' ')
+  // Padding fijo - no necesitamos variantes complejas
+  return 'card-padding-medium'
 })
 
 const imageClass = computed(() => {
   return props.variant === 'venue' ? 'card-venue-image' : 'card-image'
-})
-
-const titleClass = computed(() => {
-  return props.variant === 'venue' ? 'card-venue-title' : 'card-title'
 })
 
 // Métodos
@@ -181,7 +96,7 @@ const handleClick = (event) => {
 
 const handleImageError = (event) => {
   emit('image-error', event)
-  // Opcional: mostrar imagen placeholder
+  // Fallback a imagen placeholder
   event.target.src = '/images/placeholder-salon.jpg'
 }
 </script>

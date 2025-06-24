@@ -1,4 +1,4 @@
-/* Estilos específicos para componentes comunes/compartidos */
+/* Estilos específicos para componentes comunes/compartidos - SOLO LO QUE SE USA */
 
 /* === IMAGE UPLOAD === */
 .image-upload-container {
@@ -126,32 +126,6 @@
   @apply text-center;
 }
 
-/* Upload Actions */
-.upload-actions {
-  @apply p-4 space-y-3 rounded-lg bg-gray-50;
-}
-
-.upload-summary {
-  @apply text-sm font-medium text-gray-700;
-}
-
-/* Progress Bar */
-.upload-progress-bar {
-  @apply flex items-center space-x-3;
-}
-
-.progress-bar-track {
-  @apply flex-1 h-2 overflow-hidden bg-gray-200 rounded-full;
-}
-
-.progress-bar-fill {
-  @apply h-full transition-all duration-300 ease-out bg-brand-primary;
-}
-
-.progress-text {
-  @apply min-w-0 text-sm font-medium text-gray-700;
-}
-
 /* Error Messages */
 .upload-errors {
   @apply space-y-2;
@@ -159,6 +133,19 @@
 
 .upload-error-item {
   @apply flex items-center space-x-2 text-sm text-red-600;
+}
+
+/* === BACK TO TOP === */
+.back-to-top {
+  @apply fixed z-40 flex items-center justify-center w-12 h-12 text-white transition-all duration-200 rounded-full shadow-lg bottom-6 right-6 bg-brand-primary hover:bg-primary-700 hover:shadow-xl;
+}
+
+.back-to-top-hidden {
+  @apply transform translate-y-2 opacity-0 pointer-events-none;
+}
+
+.back-to-top-visible {
+  @apply transform translate-y-0 opacity-100 pointer-events-auto;
 }
 
 /* Responsive */
